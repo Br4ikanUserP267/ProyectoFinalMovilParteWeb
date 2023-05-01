@@ -1,18 +1,26 @@
 <?php
 
-require("../models/Usuario.php");
-require("../controllers/usuariocontroller.php");
 
-$usuario = new Usuario($_POST['usuario'], $_POST['password']);
+require("../models/Usuario.php");
+require("../controllers/ControladorLogin.php");
+
 $controladorLogin = new ControladorLogin();
+$resultadoConteo = $controladorLogin->consultarConteo(); // Agregar esta línea
+echo "Número de registros en la base de datos: " . $resultadoConteo->fetch_assoc()['conteo'] . "<br>"; // Agregar esta línea
+
+$usuario = new Usuario(intval($_POST['usuario']), $_POST['password']);
+
+
+
 $resultado = $controladorLogin->consultarRegistro($usuario);
 
-if (!$resultado) {
-    die('Error en la consulta SQL: ' . $controladorLogin->getConexion()->error);
-}
+
 
 if ($resultado->num_rows == 0) {
-    echo 'El usuario no existe';
+
+    echo '<script>alert("Error al ingresar"); window.location.href = "../views/index.php";</script>';
+
+
 } else {
     $fila = $resultado->fetch_assoc();
     $tipo = $fila['tipousuario'];
@@ -32,7 +40,8 @@ if ($resultado->num_rows == 0) {
                 break;
         }
     } else {
-        echo 'Contraseña incorrecta';
+        echo '<script>alert("Error al ingresar"); window.location.href = "../views/index.php";</script>';
+
     }
 }
 

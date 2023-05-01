@@ -1,13 +1,13 @@
 <?php 
 
-  class Usuario {
+class Usuario {
+  public $usuario;
+  public $contrasena;
 
-    public $contrasena;
-
-    public function __construct($contrasena) {
-
-      $this->contrasena = $contrasena ;
-
-    }
+  public function __construct($numeroIdentificacion, $contrasena) {
+    $this->numeroIdentificacion = $numeroIdentificacion;
+    $this->contrasena = $contrasena;
   }
+}
+
 ?>
