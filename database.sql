@@ -1,8 +1,3 @@
--- MySQL Workbench Forward Engineering
-
-SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
 -- Schema mydb
@@ -52,7 +47,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Estudiantes` (
   `fechanacimiento` DATE NOT NULL,
   `Direcciones_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_Estudiantes_Direcciones1_idx` (`Direcciones_id` ASC) VISIBLE,
   CONSTRAINT `fk_Estudiantes_Direcciones1`
     FOREIGN KEY (`Direcciones_id`)
     REFERENCES `mydb`.`DireccionesEstudiantes` (`id`)
@@ -82,9 +76,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Inscripciones` (
   `Carrera_id` INT NOT NULL,
   `Estudiantes_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_Inscripcion_Semestre1_idx` (`Semestre_numero` ASC) VISIBLE,
-  INDEX `fk_Inscripcion_Carrera1_idx` (`Carrera_id` ASC) VISIBLE,
-  INDEX `fk_Inscripciones_Estudiantes1_idx` (`Estudiantes_id` ASC) VISIBLE,
   CONSTRAINT `fk_Inscripcion_Semestre1`
     FOREIGN KEY (`Semestre_numero`)
     REFERENCES `mydb`.`Semestre` (`numero`)
@@ -111,7 +102,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Locket` (
   `descripcion` VARCHAR(45) NOT NULL,
   `Estudiantes_id` INT NULL,
   PRIMARY KEY (`idLocket`),
-  INDEX `fk_Locket_Estudiantes1_idx` (`Estudiantes_id` ASC) VISIBLE,
   CONSTRAINT `fk_Locket_Estudiantes1`
     FOREIGN KEY (`Estudiantes_id`)
     REFERENCES `mydb`.`Estudiantes` (`id`)
@@ -130,7 +120,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Prestamos` (
   `estado` VARCHAR(45) NULL,
   `Estudiantes_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_prestamos_Estudiantes1_idx` (`Estudiantes_id` ASC) VISIBLE,
+
   CONSTRAINT `fk_prestamos_Estudiantes1`
     FOREIGN KEY (`Estudiantes_id`)
     REFERENCES `mydb`.`Estudiantes` (`id`)
@@ -149,7 +139,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Multas` (
   `monto` FLOAT NULL,
   `Prestamos_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_Multas_Prestamos1_idx` (`Prestamos_id` ASC) VISIBLE,
+ 
   CONSTRAINT `fk_Multas_Prestamos1`
     FOREIGN KEY (`Prestamos_id`)
     REFERENCES `mydb`.`Prestamos` (`id`)
@@ -201,8 +191,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Libros` (
   `Editoriales_id` INT NOT NULL,
   `Categorias_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_Libros_Editoriales1_idx` (`Editoriales_id` ASC) VISIBLE,
-  INDEX `fk_Libros_Categorias1_idx` (`Categorias_id` ASC) VISIBLE,
+
   CONSTRAINT `fk_Libros_Editoriales1`
     FOREIGN KEY (`Editoriales_id`)
     REFERENCES `mydb`.`Editoriales` (`id`)
@@ -235,8 +224,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Editoriales_has_Direcciones` (
   `Editoriales_id` INT NOT NULL,
   `Direcciones_id` INT NOT NULL,
   PRIMARY KEY (`Editoriales_id`, `Direcciones_id`),
-  INDEX `fk_Editoriales_has_Direcciones_Direcciones1_idx` (`Direcciones_id` ASC) VISIBLE,
-  INDEX `fk_Editoriales_has_Direcciones_Editoriales1_idx` (`Editoriales_id` ASC) VISIBLE,
+ 
   CONSTRAINT `fk_Editoriales_has_Direcciones_Editoriales1`
     FOREIGN KEY (`Editoriales_id`)
     REFERENCES `mydb`.`Editoriales` (`id`)
@@ -257,8 +245,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Autores_has_Libros` (
   `Autores_idAutores` INT NOT NULL,
   `Libros_id` INT NOT NULL,
   PRIMARY KEY (`Autores_idAutores`, `Libros_id`),
-  INDEX `fk_Autores_has_Libros_Libros1_idx` (`Libros_id` ASC) VISIBLE,
-  INDEX `fk_Autores_has_Libros_Autores1_idx` (`Autores_idAutores` ASC) VISIBLE,
+
   CONSTRAINT `fk_Autores_has_Libros_Autores1`
     FOREIGN KEY (`Autores_idAutores`)
     REFERENCES `mydb`.`Autores` (`idAutores`)
@@ -279,8 +266,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Prestamos_has_Libros` (
   `Prestamos_id` INT NOT NULL,
   `Libros_id` INT NOT NULL,
   PRIMARY KEY (`Prestamos_id`, `Libros_id`),
-  INDEX `fk_Prestamos_has_Libros_Libros1_idx` (`Libros_id` ASC) VISIBLE,
-  INDEX `fk_Prestamos_has_Libros_Prestamos1_idx` (`Prestamos_id` ASC) VISIBLE,
   CONSTRAINT `fk_Prestamos_has_Libros_Prestamos1`
     FOREIGN KEY (`Prestamos_id`)
     REFERENCES `mydb`.`Prestamos` (`id`)
