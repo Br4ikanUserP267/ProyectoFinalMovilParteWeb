@@ -11,32 +11,41 @@
 <body>
     <div class="container mt-5">
         <h1>Crear tabla usuarios</h1>
-        <form action="crear_tabla.php" method="POST">
+        <form action="../../test/testcrearusuarios.php" method="POST">
             <div class="mb-3">
-                <label for="numeroIdentificacion" class="form-label">Número de Identificación</label>
-                <input type="number" class="form-control" id="numeroIdentificacion" name="numeroIdentificacion" required>
+              <label for="numeroIdentificacion" class="form-label">Usuario </label>
+              <input type="number" class="form-control" id="numeroIdentificacion" name="numeroIdentificacion" required>
             </div>
             <div class="mb-3">
-                <label for="contrasena" class="form-label">Contraseña</label>
-                <input type="password" class="form-control" id="contrasena" name="contrasena" required>
+              <label for="contrasena" class="form-label">Contraseña</label>
+              <input type="password" class="form-control" id="contrasena" name="contrasena" required>
             </div>
             <div class="mb-3">
-                <label for="tipousuario" class="form-label">Tipo de Usuario</label>
-                <select class="form-select" id="tipousuario" name="tipousuario">
-                    <option value="">Seleccione una opción</option>
-                    <option value="b">Bibliotecario</option>
-                    <option value="a">Administrador</option>
-                    <option value="e">estudiante</option>
-                </select>
+              <label for="tipousuario" class="form-label">Tipo de Usuario</label>
+              <select class="form-select" id="tipousuario" name="tipousuario">
+                <option value="">Seleccione una opción</option>
+                <option value="b">Bibliotecario</option>
+                <option value="a">Administrador</option>
+                <option value="e">Estudiante</option>
+              </select>
             </div>
             <button type="submit" class="btn btn-primary">Crear tabla</button>
-            <button type="submit" class="btn btn-danger">Eliminar</button>
-        </form>
+            <button type="button" class="btn btn-danger" id="btnLimpiar">Cancelard</button>
+          </form>
     </div>
 
 
     
-
+    <script>
+        function limpiarCampos() {
+          document.getElementById("numeroIdentificacion").value = "";
+          document.getElementById("contrasena").value = "";
+          document.getElementById("tipousuario").selectedIndex = 0;
+        }
+      
+        document.getElementById("btnLimpiar").addEventListener("click", limpiarCampos);
+      </script>
+      
       <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
 </body>

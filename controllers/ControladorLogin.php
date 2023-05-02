@@ -19,6 +19,7 @@
       $sql = "SELECT COUNT(*) AS conteo FROM ".$this->tabla;
       return $this->getConexion()->query($sql);
     }
+
   }
   
 ?>

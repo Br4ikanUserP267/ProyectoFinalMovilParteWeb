@@ -10,8 +10,6 @@ echo "Número de registros en la base de datos: " . $resultadoConteo->fetch_asso
 
 $usuario = new Usuario(intval($_POST['usuario']), $_POST['password']);
 
-
-
 $resultado = $controladorLogin->consultarRegistro($usuario);
 
 
