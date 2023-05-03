@@ -2,6 +2,9 @@
 <?php
 
 require("../components/conexion.php");
+
+//require("../settings/configuraciones.php");
+
 require("interfazcontrolador.php");
 class ControladorCrearUsuarios extends ConectarMySQL implements InterfazControlador {
     private $tabla = "usuarios";

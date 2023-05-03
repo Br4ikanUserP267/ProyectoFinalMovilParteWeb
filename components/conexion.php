@@ -6,7 +6,10 @@
 
     function __construct(){
       require("../settings/configuraciones.php");
+
       $this->conexion = mysqli_connect($servidor, $usuario, $contraseña, $basedatos, $puerto);
+   
+   
     }
 
     function getConexion() {

@@ -1,3 +1,8 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
 -- Schema mydb
@@ -6,288 +11,318 @@
 -- -----------------------------------------------------
 -- Schema mydb
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
+CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8mb4 ;
 USE `mydb` ;
 
 -- -----------------------------------------------------
--- Table `mydb`.`Carreras`
+-- Table `mydb`.`autores`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Carreras` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `titulo` VARCHAR(45) NULL,
-  `descripcion` VARCHAR(200) NULL,
+CREATE TABLE IF NOT EXISTS `mydb`.`autores` (
+  `idAutores` INT(11) NOT NULL,
+  `nombres` VARCHAR(45) NOT NULL,
+  `apelldios` VARCHAR(45) NOT NULL,
+  `biografia` VARCHAR(200) NOT NULL,
+  PRIMARY KEY (`idAutores`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`categorias`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`categorias` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `nombre` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`DireccionesEstudiantes`
+-- Table `mydb`.`editoriales`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`DireccionesEstudiantes` (
-  `id` INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `mydb`.`editoriales` (
+  `id` INT(11) NOT NULL,
+  `nombre` VARCHAR(45) NULL DEFAULT NULL,
+  `correo` VARCHAR(45) NULL DEFAULT NULL,
+  `numerocontacto` VARCHAR(45) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`libros`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`libros` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `nombre` VARCHAR(45) NULL DEFAULT NULL,
+  `Editoriales_id` INT(11) NOT NULL,
+  `Categorias_id` INT(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_Libros_Editoriales1` (`Editoriales_id` ASC) VISIBLE,
+  INDEX `fk_Libros_Categorias1` (`Categorias_id` ASC) VISIBLE,
+  CONSTRAINT `fk_Libros_Categorias1`
+    FOREIGN KEY (`Categorias_id`)
+    REFERENCES `mydb`.`categorias` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Libros_Editoriales1`
+    FOREIGN KEY (`Editoriales_id`)
+    REFERENCES `mydb`.`editoriales` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`autores_has_libros`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`autores_has_libros` (
+  `Autores_idAutores` INT(11) NOT NULL,
+  `Libros_id` INT(11) NOT NULL,
+  PRIMARY KEY (`Autores_idAutores`, `Libros_id`),
+  INDEX `fk_Autores_has_Libros_Libros1` (`Libros_id` ASC) VISIBLE,
+  CONSTRAINT `fk_Autores_has_Libros_Autores1`
+    FOREIGN KEY (`Autores_idAutores`)
+    REFERENCES `mydb`.`autores` (`idAutores`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Autores_has_Libros_Libros1`
+    FOREIGN KEY (`Libros_id`)
+    REFERENCES `mydb`.`libros` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`carrera`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`carrera` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `titulo` VARCHAR(45) NULL DEFAULT NULL,
+  `descripcion` VARCHAR(200) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`carreras`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`carreras` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `titulo` VARCHAR(45) NULL DEFAULT NULL,
+  `descripcion` VARCHAR(200) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`direcciones`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`direcciones` (
+  `id` INT(11) NOT NULL,
+  `pais` VARCHAR(45) NULL DEFAULT NULL,
+  `ciudad` VARCHAR(45) NULL DEFAULT NULL,
+  `direccion` VARCHAR(45) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`estudiantes`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`estudiantes` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `tipoIdentificacion` ENUM('cc', 'ti', 'ce') NOT NULL,
+  `numeroIdentificacion` VARCHAR(45) NOT NULL,
+  `nombres` VARCHAR(45) NOT NULL,
+  `apellidos` VARCHAR(45) NOT NULL,
+  `celular` VARCHAR(45) NULL DEFAULT NULL,
+  `fechanacimiento` DATE NOT NULL,
+  `tiposagre` ENUM('A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-') NULL DEFAULT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`direccionesestudiantes`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`direccionesestudiantes` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
   `pais` VARCHAR(45) NOT NULL,
   `ciudad` VARCHAR(45) NOT NULL,
   `calle` VARCHAR(45) NOT NULL,
   `numero` VARCHAR(45) NOT NULL,
   `barrio` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `mydb`.`Estudiantes`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Estudiantes` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `tipoIdentificacion` ENUM("cc", "ti", "ce") NOT NULL,
-  `numeroIdentificacion` VARCHAR(45) NOT NULL,
-  `nombres` VARCHAR(45) NOT NULL,
-  `apellidos` VARCHAR(45) NOT NULL,
-  `celular` VARCHAR(45) NULL,
-  `fechanacimiento` DATE NOT NULL,
-  `Direcciones_id` INT NOT NULL,
+  `estudiantes_id` INT(11) NOT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `fk_Estudiantes_Direcciones1`
-    FOREIGN KEY (`Direcciones_id`)
-    REFERENCES `mydb`.`DireccionesEstudiantes` (`id`)
+  INDEX `fk_direccionesestudiantes_estudiantes1_idx` (`estudiantes_id` ASC) VISIBLE,
+  CONSTRAINT `fk_direccionesestudiantes_estudiantes1`
+    FOREIGN KEY (`estudiantes_id`)
+    REFERENCES `mydb`.`estudiantes` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Semestre`
+-- Table `mydb`.`editoriales_has_direcciones`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Semestre` (
-  `numero` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `mydb`.`editoriales_has_direcciones` (
+  `Editoriales_id` INT(11) NOT NULL,
+  `Direcciones_id` INT(11) NOT NULL,
+  PRIMARY KEY (`Editoriales_id`, `Direcciones_id`),
+  INDEX `fk_Editoriales_has_Direcciones_Direcciones1` (`Direcciones_id` ASC) VISIBLE,
+  CONSTRAINT `fk_Editoriales_has_Direcciones_Direcciones1`
+    FOREIGN KEY (`Direcciones_id`)
+    REFERENCES `mydb`.`direcciones` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Editoriales_has_Direcciones_Editoriales1`
+    FOREIGN KEY (`Editoriales_id`)
+    REFERENCES `mydb`.`editoriales` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`semestre`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`semestre` (
+  `numero` INT(11) NOT NULL,
   `fecaInicio` DATE NOT NULL,
   `fechaFinal` DATE NOT NULL,
   PRIMARY KEY (`numero`))
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Inscripciones`
+-- Table `mydb`.`inscripciones`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Inscripciones` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `descripcion` VARCHAR(45) NULL,
-  `Semestre_numero` INT NOT NULL,
-  `Carrera_id` INT NOT NULL,
-  `Estudiantes_id` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `mydb`.`inscripciones` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `descripcion` VARCHAR(45) NULL DEFAULT NULL,
+  `Semestre_numero` INT(11) NOT NULL,
+  `Carrera_id` INT(11) NOT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `fk_Inscripcion_Semestre1`
-    FOREIGN KEY (`Semestre_numero`)
-    REFERENCES `mydb`.`Semestre` (`numero`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+  INDEX `fk_Inscripcion_Semestre1` (`Semestre_numero` ASC) VISIBLE,
+  INDEX `fk_Inscripcion_Carrera1` (`Carrera_id` ASC) VISIBLE,
   CONSTRAINT `fk_Inscripcion_Carrera1`
     FOREIGN KEY (`Carrera_id`)
-    REFERENCES `mydb`.`Carreras` (`id`)
+    REFERENCES `mydb`.`carrera` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Inscripciones_Estudiantes1`
-    FOREIGN KEY (`Estudiantes_id`)
-    REFERENCES `mydb`.`Estudiantes` (`id`)
+  CONSTRAINT `fk_Inscripcion_Semestre1`
+    FOREIGN KEY (`Semestre_numero`)
+    REFERENCES `mydb`.`semestre` (`numero`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Locket`
+-- Table `mydb`.`locket`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Locket` (
-  `idLocket` INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `mydb`.`locket` (
+  `idLocket` INT(11) NOT NULL AUTO_INCREMENT,
   `descripcion` VARCHAR(45) NOT NULL,
-  `Estudiantes_id` INT NULL,
+  `Estudiantes_id` INT(11) NULL DEFAULT NULL,
   PRIMARY KEY (`idLocket`),
+  INDEX `fk_Locket_Estudiantes1` (`Estudiantes_id` ASC) VISIBLE,
   CONSTRAINT `fk_Locket_Estudiantes1`
     FOREIGN KEY (`Estudiantes_id`)
-    REFERENCES `mydb`.`Estudiantes` (`id`)
+    REFERENCES `mydb`.`estudiantes` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Prestamos`
+-- Table `mydb`.`prestamos`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Prestamos` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `fechaInicio` DATE NULL,
-  `fechaFinal` DATE NULL,
-  `estado` VARCHAR(45) NULL,
-  `Estudiantes_id` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `mydb`.`prestamos` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `fechaInicio` DATE NULL DEFAULT NULL,
+  `fechaFinal` DATE NULL DEFAULT NULL,
+  `estado` VARCHAR(45) NULL DEFAULT NULL,
+  `Estudiantes_id` INT(11) NOT NULL,
   PRIMARY KEY (`id`),
-
+  INDEX `fk_prestamos_Estudiantes1` (`Estudiantes_id` ASC) VISIBLE,
   CONSTRAINT `fk_prestamos_Estudiantes1`
     FOREIGN KEY (`Estudiantes_id`)
-    REFERENCES `mydb`.`Estudiantes` (`id`)
+    REFERENCES `mydb`.`estudiantes` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Multas`
+-- Table `mydb`.`multas`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Multas` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `fecha` DATE NULL,
-  `descripcion` VARCHAR(45) NULL,
-  `monto` FLOAT NULL,
-  `Prestamos_id` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `mydb`.`multas` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `fecha` DATE NULL DEFAULT NULL,
+  `descripcion` VARCHAR(45) NULL DEFAULT NULL,
+  `monto` FLOAT NULL DEFAULT NULL,
+  `Prestamos_id` INT(11) NOT NULL,
   PRIMARY KEY (`id`),
- 
+  INDEX `fk_Multas_Prestamos1` (`Prestamos_id` ASC) VISIBLE,
   CONSTRAINT `fk_Multas_Prestamos1`
     FOREIGN KEY (`Prestamos_id`)
-    REFERENCES `mydb`.`Prestamos` (`id`)
+    REFERENCES `mydb`.`prestamos` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Autores`
+-- Table `mydb`.`prestamos_has_libros`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Autores` (
-  `idAutores` INT NOT NULL,
-  `nombres` VARCHAR(45) NOT NULL,
-  `apelldios` VARCHAR(45) NOT NULL,
-  `biografia` VARCHAR(200) NOT NULL,
-  PRIMARY KEY (`idAutores`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `mydb`.`Editoriales`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Editoriales` (
-  `id` INT NOT NULL,
-  `nombre` VARCHAR(45) NULL,
-  `correo` VARCHAR(45) NULL,
-  `numerocontacto` VARCHAR(45) NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `mydb`.`Categorias`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Categorias` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `nombre` VARCHAR(45) NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `mydb`.`Libros`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Libros` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `nombre` VARCHAR(45) NULL,
-  `Editoriales_id` INT NOT NULL,
-  `Categorias_id` INT NOT NULL,
-  PRIMARY KEY (`id`),
-
-  CONSTRAINT `fk_Libros_Editoriales1`
-    FOREIGN KEY (`Editoriales_id`)
-    REFERENCES `mydb`.`Editoriales` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Libros_Categorias1`
-    FOREIGN KEY (`Categorias_id`)
-    REFERENCES `mydb`.`Categorias` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `mydb`.`Direcciones`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Direcciones` (
-  `id` INT NOT NULL,
-  `pais` VARCHAR(45) NULL,
-  `ciudad` VARCHAR(45) NULL,
-  `direccion` VARCHAR(45) NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `mydb`.`Editoriales_has_Direcciones`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Editoriales_has_Direcciones` (
-  `Editoriales_id` INT NOT NULL,
-  `Direcciones_id` INT NOT NULL,
-  PRIMARY KEY (`Editoriales_id`, `Direcciones_id`),
- 
-  CONSTRAINT `fk_Editoriales_has_Direcciones_Editoriales1`
-    FOREIGN KEY (`Editoriales_id`)
-    REFERENCES `mydb`.`Editoriales` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Editoriales_has_Direcciones_Direcciones1`
-    FOREIGN KEY (`Direcciones_id`)
-    REFERENCES `mydb`.`Direcciones` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `mydb`.`Autores_has_Libros`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Autores_has_Libros` (
-  `Autores_idAutores` INT NOT NULL,
-  `Libros_id` INT NOT NULL,
-  PRIMARY KEY (`Autores_idAutores`, `Libros_id`),
-
-  CONSTRAINT `fk_Autores_has_Libros_Autores1`
-    FOREIGN KEY (`Autores_idAutores`)
-    REFERENCES `mydb`.`Autores` (`idAutores`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Autores_has_Libros_Libros1`
-    FOREIGN KEY (`Libros_id`)
-    REFERENCES `mydb`.`Libros` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `mydb`.`Prestamos_has_Libros`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Prestamos_has_Libros` (
-  `Prestamos_id` INT NOT NULL,
-  `Libros_id` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `mydb`.`prestamos_has_libros` (
+  `Prestamos_id` INT(11) NOT NULL,
+  `Libros_id` INT(11) NOT NULL,
   PRIMARY KEY (`Prestamos_id`, `Libros_id`),
-  CONSTRAINT `fk_Prestamos_has_Libros_Prestamos1`
-    FOREIGN KEY (`Prestamos_id`)
-    REFERENCES `mydb`.`Prestamos` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+  INDEX `fk_Prestamos_has_Libros_Libros1` (`Libros_id` ASC) VISIBLE,
   CONSTRAINT `fk_Prestamos_has_Libros_Libros1`
     FOREIGN KEY (`Libros_id`)
-    REFERENCES `mydb`.`Libros` (`id`)
+    REFERENCES `mydb`.`libros` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Prestamos_has_Libros_Prestamos1`
+    FOREIGN KEY (`Prestamos_id`)
+    REFERENCES `mydb`.`prestamos` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
 -- Table `mydb`.`usuarios`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`usuarios` (
-  `numeroIdentificacion` INT NOT NULL,
+  `numeroIdentificacion` INT(11) NOT NULL,
   `contrasena` VARCHAR(45) NOT NULL,
-  `tipousuario` ENUM("b", "a", "e") NULL,
+  `tipousuario` ENUM('b', 'a', 'e') NULL DEFAULT NULL,
   PRIMARY KEY (`numeroIdentificacion`))
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

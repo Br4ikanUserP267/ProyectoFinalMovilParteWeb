@@ -19,16 +19,16 @@
         <table id="example" class="table table-bordered table-dark" style="width:100%">
         <thead>
             <tr>
-                <th>Usuario</th>
+                <th>Identificacion</th>
                 <th>Contraseña</th>
-                <th>Tipo ussuario</th>
+                <th>Tipo usuario</th>
             </tr>
         </thead>
         <tbody>
             
             <?php 
-                include ('../../../controllers/controladorvistaUsuarios.php');
-                $controladorDatos = new ControladorUsuarios();
+                include 'controladorvistaUsuarios.php';
+                $controladorDatos = new ControladorvistaUsuarios();
                 $resultado = $controladorDatos->consultardatos(); 
 
                 while ($fila = $resultado->fetch_assoc()){?>
@@ -37,6 +37,7 @@
                         <td><?php echo $fila['numeroIdentificacion']?></td>
                         <td><?php echo $fila['contrasena']?></td>
                         <td><?php echo $fila['tipousuario']?></td>
+                        
                     </tr>
 
             <?php }?>
