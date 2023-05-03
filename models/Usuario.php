@@ -1,7 +1,7 @@
 <?php 
 
 class Usuario {
-  public $usuario;
+  public $numeroIdentificacion;
   public $contrasena;
 
   public function __construct($numeroIdentificacion, $contrasena) {

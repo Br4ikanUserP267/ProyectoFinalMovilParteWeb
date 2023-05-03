@@ -1,19 +1,32 @@
 <?php 
 
-  class ConectarMySQL {
+class ConectarMySQL {
 
     private $conexion;
 
     function __construct(){
-      require("../settings/configuraciones.php");
+        require("../settings/configuraciones.php");
 
-      $this->conexion = mysqli_connect($servidor, $usuario, $contraseña, $basedatos, $puerto);
-   
-   
+        $this->conexion = new mysqli($servidor, $usuario, $contraseña, $basedatos, $puerto);
+
+        if ($this->conexion->connect_error) {
+            die("Falló la conexión a la base de datos: " . $this->conexion->connect_error);
+        }
+
+
+      }
+
+    public function ejecutarConsulta($sql) {
+        $result = $this->conexion->query($sql);
+        if (!$result) {
+            die("Error en la consulta: " . $this->conexion->error);
+        }
+        return $result;
     }
 
     function getConexion() {
-      return $this->conexion;
+        return $this->conexion;
     }
-  }
+
+}
 ?>
