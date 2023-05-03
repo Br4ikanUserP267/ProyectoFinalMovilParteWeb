@@ -111,18 +111,6 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`carreras`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`carreras` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `titulo` VARCHAR(45) NULL DEFAULT NULL,
-  `descripcion` VARCHAR(200) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4;
-
-
--- -----------------------------------------------------
 -- Table `mydb`.`direcciones`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`direcciones` (
@@ -146,7 +134,9 @@ CREATE TABLE IF NOT EXISTS `mydb`.`estudiantes` (
   `apellidos` VARCHAR(45) NOT NULL,
   `celular` VARCHAR(45) NULL DEFAULT NULL,
   `fechanacimiento` DATE NOT NULL,
-  `tiposagre` ENUM('A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-') NULL DEFAULT NULL,
+  `tiposagre` ENUM('A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-') NOT NULL,
+  `ciudadnacimiento` VARCHAR(45) NOT NULL,
+  `paisnacimiento` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
@@ -216,9 +206,11 @@ CREATE TABLE IF NOT EXISTS `mydb`.`inscripciones` (
   `descripcion` VARCHAR(45) NULL DEFAULT NULL,
   `Semestre_numero` INT(11) NOT NULL,
   `Carrera_id` INT(11) NOT NULL,
+  `estudiantes_id` INT(11) NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_Inscripcion_Semestre1` (`Semestre_numero` ASC) VISIBLE,
   INDEX `fk_Inscripcion_Carrera1` (`Carrera_id` ASC) VISIBLE,
+  INDEX `fk_inscripciones_estudiantes1_idx` (`estudiantes_id` ASC) VISIBLE,
   CONSTRAINT `fk_Inscripcion_Carrera1`
     FOREIGN KEY (`Carrera_id`)
     REFERENCES `mydb`.`carrera` (`id`)
@@ -227,6 +219,11 @@ CREATE TABLE IF NOT EXISTS `mydb`.`inscripciones` (
   CONSTRAINT `fk_Inscripcion_Semestre1`
     FOREIGN KEY (`Semestre_numero`)
     REFERENCES `mydb`.`semestre` (`numero`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_inscripciones_estudiantes1`
+    FOREIGN KEY (`estudiantes_id`)
+    REFERENCES `mydb`.`estudiantes` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -297,6 +294,7 @@ DEFAULT CHARACTER SET = utf8mb4;
 CREATE TABLE IF NOT EXISTS `mydb`.`prestamos_has_libros` (
   `Prestamos_id` INT(11) NOT NULL,
   `Libros_id` INT(11) NOT NULL,
+  `fecha` DATE NULL,
   PRIMARY KEY (`Prestamos_id`, `Libros_id`),
   INDEX `fk_Prestamos_has_Libros_Libros1` (`Libros_id` ASC) VISIBLE,
   CONSTRAINT `fk_Prestamos_has_Libros_Libros1`
