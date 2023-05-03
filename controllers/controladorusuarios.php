@@ -6,12 +6,12 @@
             private $db;
 
             public function __construct() {
-                $this->db = new Conexion();
+                $this->db = new ConectarMySQL();
             }
 
             public function obtenerUsuarios() {
                 $sql = "SELECT * FROM usuarios";
-                $result = $this->db->query($sql);
+                $result = $this->db->ejecutarConsulta($sql);
                 $usuarios = array();
                 while ($row = $result->fetch_assoc()) {
                     $usuarios[] = $row;
@@ -22,7 +22,7 @@
 
             public function obtenerUsuario($id) {
                 $sql = "SELECT * FROM usuarios WHERE id = $id";
-                $result = $this->db->query($sql);
+                $result = $this->db->ejecutarConsulta($sql);
                 $usuario = $result->fetch_assoc();
                 header('Content-Type: application/json');
                 echo json_encode($usuario);
@@ -34,7 +34,7 @@
                 $correo = $data['correo'];
                 $password = $data['password'];
                 $sql = "INSERT INTO usuarios (nombre, correo, password) VALUES ('$nombre', '$correo', '$password')";
-                $result = $this->db->query($sql);
+                $result = $this->db->ejecutarConsulta($sql);
                 if ($result) {
                     header('Content-Type: application/json');
                     echo json_encode(array('mensaje' => 'Usuario creado con éxito'));
@@ -50,7 +50,7 @@
                 $correo = $data['correo'];
                 $password = $data['password'];
                 $sql = "UPDATE usuarios SET nombre='$nombre', correo='$correo', password='$password' WHERE id = $id";
-                $result = $this->db->query($sql);
+                $result = $this->db->ejecutarConsulta($sql);
                 if ($result) {
                     header('Content-Type: application/json');
                     echo json_encode(array('mensaje' => 'Usuario actualizado con éxito'));
@@ -62,7 +62,7 @@
 
             public function eliminarUsuario($id) {
                 $sql = "DELETE FROM usuarios WHERE id = $id";
-                $result = $this->db->query($sql);
+                $result = $this->db->ejecutarConsulta($sql);
                 if ($result) {
                     header('Content-Type: application/json');
                     echo json_encode(array('mensaje' => 'Usuario eliminado con éxito'));
@@ -75,7 +75,7 @@
 
             public function inicioSesion($username, $password) {
                 $sql = "SELECT * FROM usuarios WHERE correo = '$username' AND password = '$password'";
-                $result = $this->db->query($sql);
+                $result = $this->db->ejecutarConsulta($sql);
                 $usuario = $result->fetch_assoc();
                 if ($usuario) {
                     header('Content-Type: application/json');
