@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <title>Listado de usuarios</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Listado de usuarios</h1>
+        <table id="tabla-usuarios" class="table">
+            <thead>
+                <tr>
+                    <th>Número de identificación</th>
+                    <th>Contraseña</th>
+                    <th>Tipo de usuario</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <button id="btn-cargar" class="btn btn-primary">Cargar usuarios</button>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <script>
+
+
+            $(document).ready(function() {
+            $('#btn-cargar').click(function() {
+                $.ajax({
+                    url: 'http://localhost/proyectoFinal/api/usuarios.php',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        // Limpiar tabla
+                        $('#tabla-usuarios tbody').empty();
+                        // Agregar filas con datos
+                        $.each(data, function(index, usuario) {
+                            let tipoUsuario = "";
+                            if (usuario.tipousuario === "a") {
+                                tipoUsuario = "Administrador";
+                            } else if (usuario.tipousuario === "b") {
+                                tipoUsuario = "Bibliotecario";
+                            } else if (usuario.tipousuario === "e") {
+                                tipoUsuario = "Estudiante";
+                            }
+                            $('#tabla-usuarios tbody').append('<tr><td>' + usuario.numeroIdentificacion + '</td><td>' + usuario.contrasena + '</td><td>' + tipoUsuario  + '</td></tr>');
+                        });
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus, errorThrown);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+

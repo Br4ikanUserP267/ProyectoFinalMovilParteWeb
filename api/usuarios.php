@@ -39,7 +39,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
           VALUES
           (:numeroIdentificacion, :contrasena, :tipousuario)";
     $statement = $dbConn->prepare($sql);
-    bindAllValues($statement, $input);
+    $statement->bindParam(':numeroIdentificacion', $input['numeroIdentificacion']);
+    $statement->bindParam(':contrasena', $input['contrasena']);
+    $statement->bindParam(':tipousuario', $input['tipousuario']);
     $statement->execute();
     $userId = $dbConn->lastInsertId();
     if($userId)
@@ -54,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 //Borrar
 if ($_SERVER['REQUEST_METHOD'] == 'DELETE')
 {
-    $id = $_GET['numeroIdentificacion'];
+    $id = filter_var($_GET['numeroIdentificacion'], FILTER_SANITIZE_NUMBER_INT);
     $statement = $dbConn->prepare("DELETE FROM usuarios WHERE numeroIdentificacion=:numeroIdentificacion");
     $statement->bindValue(':numeroIdentificacion', $id);
     $statement->execute();
@@ -65,25 +67,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'DELETE')
 //Actualizar
 if ($_SERVER['REQUEST_METHOD'] == 'PUT')
 {
-    $input = $_GET;
-    $userId = $input['numeroIdentificacion'];
+    parse_str(file_get_contents("php://input"), $input);
+    $userId = filter_var($input['numeroIdentificacion'], FILTER_SANITIZE_NUMBER_INT);
     $fields = getParams($input);
 
-    $sql = "
-          UPDATE usuarios
-          SET $fields
-          WHERE numeroIdentificacion='$userId'
-           ";
+    $sql = "UPDATE usuarios
+            SET $fields
+            WHERE numeroIdentificacion=:numeroIdentificacion";
 
     $statement = $dbConn->prepare($sql);
+    $statement->bindValue(':numeroIdentificacion', $userId);
     bindAllValues($statement, $input);
 
     $statement->execute();
     header("HTTP/1.1 200 OK");
     exit();
 }
-
-//En caso de que ninguna de las opciones anteriores se haya ejecutado
-header("HTTP/1.1 400 Bad Request");
-
 ?>
