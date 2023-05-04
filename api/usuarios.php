@@ -30,28 +30,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
     }
 }
 
+
 // Crear un nuevo usuario
 if ($_SERVER['REQUEST_METHOD'] == 'POST')
 {
     $input = $_POST;
-    $sql = "INSERT INTO usuarios
-          (numeroIdentificacion, contrasena, tipousuario)
-          VALUES
-          (:numeroIdentificacion, :contrasena, :tipousuario)";
-    $statement = $dbConn->prepare($sql);
-    $statement->bindParam(':numeroIdentificacion', $input['numeroIdentificacion']);
-    $statement->bindParam(':contrasena', $input['contrasena']);
-    $statement->bindParam(':tipousuario', $input['tipousuario']);
-    $statement->execute();
-    $userId = $dbConn->lastInsertId();
-    if($userId)
-    {
-        $input['numeroIdentificacion'] = $userId;
-        header("HTTP/1.1 200 OK");
-        echo json_encode($input);
-        exit();
-    }
+    // Check that the required variables are set and not empty
+    if(!empty($input['numeroIdentificacion']) && !empty($input['contrasena']) && !empty($input['tipousuario'])) {
+            
+            $sql = "INSERT INTO usuarios
+                (numeroIdentificacion, contrasena, tipousuario)
+                VALUES
+                (:numeroIdentificacion, :contrasena, :tipousuario)";
+            $statement = $dbConn->prepare($sql);
+            bindAllValues($statement, $input);
+            $statement->execute();
+            $userId = $dbConn->lastInsertId();
+            
+            if($userId)
+            {
+                $input['id'] = $userId;
+                header("HTTP/1.1 200 OK");
+                echo json_encode($input);
+                exit();
+            }
+        }
+
+
 }
+
+
+
 
 //Borrar
 if ($_SERVER['REQUEST_METHOD'] == 'DELETE')
@@ -83,4 +92,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT')
     header("HTTP/1.1 200 OK");
     exit();
 }
+
+
+
+
+
 ?>
