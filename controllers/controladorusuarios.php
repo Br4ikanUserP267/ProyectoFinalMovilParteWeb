@@ -12,6 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     'contrasena' => $contrasena,
     'tipousuario' => $tipousuario
   );
+
   $options = array(
     'http' => array(
       'method'  => 'POST',
@@ -19,6 +20,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       'content' => http_build_query($data)
     )
   );
+
+  
   $context  = stream_context_create($options);
   $result = file_get_contents($api_url, false, $context);
   if ($result === FALSE) {
@@ -33,4 +36,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   http_response_code(405);
   echo json_encode(['message' => 'Método no permitido']);
 }
+
+
+
+
+
+
 ?>

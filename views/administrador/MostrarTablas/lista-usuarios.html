@@ -11,12 +11,30 @@
 <body>
     <div class="container">
         <h1>Listado de usuarios</h1>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="busqueda">Buscar usuario:</label>
+                    <input type="text" class="form-control" id="busqueda" placeholder="Ingrese el número de identificación">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>&nbsp;</label>
+                    <button id="btn-buscar" class="btn btn-primary btn-block">Buscar</button>
+                </div>
+            </div>
+        </div>
+        
         <table id="tabla-usuarios" class="table">
             <thead>
                 <tr>
                     <th>Número de identificación</th>
                     <th>Contraseña</th>
                     <th>Tipo de usuario</th>
+                    <th>Acciones</th>
+
+
                 </tr>
             </thead>
             <tbody>
@@ -51,8 +69,13 @@
                             } else if (usuario.tipousuario === "e") {
                                 tipoUsuario = "Estudiante";
                             }
-                            $('#tabla-usuarios tbody').append('<tr><td>' + usuario.numeroIdentificacion + '</td><td>' + usuario.contrasena + '</td><td>' + tipoUsuario  + '</td></tr>');
+                            let acciones = '<td><button class="btn btn-danger btn-eliminar" data-id="' + usuario.numeroIdentificacion + '">Eliminar</button> ';
+                            acciones += '<button class="btn btn-primary btn-editar" data-id="' + usuario.numeroIdentificacion + '">Editar</button></td>';
+                            $('#tabla-usuarios tbody').append('<tr><td>' + usuario.numeroIdentificacion + '</td><td>' + usuario.contrasena + '</td><td>' + tipoUsuario  + '</td>' + acciones + '</tr>');
+                        
+                        
                         });
+                        
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         console.log(textStatus, errorThrown);
@@ -60,7 +83,73 @@
                 });
             });
         });
-    </script>
+     </script>
+
+     <script>
+        // Eliminar usuario al hacer clic en el botón "Eliminar"
+            $(document).on('click', '.btn-eliminar', function() {
+                let id = $(this).data('id');
+                if (confirm('¿Está seguro que desea eliminar este usuario?')) {
+                    $.ajax({
+                        url: 'http://localhost/proyectoFinal/api/usuarios.php?numeroIdentificacion=' + id,
+                        type: 'DELETE',
+                        dataType: 'json',
+                        success: function(data) {
+                            // Actualizar tabla
+                            $('#btn-cargar').click();
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.log(textStatus, errorThrown);
+                        }
+                    });
+                }
+            });
+
+     </script>
+
+     <script>
+        $(document).ready(function() {
+                // ...
+
+                // Evento de escucha del botón de búsqueda
+                $('#btn-buscar').click(function() {
+                    var busqueda = $('#busqueda').val().trim().toLowerCase();
+                    $('#tabla-usuarios tbody tr').each(function() {
+                        var numeroIdentificacion = $(this).find('td:eq(0)').text().trim().toLowerCase();
+                        if (numeroIdentificacion.indexOf(busqueda) >= 0) {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                    });
+                });
+            });
+
+     </script>
+
+     <script>
+        // Actualizar usuario al hacer clic en el botón "Editar"
+            $(document).on('click', '.btn-editar', function() {
+                let id = $(this).data('id');
+                let contrasena = prompt('Ingrese la nueva contraseña para el usuario con número de identificación ' + id);
+                if (contrasena) {
+                    $.ajax({
+                        url: 'http://localhost/proyectoFinal/api/usuarios.php',
+                        type: 'PUT',
+                        data: { numeroIdentificacion: id, contrasena: contrasena },
+                        dataType: 'json',
+                        success: function(data) {
+                            // Actualizar tabla
+                            $('#btn-cargar').click();
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.log(textStatus, errorThrown);
+                        }
+                    });
+                }
+            });
+
+     </script>
 </body>
 </html>
 
