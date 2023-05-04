@@ -5,19 +5,19 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema dbbiblioteca
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema dbbiblioteca
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8mb4 ;
-USE `mydb` ;
+CREATE SCHEMA IF NOT EXISTS `dbbiblioteca` DEFAULT CHARACTER SET utf8mb4 ;
+USE `dbbiblioteca` ;
 
 -- -----------------------------------------------------
--- Table `mydb`.`autores`
+-- Table `dbbiblioteca`.`autores`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`autores` (
+CREATE TABLE IF NOT EXISTS `dbbiblioteca`.`autores` (
   `idAutores` INT(11) NOT NULL,
   `nombres` VARCHAR(45) NOT NULL,
   `apelldios` VARCHAR(45) NOT NULL,
@@ -28,9 +28,9 @@ DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`categorias`
+-- Table `dbbiblioteca`.`categorias`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`categorias` (
+CREATE TABLE IF NOT EXISTS `dbbiblioteca`.`categorias` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
@@ -39,9 +39,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`editoriales`
+-- Table `dbbiblioteca`.`editoriales`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`editoriales` (
+CREATE TABLE IF NOT EXISTS `dbbiblioteca`.`editoriales` (
   `id` INT(11) NOT NULL,
   `nombre` VARCHAR(45) NULL DEFAULT NULL,
   `correo` VARCHAR(45) NULL DEFAULT NULL,
@@ -52,24 +52,23 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`libros`
+-- Table `dbbiblioteca`.`libros`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`libros` (
+CREATE TABLE IF NOT EXISTS `dbbiblioteca`.`libros` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(45) NULL DEFAULT NULL,
   `Editoriales_id` INT(11) NOT NULL,
   `Categorias_id` INT(11) NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_Libros_Editoriales1` (`Editoriales_id` ASC) VISIBLE,
-  INDEX `fk_Libros_Categorias1` (`Categorias_id` ASC) VISIBLE,
+
   CONSTRAINT `fk_Libros_Categorias1`
     FOREIGN KEY (`Categorias_id`)
-    REFERENCES `mydb`.`categorias` (`id`)
+    REFERENCES `dbbiblioteca`.`categorias` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Libros_Editoriales1`
     FOREIGN KEY (`Editoriales_id`)
-    REFERENCES `mydb`.`editoriales` (`id`)
+    REFERENCES `dbbiblioteca`.`editoriales` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -77,21 +76,21 @@ DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`autores_has_libros`
+-- Table `dbbiblioteca`.`autores_has_libros`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`autores_has_libros` (
+CREATE TABLE IF NOT EXISTS `dbbiblioteca`.`autores_has_libros` (
   `Autores_idAutores` INT(11) NOT NULL,
   `Libros_id` INT(11) NOT NULL,
   PRIMARY KEY (`Autores_idAutores`, `Libros_id`),
-  INDEX `fk_Autores_has_Libros_Libros1` (`Libros_id` ASC) VISIBLE,
+
   CONSTRAINT `fk_Autores_has_Libros_Autores1`
     FOREIGN KEY (`Autores_idAutores`)
-    REFERENCES `mydb`.`autores` (`idAutores`)
+    REFERENCES `dbbiblioteca`.`autores` (`idAutores`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Autores_has_Libros_Libros1`
     FOREIGN KEY (`Libros_id`)
-    REFERENCES `mydb`.`libros` (`id`)
+    REFERENCES `dbbiblioteca`.`libros` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -99,9 +98,9 @@ DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`carrera`
+-- Table `dbbiblioteca`.`carrera`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`carrera` (
+CREATE TABLE IF NOT EXISTS `dbbiblioteca`.`carrera` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `titulo` VARCHAR(45) NULL DEFAULT NULL,
   `descripcion` VARCHAR(200) NULL DEFAULT NULL,
@@ -111,9 +110,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`direcciones`
+-- Table `dbbiblioteca`.`direcciones`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`direcciones` (
+CREATE TABLE IF NOT EXISTS `dbbiblioteca`.`direcciones` (
   `id` INT(11) NOT NULL,
   `pais` VARCHAR(45) NULL DEFAULT NULL,
   `ciudad` VARCHAR(45) NULL DEFAULT NULL,
@@ -124,9 +123,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`estudiantes`
+-- Table `dbbiblioteca`.`estudiantes`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`estudiantes` (
+CREATE TABLE IF NOT EXISTS `dbbiblioteca`.`estudiantes` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `tipoIdentificacion` ENUM('cc', 'ti', 'ce') NOT NULL,
   `numeroIdentificacion` VARCHAR(45) NOT NULL,
@@ -143,9 +142,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`direccionesestudiantes`
+-- Table `dbbiblioteca`.`direccionesestudiantes`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`direccionesestudiantes` (
+CREATE TABLE IF NOT EXISTS `dbbiblioteca`.`direccionesestudiantes` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `pais` VARCHAR(45) NOT NULL,
   `ciudad` VARCHAR(45) NOT NULL,
@@ -154,10 +153,10 @@ CREATE TABLE IF NOT EXISTS `mydb`.`direccionesestudiantes` (
   `barrio` VARCHAR(45) NOT NULL,
   `estudiantes_id` INT(11) NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_direccionesestudiantes_estudiantes1_idx` (`estudiantes_id` ASC) VISIBLE,
+
   CONSTRAINT `fk_direccionesestudiantes_estudiantes1`
     FOREIGN KEY (`estudiantes_id`)
-    REFERENCES `mydb`.`estudiantes` (`id`)
+    REFERENCES `dbbiblioteca`.`estudiantes` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -165,21 +164,21 @@ DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`editoriales_has_direcciones`
+-- Table `dbbiblioteca`.`editoriales_has_direcciones`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`editoriales_has_direcciones` (
+CREATE TABLE IF NOT EXISTS `dbbiblioteca`.`editoriales_has_direcciones` (
   `Editoriales_id` INT(11) NOT NULL,
   `Direcciones_id` INT(11) NOT NULL,
   PRIMARY KEY (`Editoriales_id`, `Direcciones_id`),
-  INDEX `fk_Editoriales_has_Direcciones_Direcciones1` (`Direcciones_id` ASC) VISIBLE,
+ 
   CONSTRAINT `fk_Editoriales_has_Direcciones_Direcciones1`
     FOREIGN KEY (`Direcciones_id`)
-    REFERENCES `mydb`.`direcciones` (`id`)
+    REFERENCES `dbbiblioteca`.`direcciones` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Editoriales_has_Direcciones_Editoriales1`
     FOREIGN KEY (`Editoriales_id`)
-    REFERENCES `mydb`.`editoriales` (`id`)
+    REFERENCES `dbbiblioteca`.`editoriales` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -187,9 +186,9 @@ DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`semestre`
+-- Table `dbbiblioteca`.`semestre`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`semestre` (
+CREATE TABLE IF NOT EXISTS `dbbiblioteca`.`semestre` (
   `numero` INT(11) NOT NULL,
   `fecaInicio` DATE NOT NULL,
   `fechaFinal` DATE NOT NULL,
@@ -199,31 +198,29 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`inscripciones`
+-- Table `dbbiblioteca`.`inscripciones`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`inscripciones` (
+CREATE TABLE IF NOT EXISTS `dbbiblioteca`.`inscripciones` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `descripcion` VARCHAR(45) NULL DEFAULT NULL,
   `Semestre_numero` INT(11) NOT NULL,
   `Carrera_id` INT(11) NOT NULL,
   `estudiantes_id` INT(11) NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_Inscripcion_Semestre1` (`Semestre_numero` ASC) VISIBLE,
-  INDEX `fk_Inscripcion_Carrera1` (`Carrera_id` ASC) VISIBLE,
-  INDEX `fk_inscripciones_estudiantes1_idx` (`estudiantes_id` ASC) VISIBLE,
+
   CONSTRAINT `fk_Inscripcion_Carrera1`
     FOREIGN KEY (`Carrera_id`)
-    REFERENCES `mydb`.`carrera` (`id`)
+    REFERENCES `dbbiblioteca`.`carrera` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Inscripcion_Semestre1`
     FOREIGN KEY (`Semestre_numero`)
-    REFERENCES `mydb`.`semestre` (`numero`)
+    REFERENCES `dbbiblioteca`.`semestre` (`numero`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_inscripciones_estudiantes1`
     FOREIGN KEY (`estudiantes_id`)
-    REFERENCES `mydb`.`estudiantes` (`id`)
+    REFERENCES `dbbiblioteca`.`estudiantes` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -231,17 +228,17 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`locket`
+-- Table `dbbiblioteca`.`locket`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`locket` (
+CREATE TABLE IF NOT EXISTS `dbbiblioteca`.`locket` (
   `idLocket` INT(11) NOT NULL AUTO_INCREMENT,
   `descripcion` VARCHAR(45) NOT NULL,
   `Estudiantes_id` INT(11) NULL DEFAULT NULL,
   PRIMARY KEY (`idLocket`),
-  INDEX `fk_Locket_Estudiantes1` (`Estudiantes_id` ASC) VISIBLE,
+
   CONSTRAINT `fk_Locket_Estudiantes1`
     FOREIGN KEY (`Estudiantes_id`)
-    REFERENCES `mydb`.`estudiantes` (`id`)
+    REFERENCES `dbbiblioteca`.`estudiantes` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -249,19 +246,19 @@ DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`prestamos`
+-- Table `dbbiblioteca`.`prestamos`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`prestamos` (
+CREATE TABLE IF NOT EXISTS `dbbiblioteca`.`prestamos` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `fechaInicio` DATE NULL DEFAULT NULL,
   `fechaFinal` DATE NULL DEFAULT NULL,
   `estado` VARCHAR(45) NULL DEFAULT NULL,
   `Estudiantes_id` INT(11) NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_prestamos_Estudiantes1` (`Estudiantes_id` ASC) VISIBLE,
+ 
   CONSTRAINT `fk_prestamos_Estudiantes1`
     FOREIGN KEY (`Estudiantes_id`)
-    REFERENCES `mydb`.`estudiantes` (`id`)
+    REFERENCES `dbbiblioteca`.`estudiantes` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -269,19 +266,19 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`multas`
+-- Table `dbbiblioteca`.`multas`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`multas` (
+CREATE TABLE IF NOT EXISTS `dbbiblioteca`.`multas` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `fecha` DATE NULL DEFAULT NULL,
   `descripcion` VARCHAR(45) NULL DEFAULT NULL,
   `monto` FLOAT NULL DEFAULT NULL,
   `Prestamos_id` INT(11) NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_Multas_Prestamos1` (`Prestamos_id` ASC) VISIBLE,
+
   CONSTRAINT `fk_Multas_Prestamos1`
     FOREIGN KEY (`Prestamos_id`)
-    REFERENCES `mydb`.`prestamos` (`id`)
+    REFERENCES `dbbiblioteca`.`prestamos` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -289,22 +286,22 @@ DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`prestamos_has_libros`
+-- Table `dbbiblioteca`.`prestamos_has_libros`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`prestamos_has_libros` (
+CREATE TABLE IF NOT EXISTS `dbbiblioteca`.`prestamos_has_libros` (
   `Prestamos_id` INT(11) NOT NULL,
   `Libros_id` INT(11) NOT NULL,
   `fecha` DATE NULL,
   PRIMARY KEY (`Prestamos_id`, `Libros_id`),
-  INDEX `fk_Prestamos_has_Libros_Libros1` (`Libros_id` ASC) VISIBLE,
+
   CONSTRAINT `fk_Prestamos_has_Libros_Libros1`
     FOREIGN KEY (`Libros_id`)
-    REFERENCES `mydb`.`libros` (`id`)
+    REFERENCES `dbbiblioteca`.`libros` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Prestamos_has_Libros_Prestamos1`
     FOREIGN KEY (`Prestamos_id`)
-    REFERENCES `mydb`.`prestamos` (`id`)
+    REFERENCES `dbbiblioteca`.`prestamos` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -312,9 +309,9 @@ DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`usuarios`
+-- Table `dbbiblioteca`.`usuarios`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`usuarios` (
+CREATE TABLE IF NOT EXISTS `dbbiblioteca`.`usuarios` (
   `numeroIdentificacion` INT(11) NOT NULL,
   `contrasena` VARCHAR(45) NOT NULL,
   `tipousuario` ENUM('b', 'a', 'e') NULL DEFAULT NULL,

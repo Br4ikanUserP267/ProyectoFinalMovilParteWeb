@@ -1,36 +1,39 @@
-<?php 
+<?php
 
-class ConectarMySQL {
+  //Abrir conexion a la base de datos
+  function connect($db)
+  {
+      try {
+          $conn = new PDO("mysql:host={$db['host']};dbname={$db['db']}", $db['username'], $db['password']);
 
-    private $conexion;
+          // set the PDO error mode to exception
+          $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    function __construct(){
-        require("../settings/configuraciones.php");
-
-        $this->conexion = new mysqli($servidor, $usuario, $contraseña, $basedatos, $puerto);
-
-        if ($this->conexion->connect_error) {
-            die("Falló la conexión a la base de datos: " . $this->conexion->connect_error);
-        }
+          return $conn;
+      } catch (PDOException $exception) {
+          exit($exception->getMessage());
       }
+  }
 
-    /**
-     * Summary of ejecutarConsulta
-     * @param mixed $sql
-     * @return bool|mysqli_result
-     * 
-     */
-    public function ejecutarConsulta($sql) {
-        $result = $this->conexion->query($sql);
-        if (!$result) {
-            die("Error en la consulta: " . $this->conexion->error);
-        }
-        return $result;
+
+ //Obtener parametros para updates
+ function getParams($input)
+ {
+    $filterParams = [];
+    foreach($input as $param => $value)
+    {
+            $filterParams[] = "$param=:$param";
     }
+    return implode(", ", $filterParams);
+	}
 
-    function getConexion() {
-        return $this->conexion;
-    }
-
-}
-?>
+  //Asociar todos los parametros a un sql
+	function bindAllValues($statement, $params)
+  {
+		foreach($params as $param => $value)
+    {
+				$statement->bindValue(':'.$param, $value);
+		}
+		return $statement;
+   }
+ ?>
