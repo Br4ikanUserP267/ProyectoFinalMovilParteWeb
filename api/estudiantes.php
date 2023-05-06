@@ -42,8 +42,9 @@
         $estudiante = json_decode(file_get_contents("php://input"), true);
     
         // Insertar el estudiante en la base de datos
-        $sql = "INSERT INTO estudiantes (tipoIdentificacion, numeroIdentificacion, nombres, apellidos, celular, fechanacimiento, tiposagre, ciudadnacimiento, paisnacimiento, foto) 
-                VALUES (:tipoIdentificacion, :numeroIdentificacion, :nombres, :apellidos, :celular, :fechanacimiento, :tiposagre, :ciudadnacimiento, :paisnacimiento, :foto)";
+        $sql = "INSERT INTO estudiantes (tipoIdentificacion, numeroIdentificacion, nombres, apellidos, celular, fechanacimiento, tiposagre, ciudadnacimiento, paisnacimiento, foto, correo) 
+        VALUES (:tipoIdentificacion, :numeroIdentificacion, :nombres, :apellidos, :celular, :fechanacimiento, :tiposagre, :ciudadnacimiento, :paisnacimiento, :foto, :correo)";
+
         $statement = $dbConn->prepare($sql);
         $statement->bindValue(':tipoIdentificacion', $estudiante['tipoIdentificacion']);
         $statement->bindValue(':numeroIdentificacion', $estudiante['numeroIdentificacion']);
@@ -55,6 +56,8 @@
         $statement->bindValue(':ciudadnacimiento', $estudiante['ciudadnacimiento']);
         $statement->bindValue(':paisnacimiento', $estudiante['paisnacimiento']);
         $statement->bindValue(':foto', $estudiante['foto']);
+        $statement->bindValue(':correo', $estudiante['correo']);
+
         $statement->execute();
         $estudiante_id = $dbConn->lastInsertId(); // obtener el ID del estudiante insertado
     
@@ -75,6 +78,8 @@
         header("HTTP/1.1 201 Created");
         header("Location: /estudiantes/$estudiante_id");
         exit();
+    
+    
     }
     
 

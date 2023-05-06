@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabla de estudiantes  </title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+<body>
+
+    <h1>Tabla de estudiantes </h1>
+
+    <div class="form-group">
+        <label for="searchInput">Buscar:</label>
+        <input type="text" class="form-control" id="searchInput" placeholder="Escriba algo...">
+    </div>
+    
+    <table class="table table-striped" id="tablaEstudiantes">
+        <thead>
+          <tr>
+            <th>Tipo Identificacion</th>
+            <th>Identificación</th>
+            <th>Nombres</th>
+            <th>Apellidos</th>
+            <th>Celular</th>
+            <th>Fecha de Nacimiento</th>
+            <th>Tipo de Sangre</th>
+            <th>Ciudad de Nacimiento</th>
+            <th>País de Nacimiento</th>
+            <th>Correo Electrónico</th>
+            <th>Pais</th>
+            <th>Ciudad</th>
+            <th>Calle</th>
+            <th>Número</th>
+            <th>Barrio</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <script>
+       $(document).ready(function() {
+       $.ajax({
+            url: 'http://localhost/proyectoFinal/api/estudiantes.php',
+            type: 'GET',
+            success: function(response) {
+            // Analizar la cadena JSON
+            response = JSON.parse(response);
+
+            // Limpiar la tabla antes de agregar nuevos datos
+            $('#tablaEstudiantes tbody').empty();
+            
+            // Recorrer el array de datos y agregarlos a la tabla
+            $.each(response, function(i, estudiante) {
+                var row = $('<tr>');
+                row.append($('<td>').text(estudiante.tipoIdentificacion));
+                row.append($('<td>').text(estudiante.numeroIdentificacion));
+                row.append($('<td>').text(estudiante.nombres));
+                row.append($('<td>').text(estudiante.apellidos));
+                row.append($('<td>').text(estudiante.celular));
+                row.append($('<td>').text(estudiante.fechanacimiento));
+                row.append($('<td>').text(estudiante.tiposagre));
+                row.append($('<td>').text(estudiante.ciudadnacimiento));
+                row.append($('<td>').text(estudiante.paisnacimiento));
+                row.append($('<td>').text(estudiante.correoelectronico));
+                row.append($('<td>').text(estudiante.pais));
+                row.append($('<td>').text(estudiante.ciudad));
+                row.append($('<td>').text(estudiante.calle));
+                row.append($('<td>').text(estudiante.numero));
+                row.append($('<td>').text(estudiante.barrio));
+                $('#tablaEstudiantes tbody').append(row);
+            });
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+            alert('Error al obtener los datos');
+            }
+        });
+        });
+
+
+    </script>
+
+    <script>
+
+            function buscarEstudiantes(busqueda) {
+                // Obtener todas las filas de la tabla
+                var filas = $('#tablaEstudiantes tbody tr');
+
+                // Filtrar las filas que coincidan con la búsqueda
+                filas.each(function() {
+                    var texto = $(this).text().toLowerCase();
+                    if (texto.indexOf(busqueda.toLowerCase()) === -1) {
+                        $(this).hide();
+                    } else {
+                        $(this).show();
+                    }
+                });
+            }
+
+    </script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+</body>
+</html>
