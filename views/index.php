@@ -1,3 +1,43 @@
+<?php
+// Obtener los datos del usuario
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+      $numeroIdentificacion = $_POST['usuario'];
+      $contrasena = $_POST['password'];
+
+      // Conectar a la API de usuarios
+      $url = 'http://localhost/proyectoFinal/api/usuarios.php';
+      $data = file_get_contents($url);
+      $usuarios = json_decode($data);
+
+      // Buscar el usuario en la lista de usuarios
+      $encontrado = false;
+      foreach ($usuarios as $usuario) {
+        if ($usuario->numeroIdentificacion == $numeroIdentificacion && $usuario->contrasena == $contrasena) {
+          $encontrado = true;
+          $tipousuario = $usuario->tipousuario;
+          break;
+        }
+      }
+
+      // Si se encuentra el usuario, redirigirlo a la página correspondiente según su tipo de usuario
+      if ($encontrado) {
+        if ($tipousuario == 'a') {
+          header('Location: ./administrador/menu.php');
+        } else if ($tipousuario == 'b') {
+          header('Location: ./biblioteca/menu.php');
+        } else {
+          echo "Error: Tipo de usuario no válido.";
+        }
+      } else {
+        echo '<div class="alert alert-danger" role="alert">Usuario o contraseña incorrectos.</div>';
+      }
+
+    }
+?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -15,7 +55,7 @@
           <div class="row d-flex justify-content-center align-items-center h-100">
            
             <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-              <form  action="../test/testlogin.php" method="POST">
+              <form method="POST" action="index.php">
                 <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
                   <p class="lead fw-normal mb-0 me-3">Inicio de sesion</p>
             
@@ -35,6 +75,7 @@
                     placeholder="Contraseña" />
                   
                 </div>
+                
       
                 <div class="d-flex justify-content-between align-items-center">
                   <!-- Checkbox -->
@@ -66,6 +107,8 @@
           <!-- Right -->
          
       </section>
+      <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    
     
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
