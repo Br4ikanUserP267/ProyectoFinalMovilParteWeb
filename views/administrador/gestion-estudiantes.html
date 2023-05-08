@@ -20,108 +20,167 @@
     <div class="container">
 
         <form method="post" id="formEstudiantes">
-            <div class="mb-3">
-                <label for="tipoIdentificacion" class="form-label">Tipo de Identificación:</label>
-                <select name="tipoIdentificacion" id="tipoIdentificacion" class="form-select" required>
-                    <option value="">Seleccione una opción</option>
-                    <option value="cc">Cédula de Ciudadanía</option>
-                    <option value="ti">Tarjeta de Identidad</option>
-                    <option value="ce">Cédula de Extranjería</option>
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label for="numeroIdentificacion" class="form-label">Número de Identificación:</label>
-                <input type="text" name="numeroIdentificacion" id="numeroIdentificacion" class="form-control" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="nombres" class="form-label">Nombres:</label>
-                <input type="text" name="nombres" id="nombres" class="form-control" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="apellidos" class="form-label">Apellidos:</label>
-                <input type="text" name="apellidos" id="apellidos" class="form-control" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="celular" class="form-label">Celular:</label>
-                <input type="text" name="celular" id="celular" class="form-control">
-            </div>
-
-            <div class="mb-3">
-                <label for="fechanacimiento" class="form-label">Fecha de Nacimiento:</label>
-                <input type="date" name="fechanacimiento" id="fechanacimiento" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label for="paisnacimiento" class="form-label">País de Nacimiento:</label>
-                <input type="text" name="paisnacimiento" id="paisnacimiento" class="form-control" required>
-            </div>
-            
-            <div class="mb-3">
-                <label for="foto" class="form-label">Foto:</label>
-                <input type="file" name="foto" id="foto" class="form-control">
-            </div>
-            <div class="mb-3">
-              <label for="correo" class="form-label">Correo</label>
-              <input type="text" name="correo" id="correo" class="form-control">
-          </div>
-            <label for="tipoSangre" class="form-label">Tipo de Sangre:</label>
-            <select name="tipoSangre" id="tipoSangre" class="form-select" required>
-                <option value="">Seleccione una opción</option>
-                <option value="A+">A+</option>
-                <option value="A-">A-</option>
-                <option value="B+">B+</option>
-                <option value="B-">B-</option>
-                <option value="AB+">AB+</option>
-                <option value="AB-">AB-</option>
-                <option value="O+">O+</option>
-                <option value="O-">O-</option>
-            </select>
-            
-            <div class="mb-3">
-                <label for="pais" class="form-label">País:</label>
-                <select name="pais" id="pais" class="form-select" required>
+          <form method="post" action="/ruta/para/procesar/el/formulario">
+            <div class="form-group">
+              <label for="tipoIdentificacion">Tipo de identificación:</label>
+              <select class="form-control" id="tipoIdentificacion" name="tipoIdentificacion" required>
                   <option value="">Seleccione una opción</option>
-                  <option value="Colombia">Colombia</option>
-                  <option value="Argentina">Argentina</option>
-                  <option value="Chile">Chile</option>
-                  <option value="Perú">Perú</option>
-                  <option value="México">México</option>
+                  <option value="CC">Cédula de ciudadanía</option>
+                  <option value="TI">Tarjeta de identidad</option>
+                  <option value="CE">Cédula de extranjería</option>
+              </select>
+    
+         
+          
+            </div>
+            <div class="form-group">
+                <label for="numeroIdentificacion">Número de identificación:</label>
+                <input type="text" class="form-control" id="numeroIdentificacion" name="numeroIdentificacion" required>
+            </div>
+            <div class="form-group">
+                <label for="nombres">Nombres:</label>
+                <input type="text" class="form-control" id="nombres" name="nombres" required>
+            </div>
+            <div class="form-group">
+                <label for="apellidos">Apellidos:</label>
+                <input type="text" class="form-control" id="apellidos" name="apellidos" required>
+            </div>
+            <div class="form-group">
+                <label for="celular">Celular:</label>
+                <input type="text" class="form-control" id="celular" name="celular" required>
+            </div>
+            <div class="form-group">
+                <label for="fechanacimiento">Fecha de nacimiento:</label>
+                <input type="date" class="form-control" id="fechanacimiento" name="fechanacimiento" required>
+            </div>
+            <div class="form-group">
+                <label for="tiposagre">Tipo de sangre:</label>
+                <select class="form-control" id="tiposagre" name="tiposagre" required>
+                    <option value="">Seleccione una opción</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
                 </select>
-              </div>
-              <div class="mb-3">
-                <label for="ciudad" class="form-label">ciudad:</label>
+            </div>
+            
+            <div class="form-group">
+                <label for="ciudadnacimiento">Ciudad de nacimiento:</label>
+                <input type="text" class="form-control" id="ciudadnacimiento" name="ciudadnacimiento" required>
+            </div>
+            <div class="form-group">
+                <label for="paisnacimiento">País de nacimiento:</label>
+                <input type="text" class="form-control" id="paisnacimiento" name="paisnacimiento" required>
+            </div>
+            <div class="form-group">
+                <label for="foto">Foto:</label>
+                <input type="file" class="form-control-file" id="foto" name="foto">
+            </div>
+            <div class="form-group">
+                <label for="correoelectronico">Correo electrónico:</label>
+                <input type="email" class="form-control" id="correoelectronico" name="correoelectronico" required>
+            </div>
+            <div class="form-group">
+                <label for="direccion">Dirección:</label>
+                <input type="text" class="form-control" id="direccion" name="direccion" required>
+            </div>
+            <div class="form-group">
+                <label for="pais">País:</label>
+                <input type="text" class="form-control" id="pais" name="pais" required>
+            </div>
+            <div class="form-group">
+                <label for="ciudad">Ciudad:</label>
                 <input type="text" class="form-control" id="ciudad" name="ciudad" required>
-              </div>
-              <div class="mb-3">
-                <label for="calle" class="form-label">Calle:</label>
-                <input type="text" class="form-control" id="calle" name="calle" required>
-              </div>
-              <div class="mb-3">
-                <label for="numero" class="form-label">Número:</label>
-                <input type="text" class="form-control" id="numero" name="numero" required>
-              </div>
-              <div class="mb-3">
-                <label for="barrio" class="form-label">Barrio:</label>
-                <input type="text" class="form-control" id="barrio" name="barrio" required>
-              </div>
-
-           
-             <br>
-            <div class="d-grid gap-2">
-
+            </div>
+            <div class="form-group">
+              <label for="calle">Calle:</label>
+              <input type="text" class="form-control" id="calle" name="calle" required>
+          </div>
+          <div class="form-group">
+            <label for="numero">Numero:</label>
+            <input type="text" class="form-control" id="numero" name="numero" required>
+        </div>
+        <div class="form-group">
+          <label for="barrio">Barrio</label>
+          <input type="text" class="form-control" id="barrio" name="barrio" required>
+      </div>
+      
                 <input type="submit" value="Guardar" class="btn btn-primary">
-                <input type="button"  value="Cancelar" class="btn btn-danger">
+                <input type="button" onclick="limpiarFormulario()"  value="Cancelar" class="btn btn-danger">
                 
               <input type="button" value="Crear Usuario Para Inicio Sesion" class="btn btn-secondary" onclick="irCrearUsuario()">
            
             
-
+    </form>
   </body>
 </html>
 
+    <script>
+
+        function limpiarFormulario() {
+            document.getElementById("formEstudiantes").reset();
+        }
+    </script>
+    <script>
+
+
+        $(document).ready(function() {
+        $("#formEstudiantes").submit(function(event) {
+            event.preventDefault();
+
+            // Set the API endpoint URL
+            var api_url = 'http://localhost/proyectoFinal/api/estudiantes.php';
+
+            // Set the request headers
+            var headers = {
+            'Content-Type': 'application/json'
+            };
+
+            // Set the request body
+            var data = {
+            tipoIdentificacion: $("#tipoIdentificacion").val(),
+            numeroIdentificacion: $("#numeroIdentificacion").val(),
+            nombres: $("#nombres").val(),
+            apellidos: $("#apellidos").val(),
+            celular: $("#celular").val(),
+            fechanacimiento: $("#fechanacimiento").val(),
+            tiposagre: $("#tiposagre").val(),
+            ciudadnacimiento: $("#ciudadnacimiento").val(),
+            paisnacimiento: $("#paisnacimiento").val(),
+            correoelectronico: $("#correoelectronico").val(),
+            foto: $("#foto").val(),
+            direccion: {
+                pais: $("#pais").val(),
+                ciudad: $("#ciudad").val(),
+                calle: $("#calle").val(),
+                numero: $("#numero").val(),
+                barrio: $("#barrio").val()
+            }
+            };
+
+            // Make the AJAX request
+            $.ajax({
+            url: api_url,
+            type: 'POST',
+            headers: headers,
+            data: JSON.stringify(data),
+            success: function(response) {
+                console.log(response);
+                limpiarFormulario()
+
+            },
+            error: function(error) {
+                console.error(error);
+            }
+            });
+        });
+        });
+
+    </script>
 
 
     <script>
@@ -129,60 +188,6 @@
             window.location.href = 'gestion-usuarios.html';
         }
     </script>
-      <script>
-          $(document).ready(function() {
-          $('#formEstudiantes').submit(function(event) {
-            // Prevenir el comportamiento predeterminado del formulario
-            event.preventDefault();
-
-            // Obtener los datos del formulario
-            let  tipoIdentificacion = $('#tipoIdentificacion').val();
-            let  numeroIdentificacion = $('#numeroIdentificacion').val();
-            let  nombres = $('#nombres').val();
-            let  apellidos = $('#apellidos').val();
-            let  celular = $('#celular').val();
-            let  fechanacimiento = $('#fechanacimiento').val();
-            let  paisnacimiento = $('#paisnacimiento').val();
-            let  tipoSangre = $('#tipoSangre').val();
-            let  pais = $('#pais').val();
-            let  ciudad = $('#ciudad').val();
-            let  calle = $('#calle').val();
-            let  foto = $('#foto')[0].files[0]; // Obtener el archivo de la imaglet 
-            //let Crear un objeto FormData con los datos del formulario
-            let  formData = new FormData();
-            formData.append('tipoIdentificacion', tipoIdentificacion);
-            formData.append('numeroIdentificacion', numeroIdentificacion);
-            formData.append('nombres', nombres);
-            formData.append('apellidos', apellidos);
-            formData.append('celular', celular);
-            formData.append('fechanacimiento', fechanacimiento);
-            formData.append('paisnacimiento', paisnacimiento);
-            formData.append('tipoSangre', tipoSangre);
-            formData.append('pais', pais);
-            formData.append('ciudad', ciudad);
-            formData.append('calle', calle);
-            formData.append('foto', foto);
-            formData.append('correo', correo);
-            // Enviar los datos a la API con AJAX
-            $.ajax({
-              url: 'http://localhost/proyectoFinal/api/estudiantes.php',
-              type: 'POST',
-              data: formData,
-              contentType: false,
-              processData: false,
-              success: function(response) {
-                // Si la petición fue exitosa, mostrar un mensaje de éxito
-                alert(response.message);
-              
-              },
-              error: function(jqXHR, textStatus, errorThrown) {
-                // Si la petición falló, mostrar un mensaje de error
-                alert('Error al guardar los datos en la base de datos');
-              }
-            });
-          });
-        });
-      </script>
 
 
 
