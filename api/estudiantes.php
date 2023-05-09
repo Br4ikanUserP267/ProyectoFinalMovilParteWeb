@@ -40,7 +40,29 @@
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Obtener los datos del estudiante de la petición
         $estudiante = json_decode(file_get_contents("php://input"), true);
+        if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+            $tmp_name = $_FILES["foto"]["tmp_name"];
+            $name = $_FILES["foto"]["name"];
+            $upload_dir = "C:/xampp/htdocs/proyectoFinal/images/carnet/";
+            $target_file = $upload_dir . basename($name);
+            
+            // Check if file already exists
+            if (file_exists($target_file)) {
+                echo "El archivo ya existe.";
+            } else {
+                // Try to move the uploaded file to the destination folder
+                if (move_uploaded_file($tmp_name, $target_file)) {
+                    // File was uploaded successfully
+                    echo "El archivo ha sido cargado correctamente.";
+                } else {
+                    // Error while moving the file
+                    echo "Hubo un error al cargar el archivo.";
+                }
+            }
+        }
         
+       
+    
     
         // Insertar el estudiante en la base de datos
         $sql = "INSERT INTO estudiantes (tipoIdentificacion, numeroIdentificacion, nombres, apellidos, celular, fechanacimiento, tiposagre, ciudadnacimiento, paisnacimiento, foto, correoelectronico) 

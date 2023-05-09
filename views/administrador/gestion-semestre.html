@@ -8,7 +8,7 @@
 
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <title>Gestion de estudiantes</title>
+    <title>Gestion de semestres</title>
 </head>
 <html>
   <head>
@@ -17,11 +17,11 @@
   </head>
   <body>
     <div class="container">
-        <form action="guardar_semestre.php" method="POST">
+        <form  method="POST">
         
           <div class="form-group">
             <label for="numero">Numero del semestre </label>
-            <input type="date" class="form-control" id="numero" name="numero" required>
+            <input type="number" class="form-control" id="numero" name="numero" required>
           </div>
           
           <div class="d-grid gap-2">
@@ -35,7 +35,38 @@
 
   </body>
 </html>
+      <script>
 
+        $(document).ready(function() {
+          $('form').submit(function(event) {
+            // Evita que se envíe el formulario de manera convencional
+            event.preventDefault();
+            
+            // Obtiene los datos del formulario
+            var formData = {
+              'numero': $('input[name=numero]').val()
+            };
+            
+            // Envía los datos del formulario a la API a través de AJAX
+            $.ajax({
+              type: 'POST',
+              url: 'http://localhost/proyectoFinal/api/semestres.php',
+              data: formData,
+              dataType: 'json',
+              encode: true
+            })
+            .done(function(data) {
+              console.log(data);
+              alert('Semestre guardado exitosamente.');
+            })
+            .fail(function(data) {
+              console.log(data);
+              alert('Error al guardar el semestre.');
+            });
+          });
+        });
+
+      </script>
 
 
       <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
