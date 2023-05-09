@@ -34,28 +34,27 @@
     // Crear un nuevo usuario
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $input = $_POST;
-        
-    
-        // Check that the required variables are set and not empty
-        if (!empty($input['titulo']) && !empty($input['descripcion'])) {
-            $sql = "INSERT INTO carreras (titulo, descripcion) VALUES (:titulo, :descripcion)";
-            $statement = $dbConn->prepare($sql);
-            bindAllValues($statement, $input);
-            $statement->execute();
-            $userId = $dbConn->lastInsertId();
-    
-            if ($userId) {
-                $input['id'] = $userId;
-                header("HTTP/1.1 200 OK");
-                echo json_encode($input);
-                exit();
-            }
-        } else {
-            header("HTTP/1.1 400 Bad Request");
+
+    // Check that the required variables are set and not empty
+    if (!empty($input['titulo']) && !empty($input['descripcion'])) {
+        $sql = "INSERT INTO carreras (titulo, descripcion) VALUES (:titulo, :descripcion)";
+        $statement = $dbConn->prepare($sql);
+        bindAllValues($statement, $input);
+        $statement->execute();
+        $userId = $dbConn->lastInsertId();
+
+        if ($userId) {
+            $input['id'] = $userId;
+            header("HTTP/1.1 200 OK");
+            echo json_encode($input);
             exit();
         }
+    } else {
+        header("HTTP/1.1 400 Bad Request");
+        exit();
     }
-    
+}
+
 
 
 

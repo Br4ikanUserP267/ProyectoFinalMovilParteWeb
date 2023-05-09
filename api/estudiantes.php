@@ -40,6 +40,7 @@
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Obtener los datos del estudiante de la petición
         $estudiante = json_decode(file_get_contents("php://input"), true);
+        
     
         // Insertar el estudiante en la base de datos
         $sql = "INSERT INTO estudiantes (tipoIdentificacion, numeroIdentificacion, nombres, apellidos, celular, fechanacimiento, tiposagre, ciudadnacimiento, paisnacimiento, foto, correoelectronico) 
