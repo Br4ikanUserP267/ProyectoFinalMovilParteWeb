@@ -13,8 +13,8 @@
     <h1>Inscripcion</h1>
 
     <div class="container">
-        <form action="guardar_inscripcion.php" method="POST">
-          <div class="form-group">
+        <form  method="POST">
+          <div class="form-group" id="formulario">
             <label for="descripcion">Descripción:</label>
             <input type="text" class="form-control" id="descripcion" name="descripcion">
           </div>
@@ -81,6 +81,46 @@
         });
 
 
+
+      </script>
+
+      <script>
+            $(document).ready(function() {
+            $('#formulario').submit(function(event) {
+                // Prevenir el envío del formulario por el método tradicional
+                event.preventDefault();
+
+                // Obtener los valores de los campos del formulario
+                var descripcion = $('#descripcion').val();
+                var semestre = $('#semestre').val();
+                var carrera = $('#carrera').val();
+                var estudiante = $('#estudiante').val();
+
+                // Crear un objeto con los datos a enviar
+                var datos = {
+                    descripcion: descripcion,
+                    semestre: semestre,
+                    carrera: carrera,
+                    estudiante: estudiante
+                };
+
+                // Enviar la solicitud AJAX al servidor
+                $.ajax({
+                    type: 'POST',
+                    url: 'http://localhost/proyectoFinal/api/inscripcion.php',
+                    data: datos,
+                    success: function(respuesta) {
+                        // Procesar la respuesta del servidor
+                        var inscripcion = JSON.parse(respuesta);
+                        alert('La inscripción se ha guardado con éxito con el ID: ' + inscripcion.id);
+                    },
+                    error: function() {
+                        // Mostrar un mensaje de error si la solicitud falla
+                        alert('Ha ocurrido un error al guardar la inscripción');
+                    }
+                });
+            });
+        });
 
       </script>
 
