@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,7 +21,7 @@
     <div class="container">
 
         <form method="post" id="formEstudiantes">
-          <form method="post" action="/ruta/para/procesar/el/formulario">
+        
             <div class="form-group">
               <label for="tipoIdentificacion">Tipo de identificación:</label>
               <select class="form-control" id="tipoIdentificacion" name="tipoIdentificacion" required>
@@ -113,7 +114,7 @@
                 <input type="button" onclick="limpiarFormulario()"  value="Cancelar" class="btn btn-danger">
                 
               <input type="button" value="Crear Usuario Para Inicio Sesion" class="btn btn-secondary" onclick="irCrearUsuario()">
-                    
+
             
     </form>
   </body>

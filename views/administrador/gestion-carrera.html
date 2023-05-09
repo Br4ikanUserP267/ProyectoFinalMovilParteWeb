@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +8,8 @@
     <meta name="viewport" content="width=, initial-scale=1.0">
 
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <title>Gestion de estudiantes</title>
 </head>
 <html>
@@ -16,7 +20,7 @@
   <body>
     <div class="container">
 
-        <form method="post" action="guardar.php">
+        <form method="post" >
             <div class="form-group">
                 <label for="titulo">Título:</label>
                 <input type="text" class="form-control" id="titulo" name="titulo">
@@ -25,7 +29,7 @@
                 <label for="descripcion">Descripción:</label>
                 <textarea class="form-control" id="descripcion" name="descripcion" rows="4"></textarea>
               </div>
-              <button type="submit" class="btn btn-primary">Guardar</button>
+              <button type="submit" class="btn btn-primary" id="submit-btn">Guardar</button>
               <button type="reset" class="btn btn-danger">Cancelar</button>
 
         </form>
@@ -33,6 +37,35 @@
           document.querySelector('button.btn-danger').addEventListener('click', function() {
             document.querySelector('form').reset();
           });
+        </script>
+
+        <script>
+              // Get form data and send a POST request to the PHP script
+              $(document).ready(function() {
+                $("#submit-btn").click(function() {
+                  var titulo = $("#titulo").val();
+                  var descripcion = $("#descripcion").val();
+                  
+                  $.ajax({
+                    type: "POST",
+                    url: "http://localhost/proyectoFinal/api/carreras.php",
+                    data: {titulo: titulo, descripcion: descripcion},
+                    dataType: "json",
+                    success: function(response) {
+                      console.log(response);
+                      // Handle successful response
+                    },
+                    error: function(xhr, status, error) {
+                      console.log(xhr.responseText);
+                      // Handle error response
+                    }
+                  });
+                });
+              });
+
+
+
+
         </script>
   </body>
 </html>

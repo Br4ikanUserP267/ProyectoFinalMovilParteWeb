@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
     <title>Gestion de Inscripcion</title>
@@ -29,10 +30,7 @@
           <div class="form-group">
             <label for="carrera">Carrera:</label>
             <select class="form-control" id="carrera" name="carrera">
-              <option value="1">Ingeniería de Sistemas</option>
-              <option value="2">Ingeniería Industrial</option>
-              <option value="3">Ingeniería Civil</option>
-              <!-- agregar más opciones aquí -->
+             
             </select>
           </div>
           <div class="form-group">
@@ -46,7 +44,28 @@
           <button type="submit" class="btn btn-danger">Cancelar</button>
         </form>
       </div>
-      
+
+      <script>
+
+          // Obtener datos de la tabla carreras desde la API
+            $.ajax({
+              url: "http://localhost/proyectoFinal/api/carreras.php",
+              dataType: "json",
+              success: function(response) {
+                // Agregar las opciones al select
+                response.forEach(function(carrera) {
+                  $("#carrera").append("<option value='" + carrera.id + "'>" + carrera.titulo + "</option>");
+                });
+              },
+              error: function(xhr, status, error) {
+                console.log(xhr.responseText);
+                // Handle error response
+              }
+            });
+
+
+
+      </script>
    
 
       <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
