@@ -65,8 +65,8 @@
     
     
         // Insertar el estudiante en la base de datos
-        $sql = "INSERT INTO estudiantes (tipoIdentificacion, numeroIdentificacion, nombres, apellidos, celular, fechanacimiento, tiposagre, ciudadnacimiento, paisnacimiento, foto, correoelectronico) 
-        VALUES (:tipoIdentificacion, :numeroIdentificacion, :nombres, :apellidos, :celular, :fechanacimiento, :tiposagre, :ciudadnacimiento, :paisnacimiento, :foto, :correo)";
+        $sql = "INSERT INTO estudiantes (tipoIdentificacion, numeroIdentificacion, nombres, apellidos, celular, fechanacimiento, tiposagre, ciudadnacimiento, paisnacimiento,departamentonacimiento, foto, correoelectronico) 
+        VALUES (:tipoIdentificacion, :numeroIdentificacion, :nombres, :apellidos, :celular, :fechanacimiento, :tiposagre, :ciudadnacimiento, :paisnacimiento,:departamentonacimiento, :foto, :correo)";
 
         $statement = $dbConn->prepare($sql);
         $statement->bindValue(':tipoIdentificacion', $estudiante['tipoIdentificacion']);
@@ -78,6 +78,7 @@
         $statement->bindValue(':tiposagre', $estudiante['tiposagre']);
         $statement->bindValue(':ciudadnacimiento', $estudiante['ciudadnacimiento']);
         $statement->bindValue(':paisnacimiento', $estudiante['paisnacimiento']);
+        $statement->bindValue(':departamentonacimiento', $estudiante['departamentonacimiento']);
         $statement->bindValue(':foto', $estudiante['foto']);
         $statement->bindValue(':correo', $estudiante['correoelectronico']);
 
@@ -86,17 +87,18 @@
     
         // Insertar la dirección del estudiante en la base de datos
         $direccion = $estudiante['direccion'];
-        $sql = "INSERT INTO direccionesestudiantes (pais, ciudad, calle, numero, barrio, estudiantes_id) 
-                VALUES (:pais, :ciudad, :calle, :numero, :barrio, :estudiantes_id)";
+        $sql = "INSERT INTO direccionesestudiantes (pais,departamento, ciudad, calle, numero, barrio, estudiantes_id) 
+                VALUES (:pais, :departamento, :ciudad ,:calle, :numero, :barrio, :estudiantes_id)";
         $statement = $dbConn->prepare($sql);
         $statement->bindValue(':pais', $direccion['pais']);
+        $statement->bindValue(':departamento', $direccion['departamento']);
         $statement->bindValue(':ciudad', $direccion['ciudad']);
         $statement->bindValue(':calle', $direccion['calle']);
         $statement->bindValue(':numero', $direccion['numero']);
+      
         $statement->bindValue(':barrio', $direccion['barrio']);
         $statement->bindValue(':estudiantes_id', $estudiante_id);
         $statement->execute();
-    
         // Devolver una respuesta con el ID del estudiante insertado
         header("HTTP/1.1 201 Created");
         header("Location: /estudiantes/$estudiante_id");

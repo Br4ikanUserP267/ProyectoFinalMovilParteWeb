@@ -1,5 +1,5 @@
- T
-<!DOCTYPE html>
+
+  <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -20,7 +20,7 @@
   <body>
     <div class="container">
 
-        <form method="post" id="formEstudiantes">
+        <form method="post" id="formEstudiantes" action="gestion-estudiantes.php" >
         
             <div class="form-group">
               <label for="tipoIdentificacion">Tipo de identificación:</label>
@@ -68,7 +68,10 @@
                     <option value="AB-">AB-</option>
                 </select>
             </div>
-            
+            <div class="form-group">
+              <label for="dapartamentoNacimiento">Departamento de nacimiento:</label>
+              <input type="text" class="form-control" id="dapartamentoNacimiento" name="dapartamentoNacimiento" required>
+          </div>
             <div class="form-group">
                 <label for="ciudadnacimiento">Ciudad de nacimiento:</label>
                 <input type="text" class="form-control" id="ciudadnacimiento" name="ciudadnacimiento" required>
@@ -89,10 +92,17 @@
                 <label for="direccion">Dirección:</label>
                 <input type="text" class="form-control" id="direccion" name="direccion" required>
             </div>
+
+            <h2>Direcciones</h2>
             <div class="form-group">
                 <label for="pais">País:</label>
                 <input type="text" class="form-control" id="pais" name="pais" required>
             </div>
+            <div class="form-group">
+            <label for="departamento">Departamento:</label>
+            <input type="text" class="form-control" id="departamento" name="departamento" required>
+            </div>
+
             <div class="form-group">
                 <label for="ciudad">Ciudad:</label>
                 <input type="text" class="form-control" id="ciudad" name="ciudad" required>
@@ -101,6 +111,7 @@
               <label for="calle">Calle:</label>
               <input type="text" class="form-control" id="calle" name="calle" required>
           </div>
+        
           <div class="form-group">
             <label for="numero">Numero:</label>
             <input type="text" class="form-control" id="numero" name="numero" required>
@@ -151,15 +162,18 @@
             fechanacimiento: $("#fechanacimiento").val(),
             tiposagre: $("#tiposagre").val(),
             ciudadnacimiento: $("#ciudadnacimiento").val(),
+            departamentonacimiento: $("#dapartamentoNacimiento").val(),
             paisnacimiento: $("#paisnacimiento").val(),
             correoelectronico: $("#correoelectronico").val(),
             foto: $("#foto").val(),
             direccion: {
                 pais: $("#pais").val(),
+                departamento : $("#departamento").val(),
                 ciudad: $("#ciudad").val(),
                 calle: $("#calle").val(),
                 numero: $("#numero").val(),
                 barrio: $("#barrio").val()
+                
             }
             };
 
@@ -171,6 +185,7 @@
             data: JSON.stringify(data),
             success: function(response) {
                 console.log(response);
+                
                 limpiarFormulario()
 
             },

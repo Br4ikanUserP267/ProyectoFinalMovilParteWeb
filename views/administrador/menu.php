@@ -45,7 +45,7 @@
         }
 
         function gestionEstudiantes(){
-            window.location.href = 'gestion-estudiantes.html';
+            window.location.href = 'gestion-estudiantes.php';
         }
 
         function  gestionSemestre(){
