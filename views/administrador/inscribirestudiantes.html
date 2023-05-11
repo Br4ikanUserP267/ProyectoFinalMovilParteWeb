@@ -13,8 +13,8 @@
     <h1>Inscripcion</h1>
 
     <div class="container">
-        <form  method="POST">
-          <div class="form-group" id="formulario">
+        <form  method="POST" id="formulario">
+          <div class="form-group" >
             <label for="descripcion">Descripción:</label>
             <input type="text" class="form-control" id="descripcion" name="descripcion">
           </div>
@@ -51,7 +51,7 @@
             success: function(response) {
               // Agregar las opciones al select
               response.forEach(function(semestre) {
-                $("#semestre").append("<option value='" + semestre.id + "'>" + semestre.numero + "</option>");
+                $("#semestre").append("<option value='"+semestre.numero+"'>"+semestre.numero+"</option>");
               });
             },
             error: function(xhr, status, error) {
@@ -83,32 +83,65 @@
       
             // Recopilar los datos del formulario
             var descripcion = $("#descripcion").val();
-            var fecha = $("#fecha").val();
-            var semestreId = $("#semestre").val();
+            var fecha = new Date();
+
+              var anio = fecha.getFullYear();
+              var mes = fecha.getMonth() + 1; // Sumamos 1 porque los meses empiezan en 0
+              if (mes < 10) {
+                mes = "0" + mes;
+              }
+              var dia = fecha.getDate();
+              if (dia < 10) {
+                dia = "0" + dia;
+              }
+
+              var hora = fecha.getHours();
+              if (hora < 10) {
+                hora = "0" + hora;
+              }
+              var minutos = fecha.getMinutes();
+              if (minutos < 10) {
+                minutos = "0" + minutos;
+              }
+              var segundos = fecha.getSeconds();
+              if (segundos < 10) {
+                segundos = "0" + segundos;
+              }
+
+              var datetime = anio + "-" + mes + "-" + dia + "T" + hora + ":" + minutos + ":" + segundos;
+              console.log(datetime); // Imprime la fecha y hora actual en formato datetime
+
+
+            var semestreId = $("#semestre").val();     
             var carreraId = $("#carrera").val();
             var estudianteId = $("#estudiante").val();
       
             // Enviar los datos a través de una solicitud Ajax
             $.ajax({
-              url: "http://localhost/proyectoFinal/api/inscripcion.php",
-              method: "POST",
-              dataType: "json",
-              data: JSON.stringify({
-                descripcion: descripcion,
-                fecha: fecha,
-                Semestre_numero: semestreId,
-                Carrera_id: carreraId,
-                estudiantes_id: estudianteId
-              }),
-              success: function(response) {
-                // Handle success response
-                console.log(response);
-              },
-              error: function(xhr, status, error) {
-                console.log(xhr.responseText);
-                // Handle error response
-              }
-            });
+                url: "http://localhost/proyectoFinal/api/inscripcion.php",
+                method: "POST",
+                dataType: "json",
+                data: JSON.stringify({
+                      descripcion: descripcion,
+                      fecha: datetime,
+                      Semestre_numero: semestreId,
+                      Carrera_id: carreraId,
+                      estudiantes_id: estudianteId
+                }),
+                success: function(response) {
+                  // Handle success response
+                  console.log(response);
+                },
+                error: function(xhr, status, error) {
+                  var errorMessage = xhr.status + ': ' + xhr.statusText;
+                  if (xhr.responseText) {
+                    var responseError = JSON.parse(xhr.responseText).error;
+                    errorMessage = responseError || errorMessage;
+                  }
+                  console.log("Error al registrar la inscripción: " + errorMessage);
+                  $("#mensaje-error").text("Error al registrar la inscripción: " + errorMessage);
+                }
+              });
           });
         });
       </script>
