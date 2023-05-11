@@ -32,7 +32,7 @@
           </div>
           <div class="form-group">
             <label for="estudiante">Estudiante:</label>
-            <input type="number" class="form-control" name="" id="estudiante">
+            <input type="number" class="form-control" name="estudiante" id="estudiante">
           </div>
 
           <br>
@@ -43,87 +43,77 @@
       </div>
 
       <script>
-
+        $(document).ready(function() {
+          // Obtener datos de la tabla semestres desde la API
+          $.ajax({
+            url: "http://localhost/proyectoFinal/api/semestres.php",
+            dataType: "json",
+            success: function(response) {
+              // Agregar las opciones al select
+              response.forEach(function(semestre) {
+                $("#semestre").append("<option value='" + semestre.id + "'>" + semestre.numero + "</option>");
+              });
+            },
+            error: function(xhr, status, error) {
+              console.log(xhr.responseText);
+              // Handle error response
+            }
+          });
+      
           // Obtener datos de la tabla carreras desde la API
+          $.ajax({
+            url: "http://localhost/proyectoFinal/api/carreras.php",
+            dataType: "json",
+            success: function(response) {
+              // Agregar las opciones al select
+              response.forEach(function(carrera) {
+                $("#carrera").append("<option value='" + carrera.id + "'>" + carrera.titulo + "</option>");
+              });
+            },
+            error: function(xhr, status, error) {
+              console.log(xhr.responseText);
+              // Handle error response
+            }
+          });
+      
+          // Registrar evento submit en el formulario
+          $("#formulario").submit(function(event) {
+            // Evitar la acción predeterminada del formulario
+            event.preventDefault();
+      
+            // Recopilar los datos del formulario
+            var descripcion = $("#descripcion").val();
+            var fecha = $("#fecha").val();
+            var semestreId = $("#semestre").val();
+            var carreraId = $("#carrera").val();
+            var estudianteId = $("#estudiante").val();
+      
+            // Enviar los datos a través de una solicitud Ajax
             $.ajax({
-              url: "http://localhost/proyectoFinal/api/carreras.php",
+              url: "http://localhost/proyectoFinal/api/inscripcion.php",
+              method: "POST",
               dataType: "json",
+              data: JSON.stringify({
+                descripcion: descripcion,
+                fecha: fecha,
+                Semestre_numero: semestreId,
+                Carrera_id: carreraId,
+                estudiantes_id: estudianteId
+              }),
               success: function(response) {
-                // Agregar las opciones al select
-                response.forEach(function(carrera) {
-                  $("#carrera").append("<option value='" + carrera.id + "'>" + carrera.titulo + "</option>");
-                });
+                // Handle success response
+                console.log(response);
               },
               error: function(xhr, status, error) {
                 console.log(xhr.responseText);
                 // Handle error response
               }
             });
-
-
-
-      </script>
-      <script>
-
-        $.ajax({
-          url: "http://localhost/proyectoFinal/api/semestres.php",
-          dataType: "json",
-          success: function(response) {
-            // Agregar las opciones al select
-            response.forEach(function(semestre) {
-              $("#semestre").append("<option value='" + semestre.numero + "'>" + semestre.numero + "</option>");
-            });
-          },
-          error: function(xhr, status, error) {
-            console.log(xhr.responseText);
-            // Handle error response
-          }
+          });
         });
-
-
-
       </script>
-
-      <script>
-            $(document).ready(function() {
-            $('#formulario').submit(function(event) {
-                // Prevenir el envío del formulario por el método tradicional
-                event.preventDefault();
-
-                // Obtener los valores de los campos del formulario
-                var descripcion = $('#descripcion').val();
-                var semestre = $('#semestre').val();
-                var carrera = $('#carrera').val();
-                var estudiante = $('#estudiante').val();
-
-                // Crear un objeto con los datos a enviar
-                var datos = {
-                    descripcion: descripcion,
-                    semestre: semestre,
-                    carrera: carrera,
-                    estudiante: estudiante
-                };
-
-                // Enviar la solicitud AJAX al servidor
-                $.ajax({
-                    type: 'POST',
-                    url: 'http://localhost/proyectoFinal/api/inscripcion.php',
-                    data: datos,
-                    success: function(respuesta) {
-                        // Procesar la respuesta del servidor
-                        var inscripcion = JSON.parse(respuesta);
-                        alert('La inscripción se ha guardado con éxito con el ID: ' + inscripcion.id);
-                    },
-                    error: function() {
-                        // Mostrar un mensaje de error si la solicitud falla
-                        alert('Ha ocurrido un error al guardar la inscripción');
-                    }
-                });
-            });
-        });
-
-      </script>
-
+      
+      
       <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
 </body>

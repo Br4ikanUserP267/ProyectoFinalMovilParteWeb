@@ -1,6 +1,7 @@
 <?php
-include "../components/conexion.php";
-include "../settings/configuraciones.php";
+  include "../components/conexion.php";
+  include "../settings/configuraciones.php";
+
 
 $dbConn = connect($db);
 
@@ -27,27 +28,52 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
 // Create a new inscripcion
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $input = $_POST;
+    $input = json_decode(file_get_contents('php://input'), true);
+
 
     // Check that the required variables are set and not empty
-    if (!empty($input['descripcion']) && !empty($input['fecha']) && !empty($input['Semestre_numero']) && !empty($input['Carrera_id']) && !empty($input['estudiantes_id'])) {
-        $sql = "INSERT INTO inscripciones (descripcion, fecha, Semestre_numero, Carrera_id, estudiantes_id) VALUES (:descripcion, :fecha, :Semestre_numero, :Carrera_id, :estudiantes_id)";
-        $statement = $dbConn->prepare($sql);
-        bindAllValues($statement, $input);
-        $statement->execute();
-        $inscripcionId = $dbConn->lastInsertId();
-
-        if ($inscripcionId) {
-            $input['id'] = $inscripcionId;
-            header("HTTP/1.1 200 OK");
-            echo json_encode($input);
-            exit();
-        }
-    } else {
+    $requiredFields = array('descripcion', 'fecha', 'Semestre_numero', 'Carrera_id', 'estudiantes_id');
+    $missingFields = array_diff($requiredFields, array_keys($input));
+    if (!empty($missingFields)) {
+        $missingFieldsStr = implode(", ", $missingFields);
         header("HTTP/1.1 400 Bad Request");
+        echo json_encode(array("message" => "Faltan los siguientes campos requeridos: " . $missingFieldsStr));
         exit();
     }
+
+    // Prepare the SQL statement
+    $sql = 
+    "INSERT INTO inscripciones (descripcion, fecha, Semestre_numero, Carrera_id, estudiantes_id) 
+    VALUES (:descripcion, :fecha, :Semestre_numero, :Carrera_id, :estudiantes_id)";
+    $statement = $dbConn->prepare($sql);
+
+    // Bind the parameters to the prepared statement
+    $statement->bindParam(':descripcion', $input['descripcion']);
+    $statement->bindParam(':fecha', $input['fecha']);
+    $statement->bindParam(':Semestre_numero', $input['Semestre_numero']);
+    $statement->bindParam(':Carrera_id', $input['Carrera_id']);
+    $statement->bindParam(':estudiantes_id', $input['estudiantes_id']);
+
+    // Execute the statement
+    if ($statement->execute()) {
+        $inscripcionId = $dbConn->lastInsertId();
+        $input['id'] = $inscripcionId;
+        header("HTTP/1.1 200 OK");
+        echo json_encode($input);
+        exit();
+    } else {
+        $errorInfo = $statement->errorInfo();
+        header("HTTP/1.1 500 Internal Server Error");
+        echo json_encode(array("message" => "Error al ejecutar la consulta SQL: " . $errorInfo[2]));
+        exit();
+    }
+} else {
+    header("HTTP/1.1 400 Bad Request");
+    exit();
 }
+
+
+
 
 // Delete an inscripcion
 if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {

@@ -1,5 +1,4 @@
-
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -121,7 +120,7 @@
           <input type="text" class="form-control" id="barrio" name="barrio" required>
       </div>
       
-                <input type="submit" value="Guardar" class="btn btn-primary">
+                <input type="submit"  value="Guardar" class="btn btn-primary">
                 <input type="button" onclick="limpiarFormulario()"  value="Cancelar" class="btn btn-danger">
                 
               <input type="button" value="Crear Usuario Para Inicio Sesion" class="btn btn-secondary" onclick="irCrearUsuario()">
@@ -137,6 +136,7 @@
             document.getElementById("formEstudiantes").reset();
         }
     </script>
+
     <script>
 
 
@@ -165,7 +165,8 @@
             departamentonacimiento: $("#dapartamentoNacimiento").val(),
             paisnacimiento: $("#paisnacimiento").val(),
             correoelectronico: $("#correoelectronico").val(),
-            foto: $("#foto").val(),
+            foto: $("#foto")[0].files[0],
+
             direccion: {
                 pais: $("#pais").val(),
                 departamento : $("#departamento").val(),
