@@ -1,331 +1,556 @@
--- MySQL Workbench Forward Engineering
+-- phpMyAdmin SQL Dump
+-- version 5.2.0
+-- https://www.phpmyadmin.net/
+--
+-- Servidor: 127.0.0.1:3307
+-- Tiempo de generación: 11-05-2023 a las 04:13:54
+-- Versión del servidor: 10.4.27-MariaDB
+-- Versión de PHP: 8.1.12
 
-SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
-
--- -----------------------------------------------------
--- Schema dbbiblioteca
--- -----------------------------------------------------
-
--- -----------------------------------------------------
--- Schema dbbiblioteca
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `dbbiblioteca` DEFAULT CHARACTER SET utf8mb4 ;
-USE `dbbiblioteca` ;
-
--- -----------------------------------------------------
--- Table `dbbiblioteca`.`autores`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbbiblioteca`.`autores` (
-  `idAutores` INT(11) NOT NULL,
-  `nombres` VARCHAR(45) NOT NULL,
-  `apelldios` VARCHAR(45) NOT NULL,
-  `biografia` VARCHAR(200) NOT NULL,
-  PRIMARY KEY (`idAutores`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4;
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
 
 
--- -----------------------------------------------------
--- Table `dbbiblioteca`.`categorias`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbbiblioteca`.`categorias` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `nombre` VARCHAR(45) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
 
+--
+-- Base de datos: `dbbiblioteca`
+--
 
--- -----------------------------------------------------
--- Table `dbbiblioteca`.`editoriales`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbbiblioteca`.`editoriales` (
-  `id` INT(11) NOT NULL,
-  `nombre` VARCHAR(45) NULL DEFAULT NULL,
-  `correo` VARCHAR(45) NULL DEFAULT NULL,
-  `numerocontacto` VARCHAR(45) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+-- --------------------------------------------------------
 
+--
+-- Estructura de tabla para la tabla `autores`
+--
 
--- -----------------------------------------------------
--- Table `dbbiblioteca`.`libros`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbbiblioteca`.`libros` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `nombre` VARCHAR(45) NULL DEFAULT NULL,
-  `Editoriales_id` INT(11) NOT NULL,
-  `Categorias_id` INT(11) NOT NULL,
-  PRIMARY KEY (`id`),
+CREATE TABLE `autores` (
+  `id` int(11) NOT NULL,
+  `nombres` varchar(45) NOT NULL,
+  `apelldios` varchar(45) NOT NULL,
+  `biografia` varchar(200) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-  CONSTRAINT `fk_Libros_Categorias1`
-    FOREIGN KEY (`Categorias_id`)
-    REFERENCES `dbbiblioteca`.`categorias` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Libros_Editoriales1`
-    FOREIGN KEY (`Editoriales_id`)
-    REFERENCES `dbbiblioteca`.`editoriales` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4;
+-- --------------------------------------------------------
 
+--
+-- Estructura de tabla para la tabla `autores_has_libros`
+--
 
--- -----------------------------------------------------
--- Table `dbbiblioteca`.`autores_has_libros`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbbiblioteca`.`autores_has_libros` (
-  `Autores_idAutores` INT(11) NOT NULL,
-  `Libros_id` INT(11) NOT NULL,
-  PRIMARY KEY (`Autores_idAutores`, `Libros_id`),
+CREATE TABLE `autores_has_libros` (
+  `Autores_idAutores` int(11) NOT NULL,
+  `Libros_id` int(11) NOT NULL,
+  `fecha` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-  CONSTRAINT `fk_Autores_has_Libros_Autores1`
-    FOREIGN KEY (`Autores_idAutores`)
-    REFERENCES `dbbiblioteca`.`autores` (`idAutores`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Autores_has_Libros_Libros1`
-    FOREIGN KEY (`Libros_id`)
-    REFERENCES `dbbiblioteca`.`libros` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4;
+-- --------------------------------------------------------
 
+--
+-- Estructura de tabla para la tabla `carreras`
+--
 
--- -----------------------------------------------------
--- Table `dbbiblioteca`.`carrera`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbbiblioteca`.`carrera` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `titulo` VARCHAR(45) NULL DEFAULT NULL,
-  `descripcion` VARCHAR(200) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+CREATE TABLE `carreras` (
+  `id` int(11) NOT NULL,
+  `titulo` varchar(45) DEFAULT NULL,
+  `descripcion` varchar(200) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+--
+-- Volcado de datos para la tabla `carreras`
+--
 
--- -----------------------------------------------------
--- Table `dbbiblioteca`.`direcciones`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbbiblioteca`.`direcciones` (
-  `id` INT(11) NOT NULL,
-  `pais` VARCHAR(45) NULL DEFAULT NULL,
-  `ciudad` VARCHAR(45) NULL DEFAULT NULL,
-  `direccion` VARCHAR(45) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+INSERT INTO `carreras` (`id`, `titulo`, `descripcion`) VALUES
+(1, 'Ingeniería de sistemas', 'La ingeniería de sistemas es un campo interdisciplinario de la ingeniería que permite estudiar y comprender la realidad, con el propósito de implementar u optimizar sistemas complejos.'),
+(2, 'Arquitectura', 'es una carrera muy bonita\n'),
+(3, 'Diseño industrial', 'El diseño industrial es una actividad proyectual de diseño de productos seriados o industriales, que podemos diferenciar en dos tipos: bienes de consumo y bienes de capital'),
+(4, 'Psicologia', 'No se '),
+(5, 'Derecho', 'No sirve pa na');
 
+-- --------------------------------------------------------
 
--- -----------------------------------------------------
--- Table `dbbiblioteca`.`estudiantes`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbbiblioteca`.`estudiantes` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `tipoIdentificacion` ENUM('cc', 'ti', 'ce') NOT NULL,
-  `numeroIdentificacion` VARCHAR(45) NOT NULL,
-  `nombres` VARCHAR(45) NOT NULL,
-  `apellidos` VARCHAR(45) NOT NULL,
-  `celular` VARCHAR(45) NULL DEFAULT NULL,
-  `fechanacimiento` DATE NOT NULL,
-  `tiposagre` ENUM('A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-') NOT NULL,
-  `ciudadnacimiento` VARCHAR(45) NOT NULL,
-  `paisnacimiento` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+--
+-- Estructura de tabla para la tabla `categorias`
+--
 
+CREATE TABLE `categorias` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(45) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
--- -----------------------------------------------------
--- Table `dbbiblioteca`.`direccionesestudiantes`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbbiblioteca`.`direccionesestudiantes` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `pais` VARCHAR(45) NOT NULL,
-  `ciudad` VARCHAR(45) NOT NULL,
-  `calle` VARCHAR(45) NOT NULL,
-  `numero` VARCHAR(45) NOT NULL,
-  `barrio` VARCHAR(45) NOT NULL,
-  `estudiantes_id` INT(11) NOT NULL,
-  PRIMARY KEY (`id`),
+-- --------------------------------------------------------
 
-  CONSTRAINT `fk_direccionesestudiantes_estudiantes1`
-    FOREIGN KEY (`estudiantes_id`)
-    REFERENCES `dbbiblioteca`.`estudiantes` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4;
+--
+-- Estructura de tabla para la tabla `direcciones`
+--
 
+CREATE TABLE `direcciones` (
+  `id` int(11) NOT NULL,
+  `pais` varchar(45) DEFAULT NULL,
+  `ciudad` varchar(45) DEFAULT NULL,
+  `direccion` varchar(45) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
--- -----------------------------------------------------
--- Table `dbbiblioteca`.`editoriales_has_direcciones`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbbiblioteca`.`editoriales_has_direcciones` (
-  `Editoriales_id` INT(11) NOT NULL,
-  `Direcciones_id` INT(11) NOT NULL,
-  PRIMARY KEY (`Editoriales_id`, `Direcciones_id`),
- 
-  CONSTRAINT `fk_Editoriales_has_Direcciones_Direcciones1`
-    FOREIGN KEY (`Direcciones_id`)
-    REFERENCES `dbbiblioteca`.`direcciones` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Editoriales_has_Direcciones_Editoriales1`
-    FOREIGN KEY (`Editoriales_id`)
-    REFERENCES `dbbiblioteca`.`editoriales` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4;
+-- --------------------------------------------------------
 
+--
+-- Estructura de tabla para la tabla `direccionesestudiantes`
+--
 
--- -----------------------------------------------------
--- Table `dbbiblioteca`.`semestre`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbbiblioteca`.`semestre` (
-  `numero` INT(11) NOT NULL,
-  `fecaInicio` DATE NOT NULL,
-  `fechaFinal` DATE NOT NULL,
-  PRIMARY KEY (`numero`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+CREATE TABLE `direccionesestudiantes` (
+  `id` int(11) NOT NULL,
+  `pais` varchar(45) NOT NULL,
+  `departamento` varchar(45) NOT NULL,
+  `ciudad` varchar(45) NOT NULL,
+  `calle` varchar(45) NOT NULL,
+  `numero` varchar(45) NOT NULL,
+  `barrio` varchar(45) NOT NULL,
+  `estudiantes_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `direccionesestudiantes`
+--
 
--- -----------------------------------------------------
--- Table `dbbiblioteca`.`inscripciones`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbbiblioteca`.`inscripciones` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `descripcion` VARCHAR(45) NULL DEFAULT NULL,
-  `Semestre_numero` INT(11) NOT NULL,
-  `Carrera_id` INT(11) NOT NULL,
-  `estudiantes_id` INT(11) NOT NULL,
-  PRIMARY KEY (`id`),
+INSERT INTO `direccionesestudiantes` (`id`, `pais`, `departamento`, `ciudad`, `calle`, `numero`, `barrio`, `estudiantes_id`) VALUES
+(34, 'sinclejeo', 'SINCELEJO', '10', 'ALPES', '11', 'ALPES', 50),
+(35, 'Colombia', 'SINCELEJO', '10', 'ALPES', '1111', 'ALPES', 51),
+(36, 'sinclejeo', 'Sincelejo', '11', '18', '17', '18', 53),
+(37, 'Sincelejo', 'Sincelejo', '18 ', '67', '11', '67', 54),
+(38, 'Colombia', 'Sincelejo', 'Carrera 18 ', 'fatima', '11', 'fatima', 55),
+(39, 'venezula', 'sucreq', 'sincelejo', '18', '111', 'SUCRE', 51),
+(40, 'sinclejeo', 'SINCELJO', '1111', 'ALPES', '11', 'ALPES', 56),
+(41, 'Colombia', 'Sinclejeo', '11', 'FATIMA', '19', 'FATIMA', 57),
+(42, 'COLOMBIA', 'SUCRE', 'SINCELEJO', '10', '11', 'ALPES', 58),
+(43, 'sinclejeo', 'SUCRE', 'SINCELEJO', 'ALPES', '11', 'ALPES', 61),
+(44, 'sinclejeo', 'SUCRE', 'SINCELEJO', 'Venecia', '1111', 'Venecia', 62),
+(45, 'sinclejeo', 'SUCRE', 'SINCELEJO', 'FATIMAGOD', '12121', 'FATIMAGOD', 63),
+(46, 'sinclejeo', 'SUCRE', 'SINCELJO', 'ALPES', '11', 'ALPES', 64);
 
-  CONSTRAINT `fk_Inscripcion_Carrera1`
-    FOREIGN KEY (`Carrera_id`)
-    REFERENCES `dbbiblioteca`.`carrera` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Inscripcion_Semestre1`
-    FOREIGN KEY (`Semestre_numero`)
-    REFERENCES `dbbiblioteca`.`semestre` (`numero`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_inscripciones_estudiantes1`
-    FOREIGN KEY (`estudiantes_id`)
-    REFERENCES `dbbiblioteca`.`estudiantes` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+-- --------------------------------------------------------
 
+--
+-- Estructura de tabla para la tabla `editoriales`
+--
 
--- -----------------------------------------------------
--- Table `dbbiblioteca`.`locket`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbbiblioteca`.`locket` (
-  `idLocket` INT(11) NOT NULL AUTO_INCREMENT,
-  `descripcion` VARCHAR(45) NOT NULL,
-  `Estudiantes_id` INT(11) NULL DEFAULT NULL,
-  PRIMARY KEY (`idLocket`),
+CREATE TABLE `editoriales` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(45) DEFAULT NULL,
+  `correo` varchar(45) DEFAULT NULL,
+  `numerocontacto` varchar(45) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
-  CONSTRAINT `fk_Locket_Estudiantes1`
-    FOREIGN KEY (`Estudiantes_id`)
-    REFERENCES `dbbiblioteca`.`estudiantes` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4;
+-- --------------------------------------------------------
 
+--
+-- Estructura de tabla para la tabla `editoriales_has_direcciones`
+--
 
--- -----------------------------------------------------
--- Table `dbbiblioteca`.`prestamos`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbbiblioteca`.`prestamos` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `fechaInicio` DATE NULL DEFAULT NULL,
-  `fechaFinal` DATE NULL DEFAULT NULL,
-  `estado` VARCHAR(45) NULL DEFAULT NULL,
-  `Estudiantes_id` INT(11) NOT NULL,
-  PRIMARY KEY (`id`),
- 
-  CONSTRAINT `fk_prestamos_Estudiantes1`
-    FOREIGN KEY (`Estudiantes_id`)
-    REFERENCES `dbbiblioteca`.`estudiantes` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+CREATE TABLE `editoriales_has_direcciones` (
+  `Editoriales_id` int(11) NOT NULL,
+  `Direcciones_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
 
--- -----------------------------------------------------
--- Table `dbbiblioteca`.`multas`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbbiblioteca`.`multas` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `fecha` DATE NULL DEFAULT NULL,
-  `descripcion` VARCHAR(45) NULL DEFAULT NULL,
-  `monto` FLOAT NULL DEFAULT NULL,
-  `Prestamos_id` INT(11) NOT NULL,
-  PRIMARY KEY (`id`),
+--
+-- Estructura de tabla para la tabla `estudiantes`
+--
 
-  CONSTRAINT `fk_Multas_Prestamos1`
-    FOREIGN KEY (`Prestamos_id`)
-    REFERENCES `dbbiblioteca`.`prestamos` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4;
+CREATE TABLE `estudiantes` (
+  `id` int(11) NOT NULL,
+  `tipoIdentificacion` enum('cc','ti','ce') NOT NULL,
+  `numeroIdentificacion` varchar(45) NOT NULL,
+  `nombres` varchar(45) NOT NULL,
+  `apellidos` varchar(45) NOT NULL,
+  `celular` varchar(45) DEFAULT NULL,
+  `fechanacimiento` date NOT NULL,
+  `tiposagre` enum('A+','A-','B+','B-','AB+','AB-','O+','O-') NOT NULL,
+  `paisnacimiento` varchar(45) NOT NULL,
+  `departamentonacimiento` varchar(45) NOT NULL,
+  `ciudadnacimiento` varchar(45) NOT NULL,
+  `foto` blob NOT NULL,
+  `correoelectronico` varchar(45) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+--
+-- Volcado de datos para la tabla `estudiantes`
+--
 
--- -----------------------------------------------------
--- Table `dbbiblioteca`.`prestamos_has_libros`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbbiblioteca`.`prestamos_has_libros` (
-  `Prestamos_id` INT(11) NOT NULL,
-  `Libros_id` INT(11) NOT NULL,
-  `fecha` DATE NULL,
-  PRIMARY KEY (`Prestamos_id`, `Libros_id`),
+INSERT INTO `estudiantes` (`id`, `tipoIdentificacion`, `numeroIdentificacion`, `nombres`, `apellidos`, `celular`, `fechanacimiento`, `tiposagre`, `paisnacimiento`, `departamentonacimiento`, `ciudadnacimiento`, `foto`, `correoelectronico`) VALUES
+(45, 'cc', '110114', 'khabib', 'piña zamora', '3131313', '2023-05-10', 'O-', 'Brasil', 'Sucre', '12212', 0x433a5c66616b65706174685c436170747572612064652070616e74616c6c6120283538292e706e67, 'BRAIKAN.a@gmail.com'),
+(46, 'cc', '121212', 'khabib', 'piña zamora', '3131313', '2023-05-18', 'AB+', 'Colombia', 'Sucre', 'SINCELEJO', 0x433a5c66616b65706174685c436170747572612064652070616e74616c6c6120283538292e706e67, 'BRAIKAN.a@gmail.com'),
+(48, 'cc', '2121313', 'khabib', 'piña zamora', '3131313', '2023-05-23', 'O-', 'NAMUEL', 'Sucre', '12212', 0x433a5c66616b65706174685c436170747572612064652070616e74616c6c6120283538292e706e67, 'BRAIKAN.a@gmail.com'),
+(49, 'cc', '11011432313', 'khabib', 'piña zamora', '3131313', '2023-05-17', 'B-', 'Brasil', 'Sucre', '12212', 0x433a5c66616b65706174685c436170747572612064652070616e74616c6c6120283538292e706e67, 'BRAIKAN.a@gmail.com'),
+(50, 'cc', '110114131313', 'khabib', 'piña zamora', '3131313', '2023-05-16', 'O-', 'Colomia', 'Sucre', 'Sincejo', 0x433a5c66616b65706174685c436170747572612064652070616e74616c6c6120283538292e706e67, 'BRAIKAN.a@gmail.com'),
+(51, 'cc', '1101143232', 'khabib', 'piña zamora', '3131313', '2023-05-24', 'O+', 'Sucre', 'Sucre', 'Sincelejo', 0x433a5c66616b65706174685c436170747572612064652070616e74616c6c6120283538292e706e67, 'BRAIKAN.a@gmail.com'),
+(53, 'cc', '131313133', 'khabib', 'piña zamora', '3131313212', '2023-05-11', 'O-', 'Brasil', 'Sucre', 'SINCELEJO', 0x433a5c66616b65706174685c436170747572612064652070616e74616c6c6120283538292e706e67, 'BRAIKAN.a@gmail.com'),
+(54, 'cc', '11011443434', 'khabib', 'piña zamora', '3131313231', '2023-05-25', 'O+', 'Colombia', 'Sucre', 'SINCELEJO', 0x433a5c66616b65706174685c436170747572612064652070616e74616c6c6120283538292e706e67, 'BRAIKAN.a@gmail.com'),
+(55, 'cc', '110114545456', 'khabib', 'piña zamora', '3131313', '2023-05-17', 'O-', 'Namuel', 'Sucre', '12212', 0x433a5c66616b65706174685c436170747572612064652070616e74616c6c6120283633292e706e67, 'BRAIKAN.a@gmail.com'),
+(56, 'cc', '12211212', 'khabib', 'piña zamora', '3131313', '2023-05-17', 'O-', 'Brasil', 'Sucre', '12212', 0x433a5c66616b65706174685c436170747572612064652070616e74616c6c6120283538292e706e67, 'BRAIKAN.a@gmail.com'),
+(57, 'cc', '1101143231', 'khabib', 'piña zamora', '3131313', '2023-05-17', 'AB+', 'Brasil', 'Sucre', 'SINCELEJO', 0x433a5c66616b65706174685c436170747572612064652070616e74616c6c6120283538292e706e67, 'BRAIKAN.a@gmail.com'),
+(58, 'ti', '11011411323', 'khabib', 'piña zamora', '3131313', '2023-05-10', 'O+', 'NAMUEL', 'Sucre', '12212', 0x433a5c66616b65706174685c436170747572612064652070616e74616c6c6120283538292e706e67, 'BRAIKAN.a@gmail.com'),
+(61, 'cc', '11011442424', 'khabib', 'piña zamora', '31313132121', '2023-05-10', 'O-', 'Brasil', 'Sucre', '12212', 0x433a5c66616b65706174685c436170747572612064652070616e74616c6c6120283538292e706e67, 'BRAIKAN.a@gmail.com'),
+(62, 'ti', '211313', 'khabib', 'piña zamora', '3131313', '2023-05-11', 'O-', 'Brasil', 'Sucre', '12212', 0x433a5c66616b65706174685c436170747572612064652070616e74616c6c6120283538292e706e67, 'BRAIKAN.a@gmail.com'),
+(63, 'cc', '11011421', 'khabib', 'piña zamora', '3131313', '2023-05-16', 'O+', 'Brasil', 'Sucre', '12212', 0x433a5c66616b65706174685c436170747572612064652070616e74616c6c6120283538292e706e67, 'BRAIKAN.a@gmail.com'),
+(64, 'ti', '3455621', 'khabib', 'piña zamora', '3131313', '2023-05-26', 'O-', 'Namuel', 'Sucre', '12212', 0x4172726179, 'BRAIKAN.a@gmail.com');
 
-  CONSTRAINT `fk_Prestamos_has_Libros_Libros1`
-    FOREIGN KEY (`Libros_id`)
-    REFERENCES `dbbiblioteca`.`libros` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Prestamos_has_Libros_Prestamos1`
-    FOREIGN KEY (`Prestamos_id`)
-    REFERENCES `dbbiblioteca`.`prestamos` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4;
+-- --------------------------------------------------------
 
+--
+-- Estructura de tabla para la tabla `inscripciones`
+--
 
--- -----------------------------------------------------
--- Table `dbbiblioteca`.`usuarios`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbbiblioteca`.`usuarios` (
-  `numeroIdentificacion` INT(11) NOT NULL,
-  `contrasena` VARCHAR(45) NOT NULL,
-  `tipousuario` ENUM('b', 'a', 'e') NULL DEFAULT NULL,
-  PRIMARY KEY (`numeroIdentificacion`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4;
+CREATE TABLE `inscripciones` (
+  `id` int(11) NOT NULL,
+  `descripcion` varchar(45) DEFAULT NULL,
+  `fecha` datetime DEFAULT NULL,
+  `Semestre_numero` int(11) NOT NULL,
+  `Carrera_id` int(11) NOT NULL,
+  `estudiantes_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+--
+-- Volcado de datos para la tabla `inscripciones`
+--
 
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+INSERT INTO `inscripciones` (`id`, `descripcion`, `fecha`, `Semestre_numero`, `Carrera_id`, `estudiantes_id`) VALUES
+(3, 'se inscribio', '2023-05-10 14:30:00', 1, 1, 45),
+(7, 'Inscripción semestre 2023-2', '2023-05-12 09:30:00', 1, 2, 45);
 
+-- --------------------------------------------------------
 
-ALTER TABLE `dbbiblioteca`.`estudiantes` 
-ADD COLUMN `correoelectronico` VARCHAR(45) NOT NULL AFTER `foto`;
-ALTER TABLE `dbbiblioteca`.`estudiantes` 
-ADD COLUMN `foto` BLOB NOT NULL ;
+--
+-- Estructura de tabla para la tabla `libros`
+--
+
+CREATE TABLE `libros` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(45) DEFAULT NULL,
+  `Editoriales_id` int(11) NOT NULL,
+  `Categorias_id` int(11) NOT NULL,
+  `foto` blob NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `multas`
+--
+
+CREATE TABLE `multas` (
+  `id` int(11) NOT NULL,
+  `fecha` date DEFAULT NULL,
+  `descripcion` varchar(45) DEFAULT NULL,
+  `monto` float DEFAULT NULL,
+  `Prestamos_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `prestamos`
+--
+
+CREATE TABLE `prestamos` (
+  `id` int(11) NOT NULL,
+  `fechaInicio` date DEFAULT NULL,
+  `fechaFinal` date DEFAULT NULL,
+  `estado` varchar(45) DEFAULT NULL,
+  `Estudiantes_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `prestamos_has_libros`
+--
+
+CREATE TABLE `prestamos_has_libros` (
+  `Prestamos_id` int(11) NOT NULL,
+  `Libros_id` int(11) NOT NULL,
+  `fecha` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `semestre`
+--
+
+CREATE TABLE `semestre` (
+  `numero` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Volcado de datos para la tabla `semestre`
+--
+
+INSERT INTO `semestre` (`numero`) VALUES
+(1),
+(2),
+(3),
+(4),
+(5),
+(6),
+(7),
+(8),
+(9),
+(10);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuarios`
+--
+
+CREATE TABLE `usuarios` (
+  `numeroIdentificacion` int(11) NOT NULL,
+  `contrasena` varchar(45) NOT NULL,
+  `tipousuario` enum('b','a','e') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `usuarios`
+--
+
+INSERT INTO `usuarios` (`numeroIdentificacion`, `contrasena`, `tipousuario`) VALUES
+(110114111, 'maria', 'e'),
+(1005472938, 'andresbertel', 'b'),
+(1104255477, 'namuel', 'a'),
+(1104258093, 'braikanteodio', 'e'),
+(2147483647, 'TEAMO', 'b');
+
+--
+-- Índices para tablas volcadas
+--
+
+--
+-- Indices de la tabla `autores`
+--
+ALTER TABLE `autores`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `autores_has_libros`
+--
+ALTER TABLE `autores_has_libros`
+  ADD PRIMARY KEY (`Autores_idAutores`,`Libros_id`),
+  ADD KEY `fk_Autores_has_Libros_Libros1` (`Libros_id`);
+
+--
+-- Indices de la tabla `carreras`
+--
+ALTER TABLE `carreras`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `categorias`
+--
+ALTER TABLE `categorias`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `direcciones`
+--
+ALTER TABLE `direcciones`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `direccionesestudiantes`
+--
+ALTER TABLE `direccionesestudiantes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_direccionesestudiantes_estudiantes1` (`estudiantes_id`);
+
+--
+-- Indices de la tabla `editoriales`
+--
+ALTER TABLE `editoriales`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `editoriales_has_direcciones`
+--
+ALTER TABLE `editoriales_has_direcciones`
+  ADD PRIMARY KEY (`Editoriales_id`,`Direcciones_id`),
+  ADD KEY `fk_Editoriales_has_Direcciones_Direcciones1` (`Direcciones_id`);
+
+--
+-- Indices de la tabla `estudiantes`
+--
+ALTER TABLE `estudiantes`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `numeroIdentificacion_UNIQUE` (`numeroIdentificacion`);
+
+--
+-- Indices de la tabla `inscripciones`
+--
+ALTER TABLE `inscripciones`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_Inscripcion_Carrera1` (`Carrera_id`),
+  ADD KEY `fk_Inscripcion_Semestre1` (`Semestre_numero`),
+  ADD KEY `fk_inscripciones_estudiantes1` (`estudiantes_id`);
+
+--
+-- Indices de la tabla `libros`
+--
+ALTER TABLE `libros`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_Libros_Categorias1` (`Categorias_id`),
+  ADD KEY `fk_Libros_Editoriales1` (`Editoriales_id`);
+
+--
+-- Indices de la tabla `multas`
+--
+ALTER TABLE `multas`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_Multas_Prestamos1` (`Prestamos_id`);
+
+--
+-- Indices de la tabla `prestamos`
+--
+ALTER TABLE `prestamos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_prestamos_Estudiantes1` (`Estudiantes_id`);
+
+--
+-- Indices de la tabla `prestamos_has_libros`
+--
+ALTER TABLE `prestamos_has_libros`
+  ADD PRIMARY KEY (`Prestamos_id`,`Libros_id`),
+  ADD KEY `fk_Prestamos_has_Libros_Libros1` (`Libros_id`);
+
+--
+-- Indices de la tabla `semestre`
+--
+ALTER TABLE `semestre`
+  ADD PRIMARY KEY (`numero`);
+
+--
+-- Indices de la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+  ADD PRIMARY KEY (`numeroIdentificacion`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `autores`
+--
+ALTER TABLE `autores`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `carreras`
+--
+ALTER TABLE `carreras`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de la tabla `categorias`
+--
+ALTER TABLE `categorias`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `direccionesestudiantes`
+--
+ALTER TABLE `direccionesestudiantes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+
+--
+-- AUTO_INCREMENT de la tabla `estudiantes`
+--
+ALTER TABLE `estudiantes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+
+--
+-- AUTO_INCREMENT de la tabla `inscripciones`
+--
+ALTER TABLE `inscripciones`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT de la tabla `libros`
+--
+ALTER TABLE `libros`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `multas`
+--
+ALTER TABLE `multas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `prestamos`
+--
+ALTER TABLE `prestamos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `autores_has_libros`
+--
+ALTER TABLE `autores_has_libros`
+  ADD CONSTRAINT `fk_Autores_has_Libros_Libros1` FOREIGN KEY (`Libros_id`) REFERENCES `libros` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `direccionesestudiantes`
+--
+ALTER TABLE `direccionesestudiantes`
+  ADD CONSTRAINT `fk_direccionesestudiantes_estudiantes1` FOREIGN KEY (`estudiantes_id`) REFERENCES `estudiantes` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `editoriales_has_direcciones`
+--
+ALTER TABLE `editoriales_has_direcciones`
+  ADD CONSTRAINT `fk_Editoriales_has_Direcciones_Direcciones1` FOREIGN KEY (`Direcciones_id`) REFERENCES `direcciones` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_Editoriales_has_Direcciones_Editoriales1` FOREIGN KEY (`Editoriales_id`) REFERENCES `editoriales` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `inscripciones`
+--
+ALTER TABLE `inscripciones`
+  ADD CONSTRAINT `fk_Inscripcion_Carrera1` FOREIGN KEY (`Carrera_id`) REFERENCES `carreras` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_Inscripcion_Semestre1` FOREIGN KEY (`Semestre_numero`) REFERENCES `semestre` (`numero`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_inscripciones_estudiantes1` FOREIGN KEY (`estudiantes_id`) REFERENCES `estudiantes` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `libros`
+--
+ALTER TABLE `libros`
+  ADD CONSTRAINT `fk_Libros_Categorias1` FOREIGN KEY (`Categorias_id`) REFERENCES `categorias` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_Libros_Editoriales1` FOREIGN KEY (`Editoriales_id`) REFERENCES `editoriales` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `multas`
+--
+ALTER TABLE `multas`
+  ADD CONSTRAINT `fk_Multas_Prestamos1` FOREIGN KEY (`Prestamos_id`) REFERENCES `prestamos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `prestamos`
+--
+ALTER TABLE `prestamos`
+  ADD CONSTRAINT `fk_prestamos_Estudiantes1` FOREIGN KEY (`Estudiantes_id`) REFERENCES `estudiantes` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `prestamos_has_libros`
+--
+ALTER TABLE `prestamos_has_libros`
+  ADD CONSTRAINT `fk_Prestamos_has_Libros_Libros1` FOREIGN KEY (`Libros_id`) REFERENCES `libros` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_Prestamos_has_Libros_Prestamos1` FOREIGN KEY (`Prestamos_id`) REFERENCES `prestamos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
