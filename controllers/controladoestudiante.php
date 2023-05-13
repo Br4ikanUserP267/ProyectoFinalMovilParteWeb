@@ -1,7 +1,11 @@
 
 <?php
+
+
 // Check if the form was submitted
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if (!empty($_POST)) {
+
+
   // Set the API endpoint URL
   $api_url = 'http://localhost/proyectoFinal/api/estudiantes.php';
 

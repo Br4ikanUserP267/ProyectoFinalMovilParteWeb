@@ -3,8 +3,8 @@
     include "../settings/configuraciones.php";
 
     $dbConn = connect($db);
+ //se pasa por el metodo post  ** no por fuera 
 
-    
     //listar todos los usuarios o solo uno
     
     if ($_SERVER['REQUEST_METHOD'] == 'GET')
@@ -39,12 +39,47 @@
     // Crear un nuevo estudiante 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Obtener los datos del estudiante de la petición
+
+
+         //mira el ajax guiate de lo que se esta pasando por el ajax en el método post bueno
+
         $estudiante = json_decode(file_get_contents("php://input"), true);
-       
-        // Devolver la ruta de la imagen guardada
-        $rutaDestino = "http://localhost/proyectoFinal/images/carnet/" . basename($_FILES["foto"]["name"]);
-        move_uploaded_file($_FILES["foto"]["tmp_name"], $rutaDestino);
     
+            // Devolver la ruta de la imagen guardad    // Crear la carpeta donde guardar la imagen
+        
+        //aquí guardas la imagen 
+        $dir = 'estudiante_images/';
+
+        echo "<pre>";
+        var_dump($estudiante);
+        echo "</pre>";
+
+        die();
+
+        // json_decode($estudiante['foto']);
+
+
+        if (!file_exists($dir)) {
+            mkdir($dir);
+        }
+
+        $nombreImagen = md5( uniqid( rand(), true ) ) . ".jpg";
+                    // Subir la imagen
+        move_uploaded_file($imagen['tmp_name'], $dir . $nombreImagen );
+
+        // Obtener la extensión de la imagen
+        $extension = pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION);
+
+        // Generar un nombre único para la imagen
+        $nombre_imagen = uniqid() . '.' . $extension;
+
+        // Guardar la imagen en la carpeta
+        move_uploaded_file($_FILES['foto']['tmp_name'], $dir . $nombre_imagen);
+
+        // Guardar el nombre de la ruta de la imagen en la base de datos
+        $ruta_imagen = $dir . $nombre_imagen;
+        $estudiante['foto'] = $ruta_imagen;
+        
 
 
         //guardar foto

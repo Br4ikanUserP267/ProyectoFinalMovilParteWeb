@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-
     <title>Gestion de estudiantes</title>
 </head>
 <html>
@@ -19,7 +18,8 @@
   <body>
     <div class="container">
 
-        <form method="post" id="formEstudiantes" action="gestion-estudiantes.php" >
+        <form method="POST" id="formEstudiantes" action="gestion-estudiantes.php" 
+        enctype="multipart/form-data">
         
             <div class="form-group">
               <label for="tipoIdentificacion">Tipo de identificación:</label>
@@ -79,7 +79,8 @@
                 <label for="paisnacimiento">País de nacimiento:</label>
                 <input type="text" class="form-control" id="paisnacimiento" name="paisnacimiento" required>
             </div>
-            <div class="form-group">
+            <!-- //aqui esta la foto  --> 
+            <div class="form-group"> 
                 <label for="foto">Foto:</label>
                 <input type="file" class="form-control-file" id="foto" name="foto">
             </div>
@@ -149,11 +150,14 @@
 
             // Set the request headers
             var headers = {
-            'Content-Type': 'application/json'
+                'Content-Type': 'multipart/form-data'
             };
-
+         
             // Set the request body
-            var data = {
+            
+            var formData = new FormData();
+
+            var formData = {
             tipoIdentificacion: $("#tipoIdentificacion").val(),
             numeroIdentificacion: $("#numeroIdentificacion").val(),
             nombres: $("#nombres").val(),
@@ -165,6 +169,7 @@
             departamentonacimiento: $("#dapartamentoNacimiento").val(),
             paisnacimiento: $("#paisnacimiento").val(),
             correoelectronico: $("#correoelectronico").val(),
+            
             foto: $("#foto")[0].files[0],
 
             direccion: {
@@ -174,16 +179,36 @@
                 calle: $("#calle").val(),
                 numero: $("#numero").val(),
                 barrio: $("#barrio").val()
-                
-            }
+                }
             };
+
+            // Esto funciona xd aqui se ven todos los datos enviados en el limpiarFormulario
+            //El problema esta en el response 
+            console.log(formData) //Bien
+
+            const {foto} = formData
+            console.log(foto) //Bien
+
+
+            //Terminar ...
+            var reader = new FileReader();
+
+            reader.onload = function(event) {
+            var image = new Image();
+            image.src = event.target.result;
+
+            // Hacer algo con la imagen, como mostrarla en una etiqueta <img> o realizar alguna operación con ella
+            };
+
+            reader.readAsDataURL(foto);
+
 
             // Make the AJAX request
             $.ajax({
             url: api_url,
             type: 'POST',
             headers: headers,
-            data: JSON.stringify(data),
+            data: JSON.stringify(formData),
             success: function(response) {
                 console.log(response);
                 
