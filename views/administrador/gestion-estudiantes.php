@@ -88,10 +88,6 @@
                 <label for="correoelectronico">Correo electrónico:</label>
                 <input type="email" class="form-control" id="correoelectronico" name="correoelectronico" required>
             </div>
-            <div class="form-group">
-                <label for="direccion">Dirección:</label>
-                <input type="text" class="form-control" id="direccion" name="direccion" required>
-            </div>
 
             <h2>Direcciones</h2>
             <div class="form-group">
@@ -149,66 +145,42 @@
             var api_url = 'http://localhost/proyectoFinal/api/estudiantes.php';
 
             // Set the request headers
-            var headers = {
-                'Content-Type': 'multipart/form-data'
-            };
+            // var headers = {
+            //     'Content-Type': 'application/json'
+            // };
          
             // Set the request body
             
             var formData = new FormData();
 
-            var formData = {
-            tipoIdentificacion: $("#tipoIdentificacion").val(),
-            numeroIdentificacion: $("#numeroIdentificacion").val(),
-            nombres: $("#nombres").val(),
-            apellidos: $("#apellidos").val(),
-            celular: $("#celular").val(),
-            fechanacimiento: $("#fechanacimiento").val(),
-            tiposagre: $("#tiposagre").val(),
-            ciudadnacimiento: $("#ciudadnacimiento").val(),
-            departamentonacimiento: $("#dapartamentoNacimiento").val(),
-            paisnacimiento: $("#paisnacimiento").val(),
-            correoelectronico: $("#correoelectronico").val(),
-            
-            foto: $("#foto")[0].files[0],
+            formData.append('tipoIdentificacion', $("#tipoIdentificacion").val());
+            formData.append('numeroIdentificacion', $("#numeroIdentificacion").val());
+            formData.append('nombres', $("#nombres").val());
+            formData.append('apellidos', $("#apellidos").val());
+            formData.append('celular', $("#celular").val());
+            formData.append('fechanacimiento', $("#fechanacimiento").val());
+            formData.append('tiposagre', $("#tiposagre").val());
+            formData.append('ciudadnacimiento', $("#ciudadnacimiento").val());
+            formData.append('departamentonacimiento', $("#dapartamentoNacimiento").val());
+            formData.append('paisnacimiento', $("#paisnacimiento").val());
+            formData.append('correoelectronico', $("#correoelectronico").val());
 
-            direccion: {
-                pais: $("#pais").val(),
-                departamento : $("#departamento").val(),
-                ciudad: $("#ciudad").val(),
-                calle: $("#calle").val(),
-                numero: $("#numero").val(),
-                barrio: $("#barrio").val()
-                }
-            };
+            formData.append('foto', $("#foto")[0].files[0]);
 
-            // Esto funciona xd aqui se ven todos los datos enviados en el limpiarFormulario
-            //El problema esta en el response 
-            console.log(formData) //Bien
+            formData.append('direccion[pais]', $("#pais").val());
+            formData.append('direccion[departamento]', $("#departamento").val());
+            formData.append('direccion[ciudad]', $("#ciudad").val());
+            formData.append('direccion[calle]', $("#calle").val());
+            formData.append('direccion[numero]', $("#numero").val());
+            formData.append('direccion[barrio]', $("#barrio").val());
 
-            const {foto} = formData
-            console.log(foto) //Bien
-
-
-            //Terminar ...
-            var reader = new FileReader();
-
-            reader.onload = function(event) {
-            var image = new Image();
-            image.src = event.target.result;
-
-            // Hacer algo con la imagen, como mostrarla en una etiqueta <img> o realizar alguna operación con ella
-            };
-
-            reader.readAsDataURL(foto);
-
-
-            // Make the AJAX request
-            $.ajax({
+        // Make the AJAX request
+        $.ajax({
             url: api_url,
             type: 'POST',
-            headers: headers,
-            data: JSON.stringify(formData),
+            data: formData,
+            processData: false,
+            contentType: false,
             success: function(response) {
                 console.log(response);
                 
@@ -223,7 +195,7 @@
         });
 
     </script>
-
+//sirvio ? ya lo pruebo i
 
     <script>
         function irCrearUsuario(){

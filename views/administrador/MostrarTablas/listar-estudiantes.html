@@ -24,6 +24,7 @@
             <th>ID</th>
             <th>Tipo Identificacion</th>
             <th>Identificación</th>
+            <th>foto</th>
             <th>Nombres</th>
             <th>Apellidos</th>
             <th>Celular</th>
@@ -61,6 +62,8 @@
                 row.append($('<td>').text(estudiante.id));
                 row.append($('<td>').text(estudiante.tipoIdentificacion));
                 row.append($('<td>').text(estudiante.numeroIdentificacion));
+               row.append($('<td>').append($('<img>').attr('src', 'http://localhost/proyectoFinal/api/'+estudiante.foto).attr('width', '300')));
+
                 row.append($('<td>').text(estudiante.nombres));
                 row.append($('<td>').text(estudiante.apellidos));
                 row.append($('<td>').text(estudiante.celular));
