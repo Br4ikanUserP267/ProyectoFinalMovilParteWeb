@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3307
--- Tiempo de generación: 11-05-2023 a las 04:13:54
+-- Tiempo de generación: 15-05-2023 a las 20:36:58
 -- Versión del servidor: 10.4.27-MariaDB
 -- Versión de PHP: 8.1.12
 
@@ -31,7 +31,9 @@ CREATE TABLE `autores` (
   `id` int(11) NOT NULL,
   `nombres` varchar(45) NOT NULL,
   `apelldios` varchar(45) NOT NULL,
-  `biografia` varchar(200) NOT NULL
+  `biografia` varchar(200) NOT NULL,
+  `foto` blob NOT NULL,
+  `numero` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -80,6 +82,14 @@ CREATE TABLE `categorias` (
   `nombre` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+--
+-- Volcado de datos para la tabla `categorias`
+--
+
+INSERT INTO `categorias` (`id`, `nombre`) VALUES
+(1, 'Novela'),
+(2, 'Accion');
+
 -- --------------------------------------------------------
 
 --
@@ -127,7 +137,16 @@ INSERT INTO `direccionesestudiantes` (`id`, `pais`, `departamento`, `ciudad`, `c
 (43, 'sinclejeo', 'SUCRE', 'SINCELEJO', 'ALPES', '11', 'ALPES', 61),
 (44, 'sinclejeo', 'SUCRE', 'SINCELEJO', 'Venecia', '1111', 'Venecia', 62),
 (45, 'sinclejeo', 'SUCRE', 'SINCELEJO', 'FATIMAGOD', '12121', 'FATIMAGOD', 63),
-(46, 'sinclejeo', 'SUCRE', 'SINCELJO', 'ALPES', '11', 'ALPES', 64);
+(46, 'sinclejeo', 'SUCRE', 'SINCELJO', 'ALPES', '11', 'ALPES', 64),
+(47, 'COLOMBIA', 'SUCRE', 'SINCELEJO', 'Namuel', '19', 'Namuel', 66),
+(48, 'sinclejeo', 'SUCRE', 'SINCELEJO', 'ALPES', '11', 'ALPES', 68),
+(49, 'sinclejeo', 'SUCRE', 'SINCELEJO', 'ALPES', '11', 'ALPES', 69),
+(50, 'sinclejeo', 'SUCRE', 'SINCELEJO', 'ALPES', '11', 'ALPES', 70),
+(51, 'sinclejeo', 'SUCRE', 'SINCELEJO', 'ALPES', '12121', 'ALPES', 71),
+(52, 'JIJIJIJA', 'JOA', 'ESA LEA', 'LOCO PRI', '123', 'LOCO PRI', 72),
+(53, 'COLOMBIA', 'SUCRE', 'Namuel', 'Alpes', '121', 'Alpes', 73),
+(54, 'COLOMBIA', 'SUCRE', 'SINCELJO', 'ALPES', '11', 'ALPES', 74),
+(55, 'COLOMBIA', 'SUCRE', 'SAMPEDRO', '72', '21', '72', 75);
 
 -- --------------------------------------------------------
 
@@ -195,7 +214,16 @@ INSERT INTO `estudiantes` (`id`, `tipoIdentificacion`, `numeroIdentificacion`, `
 (61, 'cc', '11011442424', 'khabib', 'piña zamora', '31313132121', '2023-05-10', 'O-', 'Brasil', 'Sucre', '12212', 0x433a5c66616b65706174685c436170747572612064652070616e74616c6c6120283538292e706e67, 'BRAIKAN.a@gmail.com'),
 (62, 'ti', '211313', 'khabib', 'piña zamora', '3131313', '2023-05-11', 'O-', 'Brasil', 'Sucre', '12212', 0x433a5c66616b65706174685c436170747572612064652070616e74616c6c6120283538292e706e67, 'BRAIKAN.a@gmail.com'),
 (63, 'cc', '11011421', 'khabib', 'piña zamora', '3131313', '2023-05-16', 'O+', 'Brasil', 'Sucre', '12212', 0x433a5c66616b65706174685c436170747572612064652070616e74616c6c6120283538292e706e67, 'BRAIKAN.a@gmail.com'),
-(64, 'ti', '3455621', 'khabib', 'piña zamora', '3131313', '2023-05-26', 'O-', 'Namuel', 'Sucre', '12212', 0x4172726179, 'BRAIKAN.a@gmail.com');
+(64, 'ti', '3455621', 'khabib', 'piña zamora', '3131313', '2023-05-26', 'O-', 'Namuel', 'Sucre', '12212', 0x4172726179, 'BRAIKAN.a@gmail.com'),
+(66, 'cc', '11011421323', 'Namuel', 'Solorzano', '310313413', '1111-12-23', 'B-', 'Colombia', 'Sucre', 'Corozal', 0x657374756469616e74655f696d616765732f363435656461646262383464642e, 'BRAIKAN.a@gmail.com'),
+(68, 'cc', '231313', 'khabib', 'piña zamora', '3131313', '2023-05-18', 'O-', 'Brasil', 'Sucre', 'SINCELEJO', 0x657374756469616e74655f696d616765732f363435656464306438356465312e, 'BRAIKAN.a@gmail.com'),
+(69, 'ti', '25454', 'khabib', 'piña zamora', '3131313', '2023-05-18', 'O-', 'Brasil', 'Sucre', 'SINCELEJO', 0x657374756469616e74655f696d616765732f363435656464376535346638612e, 'BRAIKAN.a@gmail.com'),
+(70, 'cc', '110114323', 'khabib', 'piña zamora', '3131313', '2023-05-11', 'O+', 'Brasil', 'Sucre', 'SINCELEJO', 0x657374756469616e74655f696d616765732f363435656534333537323435662e, 'BRAIKAN.a@gmail.com'),
+(71, 'cc', '233131432', 'khabib', 'piña zamora', '3131313', '2023-05-11', 'A+', 'Brasil', 'Sucre', 'SINCELEJO', 0x657374756469616e74655f696d616765732f363435666261366334303466342e, 'BRAIKAN.a@gmail.com'),
+(72, 'cc', '21212112', 'Messi bebe', 'Te amo', '111999', '2003-12-31', 'A+', 'CAJONERO', 'SAMUEL', 'CAREMONDA', 0x657374756469616e74655f696d616765732f33366230643161613136633732313562333338383335326330646463623630312e6a7067, 'uwu@gmail.com'),
+(73, 'cc', '999999321', 'Namuel', 'David', '31321212', '2023-05-17', 'O+', 'colombia', 'sucre', 'sincelejo', 0x657374756469616e74655f696d616765732f33306534323331666434383665323362373638373237326366623239653034382e6a7067, 'steven@gmail.com'),
+(74, 'cc', '121421231', 'Namuel de jesus ', 'nAMUEL', '313131', '2004-01-23', 'B+', 'Brasil', 'Sucre', 'SINCELEJO', 0x657374756469616e74655f696d616765732f65623130616134663863306361323736636439346339333938623963376562662e6a7067, 'BRAIKAN.a@gmail.com'),
+(75, 'cc', '1104008652', 'Correcto', 'Namuel', '21134141', '2023-05-17', 'A+', 'Venezuela', 'Bolivar', 'San Pedro', 0x657374756469616e74655f696d616765732f65623537366638306336343839336261643563326338663830383033353132612e6a7067, 'namueldejesus@cecar.edu.co');
 
 -- --------------------------------------------------------
 
@@ -218,7 +246,12 @@ CREATE TABLE `inscripciones` (
 
 INSERT INTO `inscripciones` (`id`, `descripcion`, `fecha`, `Semestre_numero`, `Carrera_id`, `estudiantes_id`) VALUES
 (3, 'se inscribio', '2023-05-10 14:30:00', 1, 1, 45),
-(7, 'Inscripción semestre 2023-2', '2023-05-12 09:30:00', 1, 2, 45);
+(7, 'Inscripción semestre 2023-2', '2023-05-12 09:30:00', 1, 2, 45),
+(8, 'Inscripción semestre 2023-2', '2023-05-12 09:30:00', 1, 3, 45),
+(13, 'Estudiudate inscrito', '0000-00-00 00:00:00', 1, 3, 46),
+(14, 'Estudiudate inscrito', '0000-00-00 00:00:00', 1, 3, 46),
+(16, 'Estudiudate inscrito', '0000-00-00 00:00:00', 1, 1, 50),
+(17, 'Estudiudate inscrito', '2023-05-11 17:47:12', 3, 2, 46);
 
 -- --------------------------------------------------------
 
@@ -230,8 +263,8 @@ CREATE TABLE `libros` (
   `id` int(11) NOT NULL,
   `nombre` varchar(45) DEFAULT NULL,
   `Editoriales_id` int(11) NOT NULL,
-  `Categorias_id` int(11) NOT NULL,
-  `foto` blob NOT NULL
+  `imagen` blob NOT NULL,
+  `temas_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -303,6 +336,18 @@ INSERT INTO `semestre` (`numero`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `temas`
+--
+
+CREATE TABLE `temas` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(45) NOT NULL,
+  `Categorias_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `usuarios`
 --
 
@@ -320,6 +365,7 @@ INSERT INTO `usuarios` (`numeroIdentificacion`, `contrasena`, `tipousuario`) VAL
 (110114111, 'maria', 'e'),
 (1005472938, 'andresbertel', 'b'),
 (1104255477, 'namuel', 'a'),
+(1104255477, 'namuel', 'e'),
 (1104258093, 'braikanteodio', 'e'),
 (2147483647, 'TEAMO', 'b');
 
@@ -398,9 +444,7 @@ ALTER TABLE `inscripciones`
 -- Indices de la tabla `libros`
 --
 ALTER TABLE `libros`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_Libros_Categorias1` (`Categorias_id`),
-  ADD KEY `fk_Libros_Editoriales1` (`Editoriales_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `multas`
@@ -430,10 +474,17 @@ ALTER TABLE `semestre`
   ADD PRIMARY KEY (`numero`);
 
 --
+-- Indices de la tabla `temas`
+--
+ALTER TABLE `temas`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `Categorias_id` (`Categorias_id`);
+
+--
 -- Indices de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  ADD PRIMARY KEY (`numeroIdentificacion`);
+  ADD PRIMARY KEY (`numeroIdentificacion`,`tipousuario`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -455,25 +506,25 @@ ALTER TABLE `carreras`
 -- AUTO_INCREMENT de la tabla `categorias`
 --
 ALTER TABLE `categorias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `direccionesestudiantes`
 --
 ALTER TABLE `direccionesestudiantes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- AUTO_INCREMENT de la tabla `estudiantes`
 --
 ALTER TABLE `estudiantes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
 
 --
 -- AUTO_INCREMENT de la tabla `inscripciones`
 --
 ALTER TABLE `inscripciones`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT de la tabla `libros`
@@ -525,13 +576,6 @@ ALTER TABLE `inscripciones`
   ADD CONSTRAINT `fk_inscripciones_estudiantes1` FOREIGN KEY (`estudiantes_id`) REFERENCES `estudiantes` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Filtros para la tabla `libros`
---
-ALTER TABLE `libros`
-  ADD CONSTRAINT `fk_Libros_Categorias1` FOREIGN KEY (`Categorias_id`) REFERENCES `categorias` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_Libros_Editoriales1` FOREIGN KEY (`Editoriales_id`) REFERENCES `editoriales` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
 -- Filtros para la tabla `multas`
 --
 ALTER TABLE `multas`
@@ -549,6 +593,12 @@ ALTER TABLE `prestamos`
 ALTER TABLE `prestamos_has_libros`
   ADD CONSTRAINT `fk_Prestamos_has_Libros_Libros1` FOREIGN KEY (`Libros_id`) REFERENCES `libros` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_Prestamos_has_Libros_Prestamos1` FOREIGN KEY (`Prestamos_id`) REFERENCES `prestamos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `temas`
+--
+ALTER TABLE `temas`
+  ADD CONSTRAINT `Categorias_id` FOREIGN KEY (`Categorias_id`) REFERENCES `categorias` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
