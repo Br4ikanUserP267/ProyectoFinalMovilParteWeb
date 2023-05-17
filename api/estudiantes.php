@@ -13,7 +13,11 @@
         {
             $id = $_GET['id'];
     
-            $sql = "SELECT * FROM estudiantes e INNER JOIN direccionesestudiantes d ON e.id = d.estudiantes_id WHERE e.id = :id";
+            $sql = "SELECT e.id AS estudiante_id
+            FROM estudiantes e
+            INNER JOIN direccionesestudiantes d ON e.id = d.estudiantes_id
+            WHERE e.id = :id;
+            ";
             $statement = $dbConn->prepare($sql);
             $statement->bindValue(':id', $id);
             $statement->execute();

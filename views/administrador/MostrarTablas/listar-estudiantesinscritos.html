@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabla de estudiantes  </title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+<body>
+
+    <h1>Tabla de estudiantes </h1>
+
+    <div class="form-group">
+        <label for="searchInput">Buscar:</label>
+        <input type="text" class="form-control" id="searchInput" placeholder="Escriba algo...">
+    </div>
+    
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Descripción</th>
+            <th>Fecha</th>
+            <th>Semestre</th>
+            <th>Carrera</th>
+            <th>Estudiante</th>
+            <th>Acciones</th>
+
+        </tr>
+        </thead>
+        <tbody id="inscripciones-table-body">
+        </tbody>
+    </table>
+
+    <script>
+    $(document).ready(function() {
+        $.ajax({
+            url: 'http://localhost/proyectoFinal/api/inscripcion.php',
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+            var rows = '';
+            $.each(data, function(index, inscripcion) {
+                rows += '<tr>';
+                rows += '<td>' + inscripcion.id + '</td>';
+                rows += '<td>' + inscripcion.descripcion + '</td>';
+                rows += '<td>' + inscripcion.fecha + '</td>';
+                rows += '<td>' + inscripcion.Semestre_numero + '</td>';
+                rows += '<td>' + inscripcion.Carrera_id + '</td>';
+                rows += '<td>' + inscripcion.estudiantes_id + '</td>';
+                rows += '<td><button class="btn btn-primary edit-btn" data-id="' + inscripcion.id + '">Editar</button> <button class="btn btn-danger delete-btn" data-id="' + inscripcion.id + '">Eliminar</button></td>';
+                rows += '</tr>';
+            });
+            $('#inscripciones-table-body').append(rows);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
+            }
+        });
+        });
+
+        $(document).on('click', '.delete-btn', function() {
+        var id = $(this).data('id');
+        if (confirm('¿Estás seguro de que deseas eliminar esta inscripción?')) {
+            $.ajax({
+                url: 'http://localhost/proyectoFinal/api/inscripcion.php',
+                type: 'DELETE',
+                success: function() {
+                    alert('La inscripción ha sido eliminada exitosamente.');
+                    location.reload();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+                }
+            });
+        }
+    });
+
+    </script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+</body>
+</html>
+
+  

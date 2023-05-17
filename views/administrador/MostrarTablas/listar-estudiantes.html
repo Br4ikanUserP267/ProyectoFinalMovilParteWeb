@@ -59,7 +59,7 @@
             // Recorrer el array de datos y agregarlos a la tabla
             $.each(response, function(i, estudiante) {
                 var row = $('<tr>');
-                row.append($('<td>').text(estudiante.id));
+                row.append($('<td>').text(estudiante.estudiantes_id));
                 row.append($('<td>').text(estudiante.tipoIdentificacion));
                 row.append($('<td>').text(estudiante.numeroIdentificacion));
                row.append($('<td>').append($('<img>').attr('src', 'http://localhost/proyectoFinal/api/'+estudiante.foto).attr('width', '300')));
