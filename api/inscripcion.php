@@ -77,18 +77,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 // Delete an inscripcion
 if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
-    try {
-        $id = filter_var($_GET['id'], FILTER_SANITIZE_NUMBER_INT);
-        $statement = $dbConn->prepare("DELETE FROM inscripciones WHERE id=:id");
-        $statement->bindValue(':id', $id);
-        $statement->execute();
-        header("HTTP/1.1 200 OK");
-        exit();
-    } catch (PDOException $ex) {
-        header("HTTP/1.1 500 Internal Server Error");
+    parse_str(file_get_contents("php://input"), $params);
+    $id = isset($params['id']) ? $params['id'] : null;
+
+    if ($id) {
+        try {
+            $statement = $dbConn->prepare("DELETE FROM inscripciones WHERE id = :id");
+            $statement->bindValue(':id', $id);
+            $statement->execute();
+            header("HTTP/1.1 200 OK");
+            exit();
+        } catch (PDOException $ex) {
+
+            header("HTTP/1.1 500 Internal Server Error");
+            exit();
+        }
+    } else {
+        header("HTTP/1.1 400 Bad Request");
         exit();
     }
+    
 }
+
 
 // Update an inscripcion
 if ($_SERVER['REQUEST_METHOD'] == 'PUT') {

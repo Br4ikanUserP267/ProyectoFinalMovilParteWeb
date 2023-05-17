@@ -51,7 +51,10 @@
                 rows += '<td>' + inscripcion.Semestre_numero + '</td>';
                 rows += '<td>' + inscripcion.Carrera_id + '</td>';
                 rows += '<td>' + inscripcion.estudiantes_id + '</td>';
-                rows += '<td><button class="btn btn-primary edit-btn" data-id="' + inscripcion.id + '">Editar</button> <button class="btn btn-danger delete-btn" data-id="' + inscripcion.id + '">Eliminar</button></td>';
+                rows += '<td>';
+            rows += '<button class="btn btn-primary editar-btn" data-id="' + inscripcion.id + '">Editar</button>';
+            rows += ' | ';
+            rows += '<button class="btn btn-danger eliminar-btn" data-id="' + inscripcion.id + '">Eliminar</button>';
                 rows += '</tr>';
             });
             $('#inscripciones-table-body').append(rows);
@@ -62,11 +65,11 @@
         });
         });
 
-        $(document).on('click', '.delete-btn', function() {
+        $(document).on('click', '.eliminar-btn', function() {
         var id = $(this).data('id');
         if (confirm('¿Estás seguro de que deseas eliminar esta inscripción?')) {
             $.ajax({
-                url: 'http://localhost/proyectoFinal/api/inscripcion.php',
+                url: 'http://localhost/proyectoFinal/api/inscripcion.php?id=' + id,
                 type: 'DELETE',
                 success: function() {
                     alert('La inscripción ha sido eliminada exitosamente.');
@@ -78,6 +81,8 @@
             });
         }
     });
+
+
 
     </script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
