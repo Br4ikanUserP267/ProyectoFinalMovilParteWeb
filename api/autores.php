@@ -49,15 +49,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $autor['foto'] = $carpetaImagenes . $nombreImagen;
 
-    $sql = "INSERT INTO autores (nombres, apellidos, biografia, foto, numero) 
-            VALUES (:nombres, :apellidos, :biografia, :foto, :numero)";
+    $sql = "INSERT INTO autores (nombres, apellidos, biografia, foto) 
+            VALUES (:nombres, :apellidos, :biografia, :foto)";
 
     $statement = $dbConn->prepare($sql);
     $statement->bindValue(':nombres', $autor['nombres']);
     $statement->bindValue(':apellidos', $autor['apellidos']);
     $statement->bindValue(':biografia', $autor['biografia']);
     $statement->bindValue(':foto', $autor['foto']);
-    $statement->bindValue(':numero', $autor['numero']);
+  
 
     $statement->execute();
     $autor_id = $dbConn->lastInsertId();

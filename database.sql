@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3307
--- Tiempo de generación: 15-05-2023 a las 20:36:58
+-- Tiempo de generación: 19-05-2023 a las 22:08:14
 -- Versión del servidor: 10.4.27-MariaDB
 -- Versión de PHP: 8.1.12
 
@@ -32,8 +32,7 @@ CREATE TABLE `autores` (
   `nombres` varchar(45) NOT NULL,
   `apelldios` varchar(45) NOT NULL,
   `biografia` varchar(200) NOT NULL,
-  `foto` blob NOT NULL,
-  `numero` int(11) NOT NULL
+  `foto` blob NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -87,8 +86,11 @@ CREATE TABLE `categorias` (
 --
 
 INSERT INTO `categorias` (`id`, `nombre`) VALUES
-(1, 'Novela'),
-(2, 'Accion');
+(1, 'Ciencias'),
+(2, 'Psicologia'),
+(3, 'Arte'),
+(4, 'Artes Marciales'),
+(5, 'Ingenerias');
 
 -- --------------------------------------------------------
 
@@ -100,8 +102,23 @@ CREATE TABLE `direcciones` (
   `id` int(11) NOT NULL,
   `pais` varchar(45) DEFAULT NULL,
   `ciudad` varchar(45) DEFAULT NULL,
-  `direccion` varchar(45) DEFAULT NULL
+  `direccion` varchar(45) DEFAULT NULL,
+  `departamento` varchar(45) DEFAULT NULL,
+  `id_editorial` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Volcado de datos para la tabla `direcciones`
+--
+
+INSERT INTO `direcciones` (`id`, `pais`, `ciudad`, `direccion`, `departamento`, `id_editorial`) VALUES
+(1, 'País de la dirección', 'Ciudad de la dirección ', 'Dirección completa', 'Departamento de la dirección', 1),
+(9, 'País de la dirección 2', 'Ciudad de la dirección 2', 'Dirección completa 2', 'Departamento de la dirección 2', 8),
+(10, 'País de la dirección 3', 'Ciudad de la dirección 3', 'Dirección completa 3', 'Departamento de la dirección 3', 8),
+(11, NULL, NULL, NULL, NULL, 10),
+(12, NULL, NULL, NULL, NULL, 10),
+(13, '12121', '1212', '2121', '12121212', 12),
+(14, '12121', '1212', '12121|', '12121212', 12);
 
 -- --------------------------------------------------------
 
@@ -125,28 +142,7 @@ CREATE TABLE `direccionesestudiantes` (
 --
 
 INSERT INTO `direccionesestudiantes` (`id`, `pais`, `departamento`, `ciudad`, `calle`, `numero`, `barrio`, `estudiantes_id`) VALUES
-(34, 'sinclejeo', 'SINCELEJO', '10', 'ALPES', '11', 'ALPES', 50),
-(35, 'Colombia', 'SINCELEJO', '10', 'ALPES', '1111', 'ALPES', 51),
-(36, 'sinclejeo', 'Sincelejo', '11', '18', '17', '18', 53),
-(37, 'Sincelejo', 'Sincelejo', '18 ', '67', '11', '67', 54),
-(38, 'Colombia', 'Sincelejo', 'Carrera 18 ', 'fatima', '11', 'fatima', 55),
-(39, 'venezula', 'sucreq', 'sincelejo', '18', '111', 'SUCRE', 51),
-(40, 'sinclejeo', 'SINCELJO', '1111', 'ALPES', '11', 'ALPES', 56),
-(41, 'Colombia', 'Sinclejeo', '11', 'FATIMA', '19', 'FATIMA', 57),
-(42, 'COLOMBIA', 'SUCRE', 'SINCELEJO', '10', '11', 'ALPES', 58),
-(43, 'sinclejeo', 'SUCRE', 'SINCELEJO', 'ALPES', '11', 'ALPES', 61),
-(44, 'sinclejeo', 'SUCRE', 'SINCELEJO', 'Venecia', '1111', 'Venecia', 62),
-(45, 'sinclejeo', 'SUCRE', 'SINCELEJO', 'FATIMAGOD', '12121', 'FATIMAGOD', 63),
-(46, 'sinclejeo', 'SUCRE', 'SINCELJO', 'ALPES', '11', 'ALPES', 64),
-(47, 'COLOMBIA', 'SUCRE', 'SINCELEJO', 'Namuel', '19', 'Namuel', 66),
-(48, 'sinclejeo', 'SUCRE', 'SINCELEJO', 'ALPES', '11', 'ALPES', 68),
-(49, 'sinclejeo', 'SUCRE', 'SINCELEJO', 'ALPES', '11', 'ALPES', 69),
-(50, 'sinclejeo', 'SUCRE', 'SINCELEJO', 'ALPES', '11', 'ALPES', 70),
-(51, 'sinclejeo', 'SUCRE', 'SINCELEJO', 'ALPES', '12121', 'ALPES', 71),
-(52, 'JIJIJIJA', 'JOA', 'ESA LEA', 'LOCO PRI', '123', 'LOCO PRI', 72),
-(53, 'COLOMBIA', 'SUCRE', 'Namuel', 'Alpes', '121', 'Alpes', 73),
-(54, 'COLOMBIA', 'SUCRE', 'SINCELJO', 'ALPES', '11', 'ALPES', 74),
-(55, 'COLOMBIA', 'SUCRE', 'SAMPEDRO', '72', '21', '72', 75);
+(56, 'COLOMBIA', 'SUCRE', 'SAMPUES ', 'LA VIRGENCITA', '36-48', 'LA VIRGENCITA', 76);
 
 -- --------------------------------------------------------
 
@@ -161,16 +157,17 @@ CREATE TABLE `editoriales` (
   `numerocontacto` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
--- --------------------------------------------------------
-
 --
--- Estructura de tabla para la tabla `editoriales_has_direcciones`
+-- Volcado de datos para la tabla `editoriales`
 --
 
-CREATE TABLE `editoriales_has_direcciones` (
-  `Editoriales_id` int(11) NOT NULL,
-  `Direcciones_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+INSERT INTO `editoriales` (`id`, `nombre`, `correo`, `numerocontacto`) VALUES
+(1, 'Nombre de la editorial ', 'correo@example.com', '123456789'),
+(8, 'Pepitos', 'pepitos@example.com', '987654321'),
+(9, NULL, NULL, NULL),
+(10, 'Editorial san carlos', 'braikan@gmail.com', '323131'),
+(11, 'Editorial san carlos 2', 'braikan@gmail.com', '323131'),
+(12, 'Editorial san carlos', 'braikan@gmail.com', '323131');
 
 -- --------------------------------------------------------
 
@@ -199,31 +196,7 @@ CREATE TABLE `estudiantes` (
 --
 
 INSERT INTO `estudiantes` (`id`, `tipoIdentificacion`, `numeroIdentificacion`, `nombres`, `apellidos`, `celular`, `fechanacimiento`, `tiposagre`, `paisnacimiento`, `departamentonacimiento`, `ciudadnacimiento`, `foto`, `correoelectronico`) VALUES
-(45, 'cc', '110114', 'khabib', 'piña zamora', '3131313', '2023-05-10', 'O-', 'Brasil', 'Sucre', '12212', 0x433a5c66616b65706174685c436170747572612064652070616e74616c6c6120283538292e706e67, 'BRAIKAN.a@gmail.com'),
-(46, 'cc', '121212', 'khabib', 'piña zamora', '3131313', '2023-05-18', 'AB+', 'Colombia', 'Sucre', 'SINCELEJO', 0x433a5c66616b65706174685c436170747572612064652070616e74616c6c6120283538292e706e67, 'BRAIKAN.a@gmail.com'),
-(48, 'cc', '2121313', 'khabib', 'piña zamora', '3131313', '2023-05-23', 'O-', 'NAMUEL', 'Sucre', '12212', 0x433a5c66616b65706174685c436170747572612064652070616e74616c6c6120283538292e706e67, 'BRAIKAN.a@gmail.com'),
-(49, 'cc', '11011432313', 'khabib', 'piña zamora', '3131313', '2023-05-17', 'B-', 'Brasil', 'Sucre', '12212', 0x433a5c66616b65706174685c436170747572612064652070616e74616c6c6120283538292e706e67, 'BRAIKAN.a@gmail.com'),
-(50, 'cc', '110114131313', 'khabib', 'piña zamora', '3131313', '2023-05-16', 'O-', 'Colomia', 'Sucre', 'Sincejo', 0x433a5c66616b65706174685c436170747572612064652070616e74616c6c6120283538292e706e67, 'BRAIKAN.a@gmail.com'),
-(51, 'cc', '1101143232', 'khabib', 'piña zamora', '3131313', '2023-05-24', 'O+', 'Sucre', 'Sucre', 'Sincelejo', 0x433a5c66616b65706174685c436170747572612064652070616e74616c6c6120283538292e706e67, 'BRAIKAN.a@gmail.com'),
-(53, 'cc', '131313133', 'khabib', 'piña zamora', '3131313212', '2023-05-11', 'O-', 'Brasil', 'Sucre', 'SINCELEJO', 0x433a5c66616b65706174685c436170747572612064652070616e74616c6c6120283538292e706e67, 'BRAIKAN.a@gmail.com'),
-(54, 'cc', '11011443434', 'khabib', 'piña zamora', '3131313231', '2023-05-25', 'O+', 'Colombia', 'Sucre', 'SINCELEJO', 0x433a5c66616b65706174685c436170747572612064652070616e74616c6c6120283538292e706e67, 'BRAIKAN.a@gmail.com'),
-(55, 'cc', '110114545456', 'khabib', 'piña zamora', '3131313', '2023-05-17', 'O-', 'Namuel', 'Sucre', '12212', 0x433a5c66616b65706174685c436170747572612064652070616e74616c6c6120283633292e706e67, 'BRAIKAN.a@gmail.com'),
-(56, 'cc', '12211212', 'khabib', 'piña zamora', '3131313', '2023-05-17', 'O-', 'Brasil', 'Sucre', '12212', 0x433a5c66616b65706174685c436170747572612064652070616e74616c6c6120283538292e706e67, 'BRAIKAN.a@gmail.com'),
-(57, 'cc', '1101143231', 'khabib', 'piña zamora', '3131313', '2023-05-17', 'AB+', 'Brasil', 'Sucre', 'SINCELEJO', 0x433a5c66616b65706174685c436170747572612064652070616e74616c6c6120283538292e706e67, 'BRAIKAN.a@gmail.com'),
-(58, 'ti', '11011411323', 'khabib', 'piña zamora', '3131313', '2023-05-10', 'O+', 'NAMUEL', 'Sucre', '12212', 0x433a5c66616b65706174685c436170747572612064652070616e74616c6c6120283538292e706e67, 'BRAIKAN.a@gmail.com'),
-(61, 'cc', '11011442424', 'khabib', 'piña zamora', '31313132121', '2023-05-10', 'O-', 'Brasil', 'Sucre', '12212', 0x433a5c66616b65706174685c436170747572612064652070616e74616c6c6120283538292e706e67, 'BRAIKAN.a@gmail.com'),
-(62, 'ti', '211313', 'khabib', 'piña zamora', '3131313', '2023-05-11', 'O-', 'Brasil', 'Sucre', '12212', 0x433a5c66616b65706174685c436170747572612064652070616e74616c6c6120283538292e706e67, 'BRAIKAN.a@gmail.com'),
-(63, 'cc', '11011421', 'khabib', 'piña zamora', '3131313', '2023-05-16', 'O+', 'Brasil', 'Sucre', '12212', 0x433a5c66616b65706174685c436170747572612064652070616e74616c6c6120283538292e706e67, 'BRAIKAN.a@gmail.com'),
-(64, 'ti', '3455621', 'khabib', 'piña zamora', '3131313', '2023-05-26', 'O-', 'Namuel', 'Sucre', '12212', 0x4172726179, 'BRAIKAN.a@gmail.com'),
-(66, 'cc', '11011421323', 'Namuel', 'Solorzano', '310313413', '1111-12-23', 'B-', 'Colombia', 'Sucre', 'Corozal', 0x657374756469616e74655f696d616765732f363435656461646262383464642e, 'BRAIKAN.a@gmail.com'),
-(68, 'cc', '231313', 'khabib', 'piña zamora', '3131313', '2023-05-18', 'O-', 'Brasil', 'Sucre', 'SINCELEJO', 0x657374756469616e74655f696d616765732f363435656464306438356465312e, 'BRAIKAN.a@gmail.com'),
-(69, 'ti', '25454', 'khabib', 'piña zamora', '3131313', '2023-05-18', 'O-', 'Brasil', 'Sucre', 'SINCELEJO', 0x657374756469616e74655f696d616765732f363435656464376535346638612e, 'BRAIKAN.a@gmail.com'),
-(70, 'cc', '110114323', 'khabib', 'piña zamora', '3131313', '2023-05-11', 'O+', 'Brasil', 'Sucre', 'SINCELEJO', 0x657374756469616e74655f696d616765732f363435656534333537323435662e, 'BRAIKAN.a@gmail.com'),
-(71, 'cc', '233131432', 'khabib', 'piña zamora', '3131313', '2023-05-11', 'A+', 'Brasil', 'Sucre', 'SINCELEJO', 0x657374756469616e74655f696d616765732f363435666261366334303466342e, 'BRAIKAN.a@gmail.com'),
-(72, 'cc', '21212112', 'Messi bebe', 'Te amo', '111999', '2003-12-31', 'A+', 'CAJONERO', 'SAMUEL', 'CAREMONDA', 0x657374756469616e74655f696d616765732f33366230643161613136633732313562333338383335326330646463623630312e6a7067, 'uwu@gmail.com'),
-(73, 'cc', '999999321', 'Namuel', 'David', '31321212', '2023-05-17', 'O+', 'colombia', 'sucre', 'sincelejo', 0x657374756469616e74655f696d616765732f33306534323331666434383665323362373638373237326366623239653034382e6a7067, 'steven@gmail.com'),
-(74, 'cc', '121421231', 'Namuel de jesus ', 'nAMUEL', '313131', '2004-01-23', 'B+', 'Brasil', 'Sucre', 'SINCELEJO', 0x657374756469616e74655f696d616765732f65623130616134663863306361323736636439346339333938623963376562662e6a7067, 'BRAIKAN.a@gmail.com'),
-(75, 'cc', '1104008652', 'Correcto', 'Namuel', '21134141', '2023-05-17', 'A+', 'Venezuela', 'Bolivar', 'San Pedro', 0x657374756469616e74655f696d616765732f65623537366638306336343839336261643563326338663830383033353132612e6a7067, 'namueldejesus@cecar.edu.co');
+(76, 'cc', '1103739024', 'STEVEN DAVID ', 'GOMEZ FOLIACO', '3218146258', '2023-04-24', 'O+', 'COLOMBIA', 'SUCRE', 'SINCELEJO', 0x657374756469616e74655f696d616765732f30376665353563366635336435373638616538393965376265356266313463372e6a7067, 'stevengomezf@cecar.edu.co');
 
 -- --------------------------------------------------------
 
@@ -245,13 +218,9 @@ CREATE TABLE `inscripciones` (
 --
 
 INSERT INTO `inscripciones` (`id`, `descripcion`, `fecha`, `Semestre_numero`, `Carrera_id`, `estudiantes_id`) VALUES
-(3, 'se inscribio', '2023-05-10 14:30:00', 1, 1, 45),
-(7, 'Inscripción semestre 2023-2', '2023-05-12 09:30:00', 1, 2, 45),
-(8, 'Inscripción semestre 2023-2', '2023-05-12 09:30:00', 1, 3, 45),
-(13, 'Estudiudate inscrito', '0000-00-00 00:00:00', 1, 3, 46),
-(14, 'Estudiudate inscrito', '0000-00-00 00:00:00', 1, 3, 46),
-(16, 'Estudiudate inscrito', '0000-00-00 00:00:00', 1, 1, 50),
-(17, 'Estudiudate inscrito', '2023-05-11 17:47:12', 3, 2, 46);
+(29, 'Estudiudate inscrito', '2023-05-16 09:45:38', 3, 2, 76),
+(30, 'Estudiudate inscrito', '2023-05-17 13:53:14', 3, 2, 76),
+(31, 'Estudiudate inscrito', '2023-05-17 13:53:15', 3, 2, 76);
 
 -- --------------------------------------------------------
 
@@ -264,7 +233,53 @@ CREATE TABLE `libros` (
   `nombre` varchar(45) DEFAULT NULL,
   `Editoriales_id` int(11) NOT NULL,
   `imagen` blob NOT NULL,
-  `temas_id` int(11) NOT NULL
+  `temas_id` int(11) NOT NULL,
+  `valor` varchar(45) NOT NULL,
+  `disponibilidad` tinyint(4) NOT NULL,
+  `numerounidades` int(11) NOT NULL,
+  `ubicacion` varchar(45) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Disparadores `libros`
+--
+DELIMITER $$
+CREATE TRIGGER `asignar_ubicacion` BEFORE INSERT ON `libros` FOR EACH ROW BEGIN
+    DECLARE tema_categoria_id INT;
+    DECLARE tema_id INT;
+    DECLARE ubicacion VARCHAR(45);
+
+    -- Obtener el tema y la categoría del libro
+    SELECT temas_id, Categorias_id INTO tema_id, tema_categoria_id
+    FROM temas
+    WHERE id = NEW.temas_id;
+
+    -- Construir la ubicación del libro
+    SET ubicacion = CONCAT('estante ', tema_categoria_id, ' tema ', tema_id);
+
+    -- Asignar la ubicación al nuevo libro
+    SET NEW.ubicacion = ubicacion;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `set_disponibilidad_false` BEFORE INSERT ON `libros` FOR EACH ROW BEGIN
+    IF NEW.numerounidades = 0 THEN
+        SET NEW.disponibilidad = FALSE;
+    END IF;
+END
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `motivos`
+--
+
+CREATE TABLE `motivos` (
+  `id` int(11) NOT NULL,
+  `descripcion` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -289,9 +304,9 @@ CREATE TABLE `multas` (
 
 CREATE TABLE `prestamos` (
   `id` int(11) NOT NULL,
-  `fechaInicio` date DEFAULT NULL,
-  `fechaFinal` date DEFAULT NULL,
-  `estado` varchar(45) DEFAULT NULL,
+  `fechaInicio` date NOT NULL,
+  `fechaFinal` date NOT NULL,
+  `prestado` tinyint(4) NOT NULL,
   `Estudiantes_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
@@ -304,8 +319,20 @@ CREATE TABLE `prestamos` (
 CREATE TABLE `prestamos_has_libros` (
   `Prestamos_id` int(11) NOT NULL,
   `Libros_id` int(11) NOT NULL,
-  `fecha` date DEFAULT NULL
+  `fecha` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Disparadores `prestamos_has_libros`
+--
+DELIMITER $$
+CREATE TRIGGER `disminuir_unidades_disponibles` AFTER INSERT ON `prestamos_has_libros` FOR EACH ROW BEGIN
+    UPDATE dbbiblioteca.libros
+    SET numerounidades = numerounidades - 1
+    WHERE id = NEW.Libros_id;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -345,6 +372,13 @@ CREATE TABLE `temas` (
   `Categorias_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `temas`
+--
+
+INSERT INTO `temas` (`id`, `nombre`, `Categorias_id`) VALUES
+(1, 'Judo', 4);
+
 -- --------------------------------------------------------
 
 --
@@ -364,6 +398,7 @@ CREATE TABLE `usuarios` (
 INSERT INTO `usuarios` (`numeroIdentificacion`, `contrasena`, `tipousuario`) VALUES
 (110114111, 'maria', 'e'),
 (1005472938, 'andresbertel', 'b'),
+(1103739024, 'GOMEZf', 'e'),
 (1104255477, 'namuel', 'a'),
 (1104255477, 'namuel', 'e'),
 (1104258093, 'braikanteodio', 'e'),
@@ -402,7 +437,8 @@ ALTER TABLE `categorias`
 -- Indices de la tabla `direcciones`
 --
 ALTER TABLE `direcciones`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_editorial` (`id_editorial`);
 
 --
 -- Indices de la tabla `direccionesestudiantes`
@@ -416,13 +452,6 @@ ALTER TABLE `direccionesestudiantes`
 --
 ALTER TABLE `editoriales`
   ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `editoriales_has_direcciones`
---
-ALTER TABLE `editoriales_has_direcciones`
-  ADD PRIMARY KEY (`Editoriales_id`,`Direcciones_id`),
-  ADD KEY `fk_Editoriales_has_Direcciones_Direcciones1` (`Direcciones_id`);
 
 --
 -- Indices de la tabla `estudiantes`
@@ -444,6 +473,13 @@ ALTER TABLE `inscripciones`
 -- Indices de la tabla `libros`
 --
 ALTER TABLE `libros`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_temas` (`temas_id`);
+
+--
+-- Indices de la tabla `motivos`
+--
+ALTER TABLE `motivos`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -506,30 +542,48 @@ ALTER TABLE `carreras`
 -- AUTO_INCREMENT de la tabla `categorias`
 --
 ALTER TABLE `categorias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de la tabla `direcciones`
+--
+ALTER TABLE `direcciones`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `direccionesestudiantes`
 --
 ALTER TABLE `direccionesestudiantes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+
+--
+-- AUTO_INCREMENT de la tabla `editoriales`
+--
+ALTER TABLE `editoriales`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `estudiantes`
 --
 ALTER TABLE `estudiantes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
 -- AUTO_INCREMENT de la tabla `inscripciones`
 --
 ALTER TABLE `inscripciones`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT de la tabla `libros`
 --
 ALTER TABLE `libros`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `motivos`
+--
+ALTER TABLE `motivos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -542,7 +596,13 @@ ALTER TABLE `multas`
 -- AUTO_INCREMENT de la tabla `prestamos`
 --
 ALTER TABLE `prestamos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT de la tabla `temas`
+--
+ALTER TABLE `temas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Restricciones para tablas volcadas
@@ -555,17 +615,16 @@ ALTER TABLE `autores_has_libros`
   ADD CONSTRAINT `fk_Autores_has_Libros_Libros1` FOREIGN KEY (`Libros_id`) REFERENCES `libros` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
+-- Filtros para la tabla `direcciones`
+--
+ALTER TABLE `direcciones`
+  ADD CONSTRAINT `id_editorial` FOREIGN KEY (`id_editorial`) REFERENCES `editoriales` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
 -- Filtros para la tabla `direccionesestudiantes`
 --
 ALTER TABLE `direccionesestudiantes`
   ADD CONSTRAINT `fk_direccionesestudiantes_estudiantes1` FOREIGN KEY (`estudiantes_id`) REFERENCES `estudiantes` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Filtros para la tabla `editoriales_has_direcciones`
---
-ALTER TABLE `editoriales_has_direcciones`
-  ADD CONSTRAINT `fk_Editoriales_has_Direcciones_Direcciones1` FOREIGN KEY (`Direcciones_id`) REFERENCES `direcciones` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_Editoriales_has_Direcciones_Editoriales1` FOREIGN KEY (`Editoriales_id`) REFERENCES `editoriales` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `inscripciones`
@@ -574,6 +633,12 @@ ALTER TABLE `inscripciones`
   ADD CONSTRAINT `fk_Inscripcion_Carrera1` FOREIGN KEY (`Carrera_id`) REFERENCES `carreras` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_Inscripcion_Semestre1` FOREIGN KEY (`Semestre_numero`) REFERENCES `semestre` (`numero`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_inscripciones_estudiantes1` FOREIGN KEY (`estudiantes_id`) REFERENCES `estudiantes` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `libros`
+--
+ALTER TABLE `libros`
+  ADD CONSTRAINT `id_temas` FOREIGN KEY (`temas_id`) REFERENCES `temas` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `multas`

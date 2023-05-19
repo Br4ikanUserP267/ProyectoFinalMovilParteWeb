@@ -60,6 +60,7 @@
         function inscribirEstudiantes(){
             window.location.href = 'inscribirestudiantes.html';
         }
+  
 
 
 

@@ -33,8 +33,13 @@
             </button>
         </div>
         <div style="margin-right: 10px; width: 500px; height: 500px;">
-            <button type="button"  onclick=" gestionCategorias()" style="padding: 10px; width: 100%; height: 100%; background-color: gray; color: white; border: 2px solid white; transition: all 0.2s ease-in-out; background-color: gray;" onmouseover="this.style.backgroundColor='#007bff'; this.style.borderColor='#007bff'" onmouseout="this.style.backgroundColor='gray'; this.style.borderColor='white'">
+            <button type="button"  onclick=" gestionTemas()" style="padding: 10px; width: 100%; height: 100%; background-color: gray; color: white; border: 2px solid white; transition: all 0.2s ease-in-out; background-color: gray;" onmouseover="this.style.backgroundColor='#007bff'; this.style.borderColor='#007bff'" onmouseout="this.style.backgroundColor='gray'; this.style.borderColor='white'">
                 Gestion de Temas
+            </button>
+        </div>
+        <div style="margin-right: 10px; width: 500px; height: 500px;">
+            <button type="button"  onclick=" gestionMultas()" style="padding: 10px; width: 100%; height: 100%; background-color: gray; color: white; border: 2px solid white; transition: all 0.2s ease-in-out; background-color: gray;" onmouseover="this.style.backgroundColor='#007bff'; this.style.borderColor='#007bff'" onmouseout="this.style.backgroundColor='gray'; this.style.borderColor='white'">
+                Gestion de multas
             </button>
         </div>
     </div>
@@ -54,6 +59,12 @@
 
         function gestionCategorias(){
             window.location.href = 'gestion-categorias.html';
+        }
+        function gestionTemas(){
+            window.location.href = 'gestion-temas.html';
+        }
+        function gestionMultas(){
+            window.location.href = 'motivos-multas.html';
         }
         </script>
 
