@@ -7,10 +7,11 @@
     if (isset($_GET['numeroIdentificacion'])) {
         $numeroIdentificacion = $_GET['numeroIdentificacion'];
     
-        $sql = "SELECT i.*
+        $sql = "SELECT i.*, c.titulo AS nombreCarrera
                 FROM inscripciones i
                 INNER JOIN estudiantes e ON e.id = i.estudiantes_id
-                WHERE e.numeroIdentificacion = :numeroIdentificacion";
+                INNER JOIN carreras c ON c.id = i.Carrera_id
+                WHERE e.numeroIdentificacion = :numeroIdentificacion" ;
         
         $statement = $dbConn->prepare($sql);
         $statement->bindValue(':numeroIdentificacion', $numeroIdentificacion);

@@ -64,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="form-outline mb-4">
                     <label class="form-label" >Usuario</label>
                   <input type="text" id="usuario"  name="usuario" class="form-control form-control-lg"
-                    placeholder="Usuario" />
+                    placeholder="Usuario" required />
                   
                 </div>
       
@@ -72,7 +72,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="form-outline mb-3">
                     <label class="form-label"  >Contraseña</label>
                   <input type="password" id="password" name = "password" class="form-control form-control-lg"
-                    placeholder="Contraseña" />
+                    placeholder="Contraseña" required/>
+
+                    <!--Joa pri por si te la encuentras por ahi dile que me tiene mal *procede a ponerse sentimental*-->
                   
                 </div>
                 
