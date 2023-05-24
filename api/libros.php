@@ -6,7 +6,9 @@ $dbConn = connect($db);
 
 // Obtener todos los libros
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    $sql = "SELECT * FROM libros";
+    $sql = "SELECT libros.*, CONCAT(categorias.id, '.', temas.id) AS ubicacion FROM libros
+            INNER JOIN temas ON libros.temas_id = temas.id
+            INNER JOIN categorias ON temas.Categorias_id = categorias.id";
     $statement = $dbConn->prepare($sql);
     $statement->execute();
 
@@ -15,6 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     echo json_encode($result);
     exit();
 }
+
+
 
 // Crear un nuevo libro
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -25,8 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $valor = $_POST['valor'];
     $disponibilidad = $_POST['disponibilidad'];
     $numerounidades = $_POST['numerounidades'];
-    $ubicacion = $_POST['ubicacion'];
-
     $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
     $carpetaImagenes = 'libro_images/';
 
@@ -38,8 +40,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $rutaImagen = $carpetaImagenes . $nombreImagen;
 
-    $sql = "INSERT INTO libros (nombre, Editoriales_id, imagen, temas_id, valor, disponibilidad, numerounidades, ubicacion)
-            VALUES (:nombre, :Editoriales_id, :imagen, :temas_id, :valor, :disponibilidad, :numerounidades, :ubicacion)";
+    $sql = "INSERT INTO libros (nombre, Editoriales_id, imagen, temas_id, valor, disponibilidad, numerounidades)
+            VALUES (:nombre, :Editoriales_id, :imagen, :temas_id, :valor, :disponibilidad, :numerounidades)";
 
     $statement = $dbConn->prepare($sql);
     $statement->bindValue(':nombre', $nombre);
@@ -49,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $statement->bindValue(':valor', $valor);
     $statement->bindValue(':disponibilidad', $disponibilidad);
     $statement->bindValue(':numerounidades', $numerounidades);
-    $statement->bindValue(':ubicacion', $ubicacion);
+
 
     $statement->execute();
     $libro_id = $dbConn->lastInsertId();
