@@ -1,3 +1,15 @@
+
+<?php
+session_start();
+
+// Verificar si el usuario ya ha iniciado sesión
+if (isset($_SESSION['username'])) {
+    // Redirigir al inicio
+    header("Location: ../index.php");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -40,7 +52,7 @@
     </div>
     <script>
         function gestionCarreras(){
-            window.location.href = 'gestion-carrera.html';
+            window.location.href = 'gestion-carrera.php';
 
         }
 
@@ -49,16 +61,16 @@
         }
 
         function  gestionSemestre(){
-            window.location.href = 'gestion-semestre.html';
+            window.location.href = 'gestion-semestre.php';
         }
 
         function gestionUsuarios(){
-            window.location.href = 'gestion-usuarios.html';
+            window.location.href = 'gestion-usuarios.php';
         }
 
 
         function inscribirEstudiantes(){
-            window.location.href = 'inscribirestudiantes.html';
+            window.location.href = 'inscribirestudiantes.php';
         }
   
 

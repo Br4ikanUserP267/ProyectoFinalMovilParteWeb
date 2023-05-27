@@ -85,19 +85,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
             $statement = $dbConn->prepare("DELETE FROM inscripciones WHERE id = :id");
             $statement->bindValue(':id', $id);
             $statement->execute();
-            header("HTTP/1.1 200 OK");
+            $rowCount = $statement->rowCount();
+            
+            if ($rowCount > 0) {
+                header("HTTP/1.1 200 OK");
+                echo json_encode(array("message" => "Inscripción borrada exitosamente."));
+            } else {
+                header("HTTP/1.1 404 Not Found");
+                echo json_encode(array("message" => "No se encontró la inscripción."));
+            }
             exit();
         } catch (PDOException $ex) {
-
             header("HTTP/1.1 500 Internal Server Error");
+            echo json_encode(array("message" => "Error en el servidor."));
             exit();
         }
     } else {
         header("HTTP/1.1 400 Bad Request");
+        echo json_encode(array("message" => "ID de inscripción requerido."));
         exit();
     }
-    
 }
+
 
 
 // Update an inscripcion

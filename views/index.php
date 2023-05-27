@@ -1,40 +1,53 @@
 <?php
 // Obtener los datos del usuario
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  $numeroIdentificacion = $_POST['usuario'];
+  $contrasena = $_POST['password'];
 
-      $numeroIdentificacion = $_POST['usuario'];
-      $contrasena = $_POST['password'];
+  // Conectar a la API de usuarios
+  $url = 'http://localhost/proyectoFinal/api/usuarios.php';
+  $data = file_get_contents($url);
+  $usuarios = json_decode($data);
 
-      // Conectar a la API de usuarios
-      $url = 'http://localhost/proyectoFinal/api/usuarios.php';
-      $data = file_get_contents($url);
-      $usuarios = json_decode($data);
-
+  // Verificar si se pudo obtener la lista de usuarios
+  if ($usuarios !== null) {
       // Buscar el usuario en la lista de usuarios
       $encontrado = false;
+      $tipousuario = '';
+
       foreach ($usuarios as $usuario) {
-        if ($usuario->numeroIdentificacion == $numeroIdentificacion && $usuario->contrasena == $contrasena) {
-          $encontrado = true;
-          $tipousuario = $usuario->tipousuario;
-          break;
-        }
+          if ($usuario->numeroIdentificacion == $numeroIdentificacion && $usuario->contrasena == $contrasena) {
+              $encontrado = true;
+              $tipousuario = $usuario->tipousuario;
+              break;
+          }
       }
 
-      // Si se encuentra el usuario, redirigirlo a la página correspondiente según su tipo de usuario
       if ($encontrado) {
-        if ($tipousuario == 'a') {
-          header('Location: ./administrador/menu.php');
-        } else if ($tipousuario == 'b') {
-          header('Location: ./biblioteca/menu.php');
-        } else {
-          echo "Error: Tipo de usuario no válido.";
-        }
-      } else {
-        echo '<div class="alert alert-danger" role="alert">Usuario o contraseña incorrectos.</div>';
-      }
+          // Iniciar sesión y redirigir a la página correspondiente según el tipo de usuario
+          session_start();
+          $_SESSION['numeroIdentificacion'] = $numeroIdentificacion;
+          $_SESSION['tipousuario'] = $tipousuario;
 
-    }
+          if ($tipousuario == 'b') {
+              header("Location: bibliotecario.php");
+              exit();
+          } elseif ($tipousuario == 'a') {
+              header("Location: administrador.php");
+              exit();
+          } elseif ($tipousuario == 'e') {
+              header("Location: estudiante.php");
+              exit();
+          }
+      } else {
+          $errorMessage = "Usuario o contraseña incorrectos";
+      }
+  } else {
+      $errorMessage = "Error al obtener la lista de usuarios";
+  }
+}
+
+
 ?>
 
 
