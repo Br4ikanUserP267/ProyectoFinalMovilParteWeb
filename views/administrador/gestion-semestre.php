@@ -67,6 +67,71 @@
         });
 
       </script>
+<div class="container">
+        <h2>listado semestres </h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Numero</th>
+                
+            
+                </tr>
+            </thead>
+            <tbody id="inscripcionesTableBody">
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Cargar todas las inscripciones al cargar la página
+            cargarInscripciones();
+
+            function cargarInscripciones() {
+                $.ajax({
+                    url: 'http://localhost/proyectoFinal/api/semestres.php',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        var semestres = data;
+                        var tableBody = $('#inscripcionesTableBody');
+                        tableBody.empty();
+
+                        // Recorrer cada inscripción y agregar una fila a la tabla
+                        $.each(semestres, function(index, semestres) {
+                            var row = '<tr>' +
+                                '<td>' + semestres.numero + '</td>' +
+                                '</tr>';
+                            tableBody.append(row);
+                        });
+                    }
+                });
+            }
+
+        
+        
+
+        });
+        
+    </script>
+     <script>
+    function borrarInscripcion(id) {
+        if (confirm("¿Estás seguro de que deseas borrar esta inscripción?")) {
+            $.ajax({
+                url: 'http://localhost/proyectoFinal/api/carreras.php?id=' + id,
+                type: 'DELETE',
+                success: function(response) {
+                    alert(response.message);
+                    cargarInscripciones(); // Actualizar la tabla de inscripciones
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert('Error al borrar la inscripción');
+                }
+            });
+        }
+    }
+
+</script>
 
 
       <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>

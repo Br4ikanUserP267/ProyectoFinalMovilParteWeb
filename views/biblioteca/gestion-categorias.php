@@ -57,6 +57,76 @@
         });
     </script>
 
+<div class="container">
+        <h2>Listado Categorias</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+             
+                </tr>
+            </thead>
+            <tbody id="inscripcionesTableBody">
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Cargar todas las inscripciones al cargar la página
+            cargarInscripciones();
+
+            function cargarInscripciones() {
+                $.ajax({
+                    url: 'http://localhost/proyectoFinal/api/categorias.php',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        var categorias = data;
+                        var tableBody = $('#inscripcionesTableBody');
+                        tableBody.empty();
+
+                        // Recorrer cada inscripción y agregar una fila a la tabla
+                        $.each(categorias, function(index, categorias) {
+                            var row = '<tr>' +
+                                '<td>' + categorias.id + '</td>' +
+                                '<td>' + categorias.nombre + '</td>' +
+                           
+                               
+                                '</tr>';
+                            tableBody.append(row);
+                        });
+                    }
+                });
+            }
+
+        
+        
+
+        });
+        
+    </script>
+     <script>
+    function borrarInscripcion(id) {
+        if (confirm("¿Estás seguro de que deseas borrar esta inscripción?")) {
+            $.ajax({
+                url: 'http://localhost/proyectoFinal/api/inscripcion.php?id=' + id,
+                type: 'DELETE',
+                success: function(response) {
+                    alert(response.message);
+                    cargarInscripciones(); // Actualizar la tabla de inscripciones
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert('Error al borrar la inscripción');
+                }
+            });
+        }
+    }
+
+</script>
+
+
       <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
 </body>

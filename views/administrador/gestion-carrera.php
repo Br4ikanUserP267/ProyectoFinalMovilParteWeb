@@ -81,6 +81,77 @@
 
 </body>
 </html>
+<div class="container">
+        <h2>Carreras Disponibles </h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>titulo</th>
+                    <th>descripcion</th>
+            
+                </tr>
+            </thead>
+            <tbody id="inscripcionesTableBody">
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Cargar todas las inscripciones al cargar la página
+            cargarInscripciones();
+
+            function cargarInscripciones() {
+                $.ajax({
+                    url: 'http://localhost/proyectoFinal/api/carreras.php',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        var inscripciones = data;
+                        var tableBody = $('#inscripcionesTableBody');
+                        tableBody.empty();
+
+                        // Recorrer cada inscripción y agregar una fila a la tabla
+                        $.each(inscripciones, function(index, inscripcion) {
+                            var row = '<tr>' +
+                                '<td>' + inscripcion.id + '</td>' +
+                                '<td>' + inscripcion.titulo + '</td>' +
+                                '<td>' + inscripcion.descripcion + '</td>' +
+                               
+                                '<td><button class="btn btn-danger btn-sm" onclick="borrarInscripcion(' + inscripcion.id + ')">Borrar</button></td>' +
+
+                                '</tr>';
+                            tableBody.append(row);
+                        });
+                    }
+                });
+            }
+
+        
+        
+
+        });
+        
+    </script>
+     <script>
+    function borrarInscripcion(id) {
+        if (confirm("¿Estás seguro de que deseas borrar esta inscripción?")) {
+            $.ajax({
+                url: 'http://localhost/proyectoFinal/api/carreras.php?id=' + id,
+                type: 'DELETE',
+                success: function(response) {
+                    alert(response.message);
+                    cargarInscripciones(); // Actualizar la tabla de inscripciones
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert('Error al borrar la inscripción');
+                }
+            });
+        }
+    }
+
+</script>
 
 
 

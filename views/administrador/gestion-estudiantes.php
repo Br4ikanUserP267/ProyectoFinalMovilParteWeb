@@ -195,13 +195,93 @@
         });
 
     </script>
-//sirvio ? ya lo pruebo i
+
 
     <script>
         function irCrearUsuario(){
-            window.location.href = 'gestion-usuarios.html';
+            window.location.href = 'gestion-usuarios.php';
         }
     </script>
+
+   <div class="container">
+        <h2>Estudiantes</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>titulo</th>
+                    <th>descripcion</th>
+            
+                </tr>
+            </thead>
+            <tbody id="inscripcionesTableBody">
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Cargar todas las inscripciones al cargar la página
+            cargarInscripciones();
+
+            function cargarInscripciones() {
+                $.ajax({
+                    url: 'http://localhost/proyectoFinal/api/estudiantes.php',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        var estudiantes = data;
+                        var tableBody = $('#inscripcionesTableBody');
+                        tableBody.empty();
+
+                        // Recorrer cada inscripción y agregar una fila a la tabla
+                        $.each(estudiantes, function(index, estudiantes) {
+                            var row = '<tr>' +
+                                '<td>' + estudiantes.id + '</td>' +
+                                '<td>' + estudiantes.numeroIdentificacion + '</td>' +
+                                '<td>' + estudiantes.nombres + '</td>' +
+                                '<td>' + estudiantes.apellidos + '</td>' +
+                                '<td>' + estudiantes.celular + '</td>' +
+                                '<td>' + estudiantes.fechanacimiento + '</td>' +
+                                '<td>' + estudiantes.tiposagre + '</td>' +
+                                '<td>' + estudiantes.paisnacimiento + '</td>' +
+                                
+                                '<td><button class="btn btn-danger btn-sm" onclick="borrarInscripcion(' + inscripcion.id + ')">Borrar</button></td>' +
+
+                                '</tr>';
+                            tableBody.append(row);
+                        });
+                    }
+                });
+            }
+
+        
+        
+
+        });
+        
+    </script>
+     <script>
+        function borrarInscripcion(id) {
+            if (confirm("¿Estás seguro de que deseas borrar esta inscripción?")) {
+                $.ajax({
+                    url: 'http://localhost/proyectoFinal/api/carreras.php?id=' + id,
+                    type: 'DELETE',
+                    success: function(response) {
+                        alert(response.message);
+                        cargarInscripciones(); // Actualizar la tabla de inscripciones
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert('Error al borrar la inscripción');
+                    }
+                });
+            }
+        }
+
+    </script>
+
+
+
 
 
 

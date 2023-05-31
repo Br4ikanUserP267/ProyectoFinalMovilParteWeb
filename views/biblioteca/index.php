@@ -42,30 +42,44 @@
                 Gestion de multas
             </button>
         </div>
+        <div style="margin-right: 10px; width: 500px; height: 500px;">
+            <button type="button"  onclick=" gestionPrestamos()" style="padding: 10px; width: 100%; height: 100%; background-color: gray; color: white; border: 2px solid white; transition: all 0.2s ease-in-out; background-color: gray;" onmouseover="this.style.backgroundColor='#007bff'; this.style.borderColor='#007bff'" onmouseout="this.style.backgroundColor='gray'; this.style.borderColor='white'">
+                Gestion de prestamos
+            </button>
+        </div>
     </div>
     <script>
         function gestionAutores(){
-            window.location.href = 'gestion-autores.html';
+            window.location.href = 'gestion-autores.php';
 
         }
 
         function gestionEditoriales (){
-            window.location.href = 'gestion-editoriales.html';
+            window.location.href = 'gestion-editoriales.php';
         }
 
         function  gestionLibros(){
-            window.location.href = 'gestion-libros.html';
+            window.location.href = 'gestion-libros.php';
         }
 
         function gestionCategorias(){
-            window.location.href = 'gestion-categorias.html';
+            window.location.href = 'gestion-categorias.php';
         }
         function gestionTemas(){
-            window.location.href = 'gestion-temas.html';
+            window.location.href = 'gestion-temas.php';
         }
         function gestionMultas(){
-            window.location.href = 'motivos-multas.html';
+            window.location.href = 'motivos-multas.php';
         }
+
+        function gestionPrestamos(){
+            window.location.href = 'gestionprestamos.php'
+
+        }
+
+
+
+
         </script>
 
        
