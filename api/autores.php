@@ -33,39 +33,62 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 }
 
 // Crear un nuevo autor
+// Verificar que el método de solicitud sea POST
+
+// Verificar que el método de solicitud sea POST
+// Verificar que el método de solicitud sea POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $autor = $_POST;
+    // Obtener los datos del autor de la petición
+    $nombres = $_POST['nombres'];
+    $apellidos = $_POST['apellidos'];
+    $biografia = $_POST['biografia'];
+    $fechanacimiento = $_POST['fechanacimiento'];
 
-    $imagen = $_FILES['foto'];
+    // Verificar si se cargó correctamente la imagen
+    if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+        // Generar un nombre único para la imagen
+        $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
 
-    $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
-    $carpetaImagenes = 'autor_images/';
+        // Directorio donde se guardarán las imágenes
+        $directorioImagenes = 'autor_images/';
 
-    if (!is_dir($carpetaImagenes)) {
-        mkdir($carpetaImagenes);
+        // Verificar si el directorio no existe y crearlo
+        if (!is_dir($directorioImagenes)) {
+            mkdir($directorioImagenes);
+        }
+
+        // Mover la imagen al directorio especificado
+        move_uploaded_file($_FILES['foto']['tmp_name'], $directorioImagenes . $nombreImagen);
+
+        // Guardar la ruta de la imagen en la variable $foto
+        $foto = $directorioImagenes . $nombreImagen;
+    } else {
+        // Si no se cargó una imagen, asignar una cadena vacía a la ruta de la foto
+        $foto = '';
     }
 
-    move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . $nombreImagen);
-
-    $autor['foto'] = $carpetaImagenes . $nombreImagen;
-
-    $sql = "INSERT INTO autores (nombres, apellidos, biografia, foto) 
-            VALUES (:nombres, :apellidos, :biografia, :foto)";
+    // Insertar el autor en la base de datos
+    $sql = "INSERT INTO autores (nombres, apellidos, biografia, foto, fechanacimiento) 
+            VALUES (:nombres, :apellidos, :biografia, :foto, :fechanacimiento)";
 
     $statement = $dbConn->prepare($sql);
-    $statement->bindValue(':nombres', $autor['nombres']);
-    $statement->bindValue(':apellidos', $autor['apellidos']);
-    $statement->bindValue(':biografia', $autor['biografia']);
-    $statement->bindValue(':foto', $autor['foto']);
-  
-
+    $statement->bindValue(':nombres', $nombres);
+    $statement->bindValue(':apellidos', $apellidos);
+    $statement->bindValue(':biografia', $biografia);
+    $statement->bindValue(':foto', $foto);
+    $statement->bindValue(':fechanacimiento', $fechanacimiento);
     $statement->execute();
-    $autor_id = $dbConn->lastInsertId();
+    $autorId = $dbConn->lastInsertId();
 
+    // Devolver una respuesta con el ID del autor insertado
     header("HTTP/1.1 201 Created");
-    header("Location: /autores/$autor_id");
+    header("Content-Type: application/json");
+    echo json_encode(array('id' => $autorId));
     exit();
 }
+
+
+
 
 // Borrar
 if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
