@@ -1,71 +1,100 @@
 <?php
-    include "../components/conexion.php";
-    include "../settings/configuraciones.php";
+include "../components/conexion.php";
+include "../settings/configuraciones.php";
 
-    $dbConn = connect($db);
-    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        $sql = "SELECT * FROM motivos";
-        $statement = $dbConn->prepare($sql);
-        $statement->execute();
-        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+$dbConn = connect($db);
+
+
+// Listar todos los motivos o solo uno
+if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+    if (isset($_GET['id'])) {
+        // Mostrar un motivo
+        $sql = $dbConn->prepare("SELECT * FROM motivos WHERE id=:id");
+        $sql->bindValue(':id', $_GET['id']);
+        $sql->execute();
         header("HTTP/1.1 200 OK");
-        echo json_encode($result);
+        echo json_encode($sql->fetch(PDO::FETCH_ASSOC));
+        exit();
+    } else {
+        // Mostrar lista de motivos
+        $sql = $dbConn->prepare("SELECT * FROM motivos");
+        $sql->execute();
+        $sql->setFetchMode(PDO::FETCH_ASSOC);
+        header("HTTP/1.1 200 OK");
+        echo json_encode($sql->fetchAll());
         exit();
     }
+}
 
-    // Obtener un registro por su ID
-    if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
-        $id = $_GET['id'];
-        $sql = "SELECT * FROM motivos WHERE id = :id";
+
+// Crear un nuevo motivo
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $input = $_POST;
+    // Verificar que las variables requeridas estén establecidas y no estén vacías
+    if (!empty($input['descripcion'])) {
+        // Establecer la conexión a la base de datos
+        $dbConn = connect($db);
+
+        $sql = "INSERT INTO motivos (descripcion) VALUES (:descripcion)";
         $statement = $dbConn->prepare($sql);
+        bindAllValues($statement, $input);
+        $statement->execute();
+        $motivoId = $dbConn->lastInsertId();
+
+        if ($motivoId) {
+            $input['id'] = $motivoId;
+            $response = array(
+                'status' => 'success',
+                'message' => 'Motivo creado exitosamente',
+                'data' => $input
+            );
+            header("HTTP/1.1 200 OK");
+            echo json_encode($response);
+            exit();
+        }
+    }
+
+    // Si llegamos a este punto, significa que ha ocurrido un error
+    $response = array(
+        'status' => 'error',
+        'message' => 'Error al crear el motivo'
+    );
+    header("HTTP/1.1 400 Bad Request");
+    echo json_encode($response);
+    exit();
+}
+
+// Borrar un motivo
+if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
+    try {
+        $id = filter_var($_GET['id'], FILTER_SANITIZE_NUMBER_INT);
+        $statement = $dbConn->prepare("DELETE FROM motivos WHERE id=:id");
         $statement->bindValue(':id', $id);
         $statement->execute();
-        $result = $statement->fetch(PDO::FETCH_ASSOC);
-        
-        if ($result) {
-            header("HTTP/1.1 200 OK");
-            echo json_encode($result);
-        } else {
-            header("HTTP/1.1 404 Not Found");
-        }
+        header("HTTP/1.1 200 OK");
+        exit();
+    } catch (PDOException $ex) {
+        header("HTTP/1.1 500 Internal Server Error");
         exit();
     }
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        // Verificar que se hayan enviado los datos requeridos
-        if (isset($_POST['descripcion'])) {
-            $descripcion = $_POST['descripcion'];
-            
-            // Insertar el nuevo registro en la base de datos
-            $sql = "INSERT INTO motivos (descripcion) VALUES (:descripcion)";
-            $statement = $dbConn->prepare($sql);
-            $statement->bindValue(':descripcion', $descripcion);
-            
-            if ($statement->execute()) {
-                $response = [
-                    'status' => 'success',
-                    'message' => 'Registro creado exitosamente.'
-                ];
-                header("HTTP/1.1 201 Created");
-            } else {
-                $response = [
-                    'status' => 'error',
-                    'message' => 'No se pudo crear el registro.'
-                ];
-                header("HTTP/1.1 500 Internal Server Error");
-            }
-            
-            echo json_encode($response);
-            exit();
-        } else {
-            $response = [
-                'status' => 'error',
-                'message' => 'Datos insuficientes para crear el registro.'
-            ];
-            header("HTTP/1.1 400 Bad Request");
-            echo json_encode($response);
-            exit();
-        }
-    }
-    
-    
+}
+
+
+// Actualizar un motivo
+if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
+    parse_str(file_get_contents("php://input"), $input);
+    $motivoId = filter_var($input['id'], FILTER_SANITIZE_NUMBER_INT);
+    $fields = getParams($input);
+
+    $sql = "UPDATE motivos SET $fields WHERE id=:id";
+
+    $statement = $dbConn->prepare($sql);
+    $statement->bindValue(':id', $motivoId);
+    bindAllValues($statement, $input);
+
+    $statement->execute();
+    header("HTTP/1.1 200 OK");
+    exit();
+}
+
 ?>

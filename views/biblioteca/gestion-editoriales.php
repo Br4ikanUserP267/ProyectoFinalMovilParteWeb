@@ -12,7 +12,7 @@
 </head>
 <body>
   <div class="container">
-    <h2>Formulario de Tabla y Direcciones</h2>
+    <h2>Formulario de Editoriales  y Direcciones</h2>
     <form id="formulario">
         <div class="form-group">
             <label for="nombre">Nombre:</label>

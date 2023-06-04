@@ -52,6 +52,11 @@
                 Gestion de prestamos
             </button>
         </div>
+        <div style="margin-right: 10px; width: 500px; height: 500px;">
+            <button type="button"  onclick=" mostrarlistadoEditoriales()" style="padding: 10px; width: 100%; height: 100%; background-color: gray; color: white; border: 2px solid white; transition: all 0.2s ease-in-out; background-color: gray;" onmouseover="this.style.backgroundColor='#007bff'; this.style.borderColor='#007bff'" onmouseout="this.style.backgroundColor='gray'; this.style.borderColor='white'">
+                listado editoriales
+            </button>
+        </div>
     </div>
     <script>
         function gestionAutores(){
@@ -83,6 +88,10 @@
         }
         function  gestionLibrosAutores(){
             window.location.href = 'geston-libros-autores.php';
+        }
+
+        function  mostrarlistadoEditoriales(){
+            window.location.href = 'listadoeditoriales.php';
         }
 
 

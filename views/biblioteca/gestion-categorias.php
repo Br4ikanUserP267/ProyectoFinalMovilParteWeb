@@ -64,6 +64,7 @@
                 <tr>
                     <th>Id</th>
                     <th>Nombre</th>
+               
              
                 </tr>
             </thead>
@@ -92,7 +93,6 @@
                             var row = '<tr>' +
                                 '<td>' + categorias.id + '</td>' +
                                 '<td>' + categorias.nombre + '</td>' +
-                           
                                
                                 '</tr>';
                             tableBody.append(row);

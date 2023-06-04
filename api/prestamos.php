@@ -4,60 +4,146 @@ include "../settings/configuraciones.php";
 
 $dbConn = connect($db);
 
-// Obtener todos los registros de la tabla "prestamos"
+// Obtener todos los préstamos y los registros de préstamos_has_libros relacionados
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    $query = "SELECT p.*, l.* FROM prestamos p
-              INNER JOIN prestamos_has_libros pl ON p.id = pl.Prestamos_id
-              INNER JOIN libros l ON pl.Libros_id = l.id";
-    $stmt = $dbConn->prepare($query);
+    $sql = "SELECT p.*, r.Libros_id, r.fecha
+            FROM prestamos p
+            INNER JOIN prestamos_has_libros r ON p.id = r.Prestamos_id";
+    $stmt = $dbConn->prepare($sql);
     $stmt->execute();
-    $prestamos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    echo json_encode($prestamos);
+    // Organizar los datos en una estructura de respuesta
+    $response = array();
+    foreach ($data as $row) {
+        $prestamoId = $row['id'];
+        if (!isset($response[$prestamoId])) {
+            // Agregar información del préstamo
+            $response[$prestamoId] = array(
+                'id' => $row['id'],
+                'fechaInicio' => $row['fechaInicio'],
+                'fechaFinal' => $row['fechaFinal'],
+                'prestado' => $row['prestado'],
+                'Estudiantes_id' => $row['Estudiantes_id'],
+                'registros' => array()
+            );
+        }
+
+        // Agregar información del registro de préstamo_has_libros
+        $response[$prestamoId]['registros'][] = array(
+            'Libros_id' => $row['Libros_id'],
+            'fecha' => $row['fecha']
+        );
+    }
+
+    header("HTTP/1.1 200 OK");
+    echo json_encode(array_values($response));
+    exit();
 }
 
-
-// Crear un nuevo préstamo
+// Crear un nuevo préstamo y los registros de préstamo_has_libros relacionados
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Obtener los datos enviados en la solicitud
-    $data = json_decode(file_get_contents("php://input"), true);
-    $libroId = $data['Libros_id'];
-    $fechaInicio = $data['fechaInicio'];
-    $fechaFinal = $data['fechaFinal'];
-    $prestado = $data['prestado'];
-    $estudianteId = $data['Estudiantes_id'];
+    $input = $_POST;
+    // Verificar que las variables requeridas estén establecidas y no estén vacías
+    if (!empty($input['fechaInicio']) && !empty($input['fechaFinal']) && isset($input['prestado']) && isset($input['Estudiantes_id']) && isset($input['registros'])) {
+        $registros = json_decode($input['registros'], true);
 
-    // Insertar el nuevo préstamo en la tabla "prestamos"
-    $query = "INSERT INTO prestamos (fechaInicio, fechaFinal, prestado, Estudiantes_id) VALUES (:fechaInicio, :fechaFinal, :prestado, :estudianteId)";
-    $stmt = $dbConn->prepare($query);
-    $stmt->bindParam(':fechaInicio', $fechaInicio);
-    $stmt->bindParam(':fechaFinal', $fechaFinal);
-    $stmt->bindParam(':prestado', $prestado);
-    $stmt->bindParam(':estudianteId', $estudianteId);
-    $stmt->execute();
+        // Insertar el préstamo
+        $sql = "INSERT INTO prestamos (fechaInicio, fechaFinal, prestado, Estudiantes_id)
+                VALUES (:fechaInicio, :fechaFinal, :prestado, :Estudiantes_id)";
+        $statement = $dbConn->prepare($sql);
+        bindAllValues($statement, $input);
+        $statement->execute();
+        $prestamoId = $dbConn->lastInsertId();
 
-    // Obtener el ID del nuevo préstamo insertado
-    $prestamoId = $dbConn->lastInsertId();
+        if ($prestamoId) {
+            // Insertar los registros de préstamo_has_libros
+            $sql = "INSERT INTO prestamos_has_libros (Prestamos_id, Libros_id, fecha)
+                    VALUES (:Prestamos_id, :Libros_id, :fecha)";
+            $statement = $dbConn->prepare($sql);
+            $statement->bindValue(':Prestamos_id', $prestamoId);
+            foreach ($registros as $registro) {
+                $statement->bindValue(':Libros_id', $registro['Libros_id']);
+                $statement->bindValue(':fecha', $registro['fecha']);
+                $statement->execute();
+            }
 
-    // Insertar la relación entre el préstamo y el libro en la tabla "prestamos_has_libros"
-    $query = "INSERT INTO prestamos_has_libros (Prestamos_id, Libros_id) VALUES (:prestamoId, :libroId)";
-    $stmt = $dbConn->prepare($query);
-    $stmt->bindParam(':prestamoId', $prestamoId);
-    $stmt->bindParam(':libroId', $libroId);
-    $stmt->execute();
+            $input['id'] = $prestamoId;
+            header("HTTP/1.1 200 OK");
+            echo json_encode($input);
+            exit();
+        }
+    }
+}
 
-    // Devolver la respuesta con el ID del nuevo préstamo creado
-    $response = array('prestamoId' => $prestamoId);
-    echo json_encode($response);
+// Actualizar un préstamo y los registros de préstamo_has_libros relacionados
+// Actualizar un préstamo y los registros de préstamo_has_libros relacionados
+if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
+    parse_str(file_get_contents("php://input"), $input);
+    $prestamoId = filter_var($input['id'], FILTER_SANITIZE_NUMBER_INT);
+    // Verificar que el ID del préstamo esté establecido
+    if (!empty($prestamoId)) {
+        // Actualizar el préstamo
+        $sql = "UPDATE prestamos SET fechaInicio = :fechaInicio, fechaFinal = :fechaFinal, prestado = :prestado, Estudiantes_id = :Estudiantes_id WHERE id = :id";
+        $statement = $dbConn->prepare($sql);
+        $statement->bindValue(':id', $prestamoId);
+        $statement->bindValue(':fechaInicio', $input['fechaInicio']);
+        $statement->bindValue(':fechaFinal', $input['fechaFinal']);
+        $statement->bindValue(':prestado', $input['prestado']);
+        $statement->bindValue(':Estudiantes_id', $input['Estudiantes_id']);
+        $statement->execute();
+
+        // Actualizar los registros de préstamo_has_libros
+        if (isset($input['registros'])) {
+            $registros = json_decode($input['registros'], true);
+
+            // Eliminar los registros existentes
+            $sql = "DELETE FROM prestamos_has_libros WHERE Prestamos_id = :Prestamos_id";
+            $statement = $dbConn->prepare($sql);
+            $statement->bindValue(':Prestamos_id', $prestamoId);
+            $statement->execute();
+
+            // Insertar los nuevos registros
+            $sql = "INSERT INTO prestamos_has_libros (Prestamos_id, Libros_id, fecha)
+                    VALUES (:Prestamos_id, :Libros_id, :fecha)";
+            $statement = $dbConn->prepare($sql);
+            $statement->bindValue(':Prestamos_id', $prestamoId);
+            foreach ($registros as $registro) {
+                $statement->bindValue(':Libros_id', $registro['Libros_id']);
+                $statement->bindValue(':fecha', $registro['fecha']);
+                $statement->execute();
+            }
+        }
+
+        header("HTTP/1.1 200 OK");
+        exit();
+    }
 }
 
 
+// Borrar un préstamo y los registros de préstamo_has_libros relacionados
+if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
+    try {
+        $prestamoId = filter_var($_GET['id'], FILTER_SANITIZE_NUMBER_INT);
+        // Verificar que el ID del préstamo esté establecido
+        if (!empty($prestamoId)) {
+            // Eliminar el préstamo
+            $statement = $dbConn->prepare("DELETE FROM prestamos WHERE id = :id");
+            $statement->bindValue(':id', $prestamoId);
+            $statement->execute();
 
+            // Eliminar los registros de préstamo_has_libros relacionados
+            $statement = $dbConn->prepare("DELETE FROM prestamos_has_libros WHERE Prestamos_id = :Prestamos_id");
+            $statement->bindValue(':Prestamos_id', $prestamoId);
+            $statement->execute();
 
-
-
-
-
-
+            header("HTTP/1.1 200 OK");
+            exit();
+        }
+    } catch (PDOException $ex) {
+        header("HTTP/1.1 500 Internal Server Error");
+        exit();
+    }
+}
 
 ?>
