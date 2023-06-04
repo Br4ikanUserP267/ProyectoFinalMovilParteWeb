@@ -42,6 +42,10 @@
         <label for="numerounidades">Número de unidades:</label>
         <input type="number" class="form-control" id="numerounidades" name="numerounidades" required>
     </div>
+    <div class="form-group">
+        <label for="resumen">Resumen</label>
+        <input type="text" class="form-control" id="resumen" name="resumen" required>
+    </div>
     <button type="submit" class="btn btn-primary">Crear libro</button>
     <button type="button" class="btn btn-secondary" id="cancelarBtn">Cancelar</button>
 </form>
@@ -57,8 +61,10 @@
             <th>Tema ID</th>
             <th>Valor</th>
             <th>Disponibilidad</th>
-            <th>Número de unidades</th>
+            <th>Número de unidades</th>           
             <th>Ubicación</th>
+            
+            <th>Resumen</th>
         </tr>
     </thead>
     <tbody></tbody>
@@ -119,6 +125,7 @@ $(document).ready(function() {
                 row.append($('<td>').text(disponibilidad));
                 row.append($('<td>').text(libro.numerounidades));
                 row.append($('<td>').text(libro.ubicacion));
+                row.append($('<td>').text(libro.resumen));
                 
                 // Agregar botón de eliminar
                 var eliminarBtn = $('<button>').text('Eliminar').addClass('btn btn-danger btn-sm eliminar-btn');

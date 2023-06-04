@@ -6,9 +6,10 @@ $dbConn = connect($db);
 
 // Obtener todos los libros con sus autores
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    $sql = "SELECT libros.*, GROUP_CONCAT(autores.nombre SEPARATOR ', ') AS autores FROM libros
+    $sql = "SELECT libros.*, GROUP_CONCAT(autores.nombres SEPARATOR ', ') AS autores, editoriales.nombre AS nombre_editorial FROM libros
             INNER JOIN autores_has_libros ON libros.id = autores_has_libros.Libros_id
-            INNER JOIN autores ON autores_has_libros.Autores_id = autores.id
+            INNER JOIN autores ON autores.id = autores_has_libros.Autores_idAutores
+            INNER JOIN editoriales ON libros.Editoriales_id = editoriales.id
             GROUP BY libros.id";
     $statement = $dbConn->prepare($sql);
     $statement->execute();
@@ -22,3 +23,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 // Resto del código de la API
 // ...
 ?>
+

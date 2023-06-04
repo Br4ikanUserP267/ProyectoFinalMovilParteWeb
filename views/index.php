@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           $_SESSION['tipousuario'] = $tipousuario;
 
           if ($tipousuario == 'b') {
-              header("Location: bibliotecario");
+              header("Location: biblioteca");
               exit();
           } elseif ($tipousuario == 'a') {
               header("Location: administrador");

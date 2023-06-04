@@ -29,6 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $valor = $_POST['valor'];
     $disponibilidad = $_POST['disponibilidad'];
     $numerounidades = $_POST['numerounidades'];
+    $resumen = $_POST['resumen'];
     $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
     $carpetaImagenes = 'libro_images/';
 
@@ -40,8 +41,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $rutaImagen = $carpetaImagenes . $nombreImagen;
 
-    $sql = "INSERT INTO libros (nombre, Editoriales_id, imagen, temas_id, valor, disponibilidad, numerounidades)
-            VALUES (:nombre, :Editoriales_id, :imagen, :temas_id, :valor, :disponibilidad, :numerounidades)";
+    $sql = "INSERT INTO libros (nombre, Editoriales_id, imagen, temas_id, valor, disponibilidad, numerounidades,resumen)
+            VALUES (:nombre, :Editoriales_id, :imagen, :temas_id, :valor, :disponibilidad, :numerounidades,:resumen)";
 
     $statement = $dbConn->prepare($sql);
     $statement->bindValue(':nombre', $nombre);
@@ -51,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $statement->bindValue(':valor', $valor);
     $statement->bindValue(':disponibilidad', $disponibilidad);
     $statement->bindValue(':numerounidades', $numerounidades);
-
+    $statement->bindValue(':resumen', $resumen);
 
     $statement->execute();
     $libro_id = $dbConn->lastInsertId();
