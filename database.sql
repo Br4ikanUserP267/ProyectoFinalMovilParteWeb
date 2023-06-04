@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3307
--- Tiempo de generación: 19-05-2023 a las 22:08:14
+-- Tiempo de generación: 04-06-2023 a las 04:00:32
 -- Versión del servidor: 10.4.27-MariaDB
 -- Versión de PHP: 8.1.12
 
@@ -29,11 +29,19 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `autores` (
   `id` int(11) NOT NULL,
-  `nombres` varchar(45) NOT NULL,
-  `apelldios` varchar(45) NOT NULL,
-  `biografia` varchar(200) NOT NULL,
-  `foto` blob NOT NULL
+  `nombres` varchar(45) DEFAULT NULL,
+  `apellidos` varchar(45) DEFAULT NULL,
+  `biografia` varchar(200) DEFAULT NULL,
+  `foto` blob DEFAULT NULL,
+  `fechanacimiento` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `autores`
+--
+
+INSERT INTO `autores` (`id`, `nombres`, `apellidos`, `biografia`, `foto`, `fechanacimiento`) VALUES
+(29, 'Namuel', 'piña zamora', 'dadad', 0x6175746f725f696d616765732f61646565313437626230643435396338373663333133363765646466313538622e6a7067, '2023-06-15');
 
 -- --------------------------------------------------------
 
@@ -67,8 +75,7 @@ INSERT INTO `carreras` (`id`, `titulo`, `descripcion`) VALUES
 (1, 'Ingeniería de sistemas', 'La ingeniería de sistemas es un campo interdisciplinario de la ingeniería que permite estudiar y comprender la realidad, con el propósito de implementar u optimizar sistemas complejos.'),
 (2, 'Arquitectura', 'es una carrera muy bonita\n'),
 (3, 'Diseño industrial', 'El diseño industrial es una actividad proyectual de diseño de productos seriados o industriales, que podemos diferenciar en dos tipos: bienes de consumo y bienes de capital'),
-(4, 'Psicologia', 'No se '),
-(5, 'Derecho', 'No sirve pa na');
+(4, 'Psicologia', 'No se ');
 
 -- --------------------------------------------------------
 
@@ -115,8 +122,8 @@ INSERT INTO `direcciones` (`id`, `pais`, `ciudad`, `direccion`, `departamento`, 
 (1, 'País de la dirección', 'Ciudad de la dirección ', 'Dirección completa', 'Departamento de la dirección', 1),
 (9, 'País de la dirección 2', 'Ciudad de la dirección 2', 'Dirección completa 2', 'Departamento de la dirección 2', 8),
 (10, 'País de la dirección 3', 'Ciudad de la dirección 3', 'Dirección completa 3', 'Departamento de la dirección 3', 8),
-(11, NULL, NULL, NULL, NULL, 10),
-(12, NULL, NULL, NULL, NULL, 10),
+(11, '1', '2', '3', '4', 10),
+(12, '5', '5', '6', '7', 10),
 (13, '12121', '1212', '2121', '12121212', 12),
 (14, '12121', '1212', '12121|', '12121212', 12);
 
@@ -220,7 +227,8 @@ CREATE TABLE `inscripciones` (
 INSERT INTO `inscripciones` (`id`, `descripcion`, `fecha`, `Semestre_numero`, `Carrera_id`, `estudiantes_id`) VALUES
 (29, 'Estudiudate inscrito', '2023-05-16 09:45:38', 3, 2, 76),
 (30, 'Estudiudate inscrito', '2023-05-17 13:53:14', 3, 2, 76),
-(31, 'Estudiudate inscrito', '2023-05-17 13:53:15', 3, 2, 76);
+(31, 'Estudiudate inscrito', '2023-05-17 13:53:15', 3, 2, 76),
+(32, 'Se inscriboó', '2023-05-21 13:22:01', 5, 1, 76);
 
 -- --------------------------------------------------------
 
@@ -231,41 +239,38 @@ INSERT INTO `inscripciones` (`id`, `descripcion`, `fecha`, `Semestre_numero`, `C
 CREATE TABLE `libros` (
   `id` int(11) NOT NULL,
   `nombre` varchar(45) DEFAULT NULL,
-  `Editoriales_id` int(11) NOT NULL,
-  `imagen` blob NOT NULL,
+  `Editoriales_id` int(11) DEFAULT NULL,
+  `imagen` blob DEFAULT NULL,
   `temas_id` int(11) NOT NULL,
-  `valor` varchar(45) NOT NULL,
-  `disponibilidad` tinyint(4) NOT NULL,
-  `numerounidades` int(11) NOT NULL,
-  `ubicacion` varchar(45) DEFAULT NULL
+  `valor` float DEFAULT NULL,
+  `disponibilidad` tinyint(4) DEFAULT NULL,
+  `numerounidades` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `libros`
+--
+
+INSERT INTO `libros` (`id`, `nombre`, `Editoriales_id`, `imagen`, `temas_id`, `valor`, `disponibilidad`, `numerounidades`) VALUES
+(2, 'BRAIKAN ANDRES', 1, 0x6c6962726f5f696d616765732f63376365313936376364613438356636613562383561666465383634363963382e6a7067, 1, 100, 1, 10);
 
 --
 -- Disparadores `libros`
 --
 DELIMITER $$
-CREATE TRIGGER `asignar_ubicacion` BEFORE INSERT ON `libros` FOR EACH ROW BEGIN
-    DECLARE tema_categoria_id INT;
-    DECLARE tema_id INT;
-    DECLARE ubicacion VARCHAR(45);
-
-    -- Obtener el tema y la categoría del libro
-    SELECT temas_id, Categorias_id INTO tema_id, tema_categoria_id
-    FROM temas
-    WHERE id = NEW.temas_id;
-
-    -- Construir la ubicación del libro
-    SET ubicacion = CONCAT('estante ', tema_categoria_id, ' tema ', tema_id);
-
-    -- Asignar la ubicación al nuevo libro
-    SET NEW.ubicacion = ubicacion;
+CREATE TRIGGER `set_disponibilidad_false_before_insert` BEFORE INSERT ON `libros` FOR EACH ROW BEGIN
+    IF NEW.numerounidades = 0 OR NEW.numerounidades IS NULL THEN
+        SET NEW.disponibilidad = FALSE;
+    END IF;
 END
 $$
 DELIMITER ;
 DELIMITER $$
-CREATE TRIGGER `set_disponibilidad_false` BEFORE INSERT ON `libros` FOR EACH ROW BEGIN
-    IF NEW.numerounidades = 0 THEN
+CREATE TRIGGER `set_disponibilidad_false_before_update` BEFORE UPDATE ON `libros` FOR EACH ROW BEGIN
+    IF NEW.numerounidades = 0 OR NEW.numerounidades IS NULL THEN
         SET NEW.disponibilidad = FALSE;
+     ELSE
+        SET NEW.disponibilidad = TRUE;
     END IF;
 END
 $$
@@ -282,6 +287,15 @@ CREATE TABLE `motivos` (
   `descripcion` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `motivos`
+--
+
+INSERT INTO `motivos` (`id`, `descripcion`) VALUES
+(1, 'Vencimiento'),
+(2, 'Robo/Perdida'),
+(4, 'hackeo');
+
 -- --------------------------------------------------------
 
 --
@@ -291,10 +305,32 @@ CREATE TABLE `motivos` (
 CREATE TABLE `multas` (
   `id` int(11) NOT NULL,
   `fecha` date DEFAULT NULL,
-  `descripcion` varchar(45) DEFAULT NULL,
+  `motivo_id` int(11) DEFAULT NULL,
   `monto` float DEFAULT NULL,
   `Prestamos_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Disparadores `multas`
+--
+DELIMITER $$
+CREATE TRIGGER `calcular_multa` BEFORE INSERT ON `multas` FOR EACH ROW BEGIN
+    DECLARE total_monto FLOAT;
+    
+    IF NEW.motivo_id = 1 THEN
+        SET NEW.monto = 0.04 * 1200000;
+    ELSEIF NEW.motivo_id = 2 THEN
+        SELECT SUM(l.valor) INTO total_monto
+        FROM prestamos p
+        INNER JOIN prestamos_has_libros pl ON p.id = pl.Prestamos_id
+        INNER JOIN libros l ON pl.Libros_id = l.id
+        WHERE p.id = NEW.Prestamos_id;
+        
+        SET NEW.monto = total_monto;
+    END IF;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -487,7 +523,8 @@ ALTER TABLE `motivos`
 --
 ALTER TABLE `multas`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_Multas_Prestamos1` (`Prestamos_id`);
+  ADD KEY `fk_Multas_Prestamos1` (`Prestamos_id`),
+  ADD KEY `fk_multa_motivos` (`motivo_id`);
 
 --
 -- Indices de la tabla `prestamos`
@@ -530,7 +567,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `autores`
 --
 ALTER TABLE `autores`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT de la tabla `carreras`
@@ -548,7 +585,7 @@ ALTER TABLE `categorias`
 -- AUTO_INCREMENT de la tabla `direcciones`
 --
 ALTER TABLE `direcciones`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `direccionesestudiantes`
@@ -572,19 +609,19 @@ ALTER TABLE `estudiantes`
 -- AUTO_INCREMENT de la tabla `inscripciones`
 --
 ALTER TABLE `inscripciones`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT de la tabla `libros`
 --
 ALTER TABLE `libros`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `motivos`
 --
 ALTER TABLE `motivos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `multas`
@@ -644,7 +681,8 @@ ALTER TABLE `libros`
 -- Filtros para la tabla `multas`
 --
 ALTER TABLE `multas`
-  ADD CONSTRAINT `fk_Multas_Prestamos1` FOREIGN KEY (`Prestamos_id`) REFERENCES `prestamos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_Multas_Prestamos1` FOREIGN KEY (`Prestamos_id`) REFERENCES `prestamos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_multa_motivos` FOREIGN KEY (`motivo_id`) REFERENCES `motivos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `prestamos`
