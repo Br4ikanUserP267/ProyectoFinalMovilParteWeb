@@ -126,8 +126,9 @@
                         $.each(usuarios, function(index, usuarios) {
                             var row = '<tr>' +
                                 '<td>' + usuarios.numeroIdentificacion + '</td>' +
-                                '<td>' + usuarios.contrasena + '</td>' +  
-                                
+                                '<td>' + btoa(usuarios.contrasena) + '</td>' +  
+                               
+
                                 '<td>' + usuarios.tipousuario + '</td>' +                               
 
                                 '</tr>';
