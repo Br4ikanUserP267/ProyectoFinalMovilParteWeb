@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3307
--- Tiempo de generación: 04-06-2023 a las 04:00:32
+-- Tiempo de generación: 07-06-2023 a las 17:24:01
 -- Versión del servidor: 10.4.27-MariaDB
 -- Versión de PHP: 8.1.12
 
@@ -20,6 +20,20 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `dbbiblioteca`
 --
+
+DELIMITER $$
+--
+-- Procedimientos
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CambiarEstadoPrestamo` (IN `prestamoId` INT)   BEGIN
+UPDATE prestamos
+    SET prestado = CASE WHEN prestado = TRUE THEN FALSE ELSE TRUE END,
+        fechaFinal = CASE WHEN prestado = TRUE THEN DATE_ADD(fechaInicio, INTERVAL 8 DAY) ELSE fechaFinal END
+    WHERE id = prestamoId;
+    
+END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -41,7 +55,7 @@ CREATE TABLE `autores` (
 --
 
 INSERT INTO `autores` (`id`, `nombres`, `apellidos`, `biografia`, `foto`, `fechanacimiento`) VALUES
-(29, 'Namuel', 'piña zamora', 'dadad', 0x6175746f725f696d616765732f61646565313437626230643435396338373663333133363765646466313538622e6a7067, '2023-06-15');
+(29, 'Braikan', 'Piña', 'dadad', 0x6175746f725f696d616765732f61646565313437626230643435396338373663333133363765646466313538622e6a7067, '2023-06-15');
 
 -- --------------------------------------------------------
 
@@ -54,6 +68,16 @@ CREATE TABLE `autores_has_libros` (
   `Libros_id` int(11) NOT NULL,
   `fecha` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `autores_has_libros`
+--
+
+INSERT INTO `autores_has_libros` (`Autores_idAutores`, `Libros_id`, `fecha`) VALUES
+(29, 2, '0000-00-00'),
+(29, 5, '2023-06-14'),
+(29, 7, '2023-06-13'),
+(29, 8, '2023-06-13');
 
 -- --------------------------------------------------------
 
@@ -75,7 +99,8 @@ INSERT INTO `carreras` (`id`, `titulo`, `descripcion`) VALUES
 (1, 'Ingeniería de sistemas', 'La ingeniería de sistemas es un campo interdisciplinario de la ingeniería que permite estudiar y comprender la realidad, con el propósito de implementar u optimizar sistemas complejos.'),
 (2, 'Arquitectura', 'es una carrera muy bonita\n'),
 (3, 'Diseño industrial', 'El diseño industrial es una actividad proyectual de diseño de productos seriados o industriales, que podemos diferenciar en dos tipos: bienes de consumo y bienes de capital'),
-(4, 'Psicologia', 'No se ');
+(4, 'Psicologia', 'No se '),
+(6, 'ASTRONAUTA', 'AAAAAA wao');
 
 -- --------------------------------------------------------
 
@@ -149,7 +174,9 @@ CREATE TABLE `direccionesestudiantes` (
 --
 
 INSERT INTO `direccionesestudiantes` (`id`, `pais`, `departamento`, `ciudad`, `calle`, `numero`, `barrio`, `estudiantes_id`) VALUES
-(56, 'COLOMBIA', 'SUCRE', 'SAMPUES ', 'LA VIRGENCITA', '36-48', 'LA VIRGENCITA', 76);
+(56, 'COLOMBIA', 'SUCRE', 'SAMPUES ', 'LA VIRGENCITA', '36-48', 'LA VIRGENCITA', 76),
+(57, 'COLOMBIA', 'SUCRE', 'SINCELEJO', 'la balsa', '11', 'la balsa', 77),
+(58, 'COLOMBIA', 'SUCRE', 'SINCELEJO', 'ALPES', '11', 'ALPES', 78);
 
 -- --------------------------------------------------------
 
@@ -203,7 +230,9 @@ CREATE TABLE `estudiantes` (
 --
 
 INSERT INTO `estudiantes` (`id`, `tipoIdentificacion`, `numeroIdentificacion`, `nombres`, `apellidos`, `celular`, `fechanacimiento`, `tiposagre`, `paisnacimiento`, `departamentonacimiento`, `ciudadnacimiento`, `foto`, `correoelectronico`) VALUES
-(76, 'cc', '1103739024', 'STEVEN DAVID ', 'GOMEZ FOLIACO', '3218146258', '2023-04-24', 'O+', 'COLOMBIA', 'SUCRE', 'SINCELEJO', 0x657374756469616e74655f696d616765732f30376665353563366635336435373638616538393965376265356266313463372e6a7067, 'stevengomezf@cecar.edu.co');
+(76, 'cc', '1103739024', 'STEVEN DAVID ', 'GOMEZ FOLIACO', '3218146258', '2023-04-24', 'O+', 'COLOMBIA', 'SUCRE', 'SINCELEJO', 0x657374756469616e74655f696d616765732f30376665353563366635336435373638616538393965376265356266313463372e6a7067, 'stevengomezf@cecar.edu.co'),
+(77, 'cc', '9999111', 'jajaja', 'jejeje', '12121212', '2000-12-31', 'O-', 'Colombia', 'Sucre', 'SINCELEJO', 0x657374756469616e74655f696d616765732f66306538376363623338353162623964376333653164303366323737663062612e6a7067, 'steven@gmail.com'),
+(78, 'cc', '224455', 'steven ', 'gomez', '12121212', '2008-12-31', 'O+', 'Brasil', 'Sucre', 'SINCELEJO', 0x657374756469616e74655f696d616765732f62356237666130363139346137363832303266323330386364353466643166372e6a7067, 'BRAIKAN.a@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -228,7 +257,9 @@ INSERT INTO `inscripciones` (`id`, `descripcion`, `fecha`, `Semestre_numero`, `C
 (29, 'Estudiudate inscrito', '2023-05-16 09:45:38', 3, 2, 76),
 (30, 'Estudiudate inscrito', '2023-05-17 13:53:14', 3, 2, 76),
 (31, 'Estudiudate inscrito', '2023-05-17 13:53:15', 3, 2, 76),
-(32, 'Se inscriboó', '2023-05-21 13:22:01', 5, 1, 76);
+(32, 'Se inscriboó', '2023-05-21 13:22:01', 5, 1, 76),
+(45, 'kaslkaslkas', '2023-06-05 12:55:26', 5, 6, 77),
+(46, 'kaslkaslkas', '2023-06-05 12:55:28', 5, 6, 77);
 
 -- --------------------------------------------------------
 
@@ -244,15 +275,20 @@ CREATE TABLE `libros` (
   `temas_id` int(11) NOT NULL,
   `valor` float DEFAULT NULL,
   `disponibilidad` tinyint(4) DEFAULT NULL,
-  `numerounidades` int(11) DEFAULT NULL
+  `numerounidades` int(11) DEFAULT NULL,
+  `resumen` varchar(200) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `libros`
 --
 
-INSERT INTO `libros` (`id`, `nombre`, `Editoriales_id`, `imagen`, `temas_id`, `valor`, `disponibilidad`, `numerounidades`) VALUES
-(2, 'BRAIKAN ANDRES', 1, 0x6c6962726f5f696d616765732f63376365313936376364613438356636613562383561666465383634363963382e6a7067, 1, 100, 1, 10);
+INSERT INTO `libros` (`id`, `nombre`, `Editoriales_id`, `imagen`, `temas_id`, `valor`, `disponibilidad`, `numerounidades`, `resumen`) VALUES
+(2, 'mil maravillas', 1, 0x6c6962726f5f696d616765732f63376365313936376364613438356636613562383561666465383634363963382e6a7067, 1, 100, 1, -3, 'hola soy un libro divertido'),
+(5, 'Editorial san carlos', 10, 0x6c6962726f5f696d616765732f39373037383438343534643936316537323335313864396236666332616136342e6a7067, 1, 100, 1, 76, 'HoLA SOY UN LIBRO MUY PRO'),
+(7, '300 libro de amor ', 10, 0x6c6962726f5f696d616765732f30386664653039396665393730386664323535313864306636393064343433642e6a7067, 1, 10000, 0, 0, 'Es un ibro demasiado bonito'),
+(8, 'Mi vida diomedes ', 10, 0x6c6962726f5f696d616765732f64353537333464666538656232396565346264363561313837303033373538352e6a7067, 1, 10000, 0, 0, 'Es un ibro demasiado bonito'),
+(9, 'libro nuevo', 1, 0x6c6962726f5f696d616765732f64653536393731663165313632376439346638366266363963383038313265632e6a7067, 1, 1000, 1, 100, 'este es un resumen del libro creado');
 
 --
 -- Disparadores `libros`
@@ -341,10 +377,41 @@ DELIMITER ;
 CREATE TABLE `prestamos` (
   `id` int(11) NOT NULL,
   `fechaInicio` date NOT NULL,
-  `fechaFinal` date NOT NULL,
+  `fechaFinal` date DEFAULT NULL,
   `prestado` tinyint(4) NOT NULL,
   `Estudiantes_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Volcado de datos para la tabla `prestamos`
+--
+
+INSERT INTO `prestamos` (`id`, `fechaInicio`, `fechaFinal`, `prestado`, `Estudiantes_id`) VALUES
+(3, '2023-06-01', '2023-06-15', 1, 76),
+(5, '2023-06-05', '2023-06-10', 1, 76),
+(6, '2023-06-05', '2023-06-10', 1, 76),
+(8, '2023-06-04', '2023-06-12', 1, 76),
+(9, '2023-06-04', '2023-06-11', 0, 76),
+(10, '2023-06-04', '2023-06-11', 0, 76),
+(11, '2023-06-04', '2023-06-11', 1, 76),
+(13, '2023-06-04', '2023-06-12', 1, 76),
+(15, '2023-06-04', '2023-06-16', 1, 76),
+(16, '2023-06-04', '2023-06-11', 1, 76),
+(17, '2023-06-05', '2023-06-12', 1, 76),
+(18, '2023-06-05', '2023-06-12', 1, 76),
+(19, '2023-06-05', '2023-06-12', 1, 76),
+(20, '2023-06-05', '2023-06-12', 0, 76),
+(21, '2023-06-05', '2023-06-12', 1, 77),
+(22, '2023-06-05', '2023-06-13', 1, 77),
+(23, '2023-06-05', '2023-06-12', 1, 77),
+(24, '2023-06-05', '2023-06-12', 0, 77),
+(25, '2023-06-05', '2023-06-12', 1, 77),
+(26, '2023-06-05', '2023-06-12', 1, 77),
+(27, '2023-06-05', '2023-06-12', 1, 77),
+(28, '2023-06-05', '2023-06-12', 1, 77),
+(29, '2023-06-05', '2023-06-12', 1, 77),
+(30, '2023-06-05', '2023-06-12', 1, 77),
+(31, '2023-06-05', '2023-06-12', 1, 77);
 
 -- --------------------------------------------------------
 
@@ -357,6 +424,36 @@ CREATE TABLE `prestamos_has_libros` (
   `Libros_id` int(11) NOT NULL,
   `fecha` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `prestamos_has_libros`
+--
+
+INSERT INTO `prestamos_has_libros` (`Prestamos_id`, `Libros_id`, `fecha`) VALUES
+(8, 2, '2023-06-04 00:00:00'),
+(9, 2, '2023-06-04 00:00:00'),
+(10, 2, '2023-06-04 00:00:00'),
+(11, 2, '2023-06-04 00:00:00'),
+(13, 2, '2023-06-04 00:00:00'),
+(15, 2, '2023-06-04 00:00:00'),
+(17, 5, '2023-06-05 00:00:00'),
+(18, 2, '2023-06-05 00:00:00'),
+(18, 5, '2023-06-05 00:00:00'),
+(18, 7, '2023-06-05 00:00:00'),
+(19, 2, '2023-06-05 00:00:00'),
+(20, 8, '2023-06-05 00:00:00'),
+(21, 2, '2023-06-05 00:00:00'),
+(22, 7, '2023-06-05 00:00:00'),
+(22, 8, '2023-06-05 00:00:00'),
+(23, 7, '2023-06-05 00:00:00'),
+(24, 8, '2023-06-05 00:00:00'),
+(25, 7, '2023-06-05 00:00:00'),
+(26, 7, '2023-06-05 00:00:00'),
+(27, 7, '2023-06-05 00:00:00'),
+(28, 7, '2023-06-05 00:00:00'),
+(29, 7, '2023-06-05 00:00:00'),
+(30, 7, '2023-06-05 00:00:00'),
+(31, 7, '2023-06-05 00:00:00');
 
 --
 -- Disparadores `prestamos_has_libros`
@@ -432,6 +529,8 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`numeroIdentificacion`, `contrasena`, `tipousuario`) VALUES
+(224455, '123', 'e'),
+(9999111, '123', 'e'),
 (110114111, 'maria', 'e'),
 (1005472938, 'andresbertel', 'b'),
 (1103739024, 'GOMEZf', 'e'),
@@ -573,7 +672,7 @@ ALTER TABLE `autores`
 -- AUTO_INCREMENT de la tabla `carreras`
 --
 ALTER TABLE `carreras`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `categorias`
@@ -591,7 +690,7 @@ ALTER TABLE `direcciones`
 -- AUTO_INCREMENT de la tabla `direccionesestudiantes`
 --
 ALTER TABLE `direccionesestudiantes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT de la tabla `editoriales`
@@ -603,19 +702,19 @@ ALTER TABLE `editoriales`
 -- AUTO_INCREMENT de la tabla `estudiantes`
 --
 ALTER TABLE `estudiantes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
 
 --
 -- AUTO_INCREMENT de la tabla `inscripciones`
 --
 ALTER TABLE `inscripciones`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT de la tabla `libros`
 --
 ALTER TABLE `libros`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `motivos`
@@ -633,7 +732,7 @@ ALTER TABLE `multas`
 -- AUTO_INCREMENT de la tabla `prestamos`
 --
 ALTER TABLE `prestamos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT de la tabla `temas`
